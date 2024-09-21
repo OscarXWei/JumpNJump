@@ -1,0 +1,22 @@
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+
+# Visual Studio / MonoDevelop generated files
+[vV]isual[Ss]tudio/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+*.svd
+
+# OS-specific files
+.DS_Store
+Thumbs.db
