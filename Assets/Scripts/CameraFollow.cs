@@ -3,16 +3,16 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform target; // 玩家的 Transform
-    public float height = 10f; // 相机高度
+    public float height = 2f; // 相机高度
     public float distance = 5f; // 相机与玩家的水平距离
-    public float angle = 45f; // 相机俯视角度
+    public float rotationSpeed = 5f; // 鼠标旋转速度
     public float smoothSpeed = 0.125f; // 相机跟随的平滑度
-    public float trackingSpeed = 5f; // 跟踪点跟随玩家的速度
 
-    private Transform trackingPoint;
+    private float yaw = 0f; // 水平旋转角度
+    private float pitch = 0f; // 垂直旋转角度
     private Vector3 refVelocity = Vector3.zero;
 
-    private void Start()
+    void Start()
     {
         if (target == null)
         {
@@ -20,58 +20,36 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        // 创建一个空物体作为跟踪点
-        GameObject trackingObject = new GameObject("CameraTrackingPoint");
-        trackingPoint = trackingObject.transform;
-        trackingPoint.position = target.position;
-
-        // 初始化相机位置
-        Vector3 targetPosition = CalculateTargetPosition(trackingPoint.position);
-        transform.position = targetPosition;
-        transform.rotation = Quaternion.Euler(angle, 0, 0);
+        // 初始化视角（从玩家后面开始）
+        yaw = target.eulerAngles.y;
+        pitch = 20f; // 视角的初始仰角
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
-        if (target == null || trackingPoint == null)
+        if (target == null)
         {
             return;
         }
 
-        // 平滑地移动跟踪点towards玩家位置
-        trackingPoint.position = Vector3.Lerp(trackingPoint.position, target.position, trackingSpeed * Time.deltaTime);
+        // 检查鼠标左键是否按下
+        if (Input.GetMouseButton(0)) // 0 表示鼠标左键
+        {
+            // 鼠标输入来控制视角
+            yaw += Input.GetAxis("Mouse X") * rotationSpeed;
+            pitch -= Input.GetAxis("Mouse Y") * rotationSpeed;
 
-        // 计算目标位置
-        Vector3 targetPosition = CalculateTargetPosition(trackingPoint.position);
+            // 限制 pitch 角度（防止相机过度俯仰）
+            pitch = Mathf.Clamp(pitch, -30f, 60f);
+        }
+
+        // 计算相机的位置
+        Vector3 targetPosition = target.position - (Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward * distance) + Vector3.up * height;
 
         // 平滑移动相机
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref refVelocity, smoothSpeed);
 
-        // 保持固定的俯视角度
-        transform.rotation = Quaternion.Euler(angle, 0, 0);
-    }
-
-    private Vector3 CalculateTargetPosition(Vector3 targetPos)
-    {
-        // 计算相机在水平面上的偏移
-        Vector3 horizontalOffset = -Vector3.forward * distance;
-
-        // 旋转偏移量，使其与玩家的朝向一致（如果需要的话）
-        // horizontalOffset = Quaternion.Euler(0, target.eulerAngles.y, 0) * horizontalOffset;
-
-        // 计算最终的目标位置
-        return targetPos + horizontalOffset + Vector3.up * height;
-    }
-
-    // 公共方法，用于在需要时重置相机位置（例如玩家重生时）
-    public void ResetCamera()
-    {
-        if (target != null && trackingPoint != null)
-        {
-            trackingPoint.position = target.position;
-            Vector3 targetPosition = CalculateTargetPosition(trackingPoint.position);
-            transform.position = targetPosition;
-            transform.rotation = Quaternion.Euler(angle, 0, 0);
-        }
+        // 使相机始终看向玩家
+        transform.LookAt(target.position + Vector3.up * height * 0.5f); // 调整相机看向玩家的中部
     }
 }

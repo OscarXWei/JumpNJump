@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "MyGame.sln"
+    "dotnet.defaultSolution": "JumpNJump.sln"
 }

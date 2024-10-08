@@ -61,18 +61,26 @@ public class PlayerController : MonoBehaviour
     public float shootCooldown = 0.5f;
 
     private float lastShootTime;
+    private float maxHealth = 100.0f;
+    private float currentHealth = 100.0f;
+    [SerializeField] HealthBarController healthBar;
 
+    private void Awake()
+    {
+        healthBar = GetComponentInChildren<HealthBarController>();
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        healthBar.UpdateHp(currentHealth, maxHealth);
         platformManager = FindObjectOfType<PlatformManager>();
         gameOverUI = FindObjectOfType<GameOverUI>();
-        
+
         if (platformManager == null)
         {
             Debug.LogError("PlatformManager not found in the scene!");
         }
-        
+
         if (gameOverUI == null)
         {
             Debug.LogError("GameOverUI not found in the scene!");
@@ -93,13 +101,13 @@ public class PlayerController : MonoBehaviour
             {
                 StartCharging();
             }
-            
+
             if (Input.GetKey(KeyCode.Space) && isCharging)
             {
                 ContinueCharging();
                 ApplySquashEffect();
             }
-            
+
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 if (debugMode) Debug.Log("Space key released, attempting to jump");
@@ -127,9 +135,10 @@ public class PlayerController : MonoBehaviour
         // SoundManager.Instance.PlayShootSound(); // 假设您有这个方法
     }
 
-    public void TakeDamage()
+    public void TakeDamage(float damage)
     {
-        FailJump();
+        currentHealth -= damage;
+        healthBar.UpdateHp(currentHealth, maxHealth);
     }
 
     void UpdateCubeReferences()
@@ -214,7 +223,7 @@ public class PlayerController : MonoBehaviour
             // 如果 Vector3.Dot < 0，保持 rollAxis 不变，这将是后翻
 
             jumpPowerUI.SetPower(0);
-            
+
             //SoundManager.Instance.PlayJumpSound();  
         }
         else
@@ -236,13 +245,13 @@ public class PlayerController : MonoBehaviour
         Vector3 targetDirection = nextCube.transform.position - transform.position;
         float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
         float radianAngle = jumpAngle * Mathf.Deg2Rad;
-        
+
         float cosAngle = Mathf.Cos(radianAngle);
         float tanAngle = Mathf.Tan(radianAngle);
-        
+
         Vector3 horizontalDir = new Vector3(targetDirection.x, 0, targetDirection.z).normalized;
         Vector3 jumpDirection = horizontalDir * cosAngle + Vector3.up * tanAngle;
-        
+
         return jumpDirection.normalized;
     }
 
@@ -256,8 +265,8 @@ public class PlayerController : MonoBehaviour
             float gravity = Physics.gravity.magnitude;
             float radianAngle = jumpAngle * Mathf.Deg2Rad;
 
-            float v0Squared = (gravity * horizontalDistance * horizontalDistance) / 
-                              (2 * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle) * 
+            float v0Squared = (gravity * horizontalDistance * horizontalDistance) /
+                              (2 * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle) *
                                (horizontalDistance * Mathf.Tan(radianAngle) - verticalDistance));
             float v0 = Mathf.Sqrt(v0Squared);
 
@@ -275,7 +284,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         GameObject hitPlatform = collision.gameObject;
-        
+
         if (hitPlatform == platformManager.GetNextPlatform())
         {
             SucceedJump();
@@ -286,6 +295,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (hitPlatform.CompareTag("Terrain"))
         {
+            TakeDamage(100);
             FailJump();
         }
 
@@ -410,7 +420,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator ShowGameOverAfterDelay()
     {
         yield return new WaitForSeconds(gameOverDelay);
-        
+
         if (gameOverUI != null)
         {
             gameOverUI.ShowGameOver();
@@ -425,7 +435,7 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = false;
         Vector3 shatterPosition = transform.position;
-        
+
         if (shatteredPlayerPrefab != null)
         {
             GameObject shatteredPlayer = Instantiate(shatteredPlayerPrefab, shatterPosition, Quaternion.identity);
@@ -433,7 +443,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Invoke("HidePlayer", 0.1f);
-        
+
         OnGameOver?.Invoke();
     }
 
@@ -485,7 +495,7 @@ public class PlayerController : MonoBehaviour
 
         UpdateCubeReferences();
 
-        if (debugMode) 
+        if (debugMode)
         {
             Debug.Log("Player game state reset completed");
             Debug.Log($"Current cube: {(currentCube != null ? currentCube.name : "null")}");
@@ -493,7 +503,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   public void TryAgain()
+    public void TryAgain()
     {
 
         // 重置玩家位置到目标平台
@@ -501,7 +511,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = startRotation;
 
         isGameOver = false;
-        StopAllCoroutines(); 
+        StopAllCoroutines();
 
         // 重置玩家状态
         rb.velocity = Vector3.zero;
@@ -516,5 +526,5 @@ public class PlayerController : MonoBehaviour
 
         ScoreManager.Instance.RetryScore();
         if (debugMode) Debug.Log("Player reset for Try Again");
-    }   
+    }
 }
