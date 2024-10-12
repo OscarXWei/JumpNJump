@@ -54,34 +54,9 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 GetRandomSpawnPosition()
     {
         Vector3 randomPos;
-        int attempts = 0;
-        do
-        {
-            // 在 XZ 平面上生成随机位置
-            Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minSpawnDistance, spawnRadius);
-            randomPos = player.transform.position + new Vector3(randomCircle.x, 0, randomCircle.y);
-            
-            // 使用 Raycast 检查生成位置是否合适
-            RaycastHit hit;
-            if (Physics.Raycast(randomPos + Vector3.up * 10, Vector3.down, out hit, 20))
-            {
-                randomPos.y = hit.point.y;
-                if (hit.collider.CompareTag("Platform"))
-                {
-                    break; // 如果在平台上找到了合适的位置，跳出循环
-                }
-            }
-            
-            attempts++;
-        } while (attempts < 20); // 限制尝试次数，避免无限循环
-
-        if (attempts >= 20)
-        {
-            Debug.LogWarning("Failed to find a suitable spawn position after 10 attempts.");
-            // 如果找不到合适的位置，就直接使用最后一次计算的位置
-            randomPos.y = player.transform.position.y;
-        }
-
+        // 在 XZ 平面上生成随机位置
+        Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minSpawnDistance, spawnRadius);
+        randomPos = player.transform.position + new Vector3(randomCircle.x, 0, randomCircle.y);
         return randomPos;
     }
 }

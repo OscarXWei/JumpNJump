@@ -20,7 +20,7 @@ public class StartMenuUI : MonoBehaviour
         easyModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Easy));
         normalModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Normal));
         hardModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Hard));
-        gameInfoButton.onClick.AddListener(ShowGameInfo);
+        //gameInfoButton.onClick.AddListener(ShowGameInfo);
 
         // Show start menu
         ShowStartMenu();
