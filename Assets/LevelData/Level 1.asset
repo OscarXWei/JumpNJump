@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1c59d541c0d4df0b81762daa4abddb, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  levelName: Level1
-  playerStartPosition: {x: 0, y: 1, z: 0}
+  levelName: 
+  playerStartPosition: {x: 0, y: 0, z: 0}
   platforms:
   - position: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    color: {r: 0.28119436, g: 0.53249866, b: 0.6698113, a: 0}
+    color: {r: 0.3801642, g: 0.8207547, b: 0.3213332, a: 0}
     directionTag: 
-  - position: {x: 5, y: 0, z: 0}
+  - position: {x: 1, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    color: {r: 0.8207547, g: 0.10996093, b: 0.081301175, a: 0}
+    color: {r: 0.735849, g: 0.12148449, b: 0.12148449, a: 0}
     directionTag: 
-  - position: {x: 10, y: 0, z: 0}
+  - position: {x: 2, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    color: {r: 0.50506073, g: 0.121395506, b: 0.8301887, a: 0}
+    color: {r: 0.111739054, g: 0.64970595, b: 0.764151, a: 0}
     directionTag: 
-  - position: {x: 15, y: 0, z: 0}
+  - position: {x: 3, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    color: {r: 0.7863781, g: 0.8962264, b: 0.2747864, a: 0}
+    color: {r: 0.8773585, g: 0.27727836, b: 0.27727836, a: 0}
     directionTag: 
-  - position: {x: 20, y: 0, z: 0}
+  - position: {x: 4, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0.8962264, g: 0.6337431, b: 0.32551616, a: 0}
     directionTag: 
   timeLimit: 600
   checkpointIndex: -1

@@ -18,16 +18,19 @@ public class LevelData : ScriptableObject
         public Vector3 scale = Vector3.one;
         public Color color = Color.white;
         public string directionTag;
+        public PlatformType type;
     }
 
     public enum PlatformType
     {
+        Start,
         Normal,
         Reward,
         Spring,
         Hidden,
         Explosive,
         Checkpoint,
+        Moving,
         Goal
     }
 }
