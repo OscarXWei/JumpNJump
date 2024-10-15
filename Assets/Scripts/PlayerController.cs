@@ -280,46 +280,37 @@ public class PlayerController : MonoBehaviour
             jumpPowerUI.SetOptimalPowerRange(minOptimal, maxOptimal);
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
+        // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
+        Vector3 platformPosition = hitPlatform.transform.position;
 
-        if (hitPlatform == platformManager.GetNextPlatform())
+        if (hitPlatform == platformManager.GetNextPlatform() && transform.position.y > hitPlatform.transform.position.y + 0.6)        
         {
-            SucceedJump();
-        }
-        else if (hitPlatform == platformManager.GetCurrentPlatform())
-        {
-            RetryJump();
+            SucceedJump(hitPlatform);
         }
         else if (hitPlatform.CompareTag("Terrain"))
         {
-            TakeDamage(100);
             FailJump();
         }
 
-        // 停止翻滚
+        
         isRolling = false;
-        // 重置旋转
+  
         // transform.rotation = Quaternion.identity;
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
-    private void SucceedJump()
+    private void SucceedJump(GameObject hitPlatform)
     {
         isJumping = false;
-        OnJumpSuccess?.Invoke();
         platformManager.MoveToNextPlatform();
-        UpdateCubeReferences();
-        currentPlatformColor = platformManager.GetCurrentPlatform().GetComponent<Renderer>().material.color;
-        StartCoroutine(CheckPlatformRules());
-        if (debugMode) Debug.Log("Successfully jumped to next cube");
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
-        // 立即将玩家位置调整到平台中心上方
-        transform.position = platformManager.GetCurrentPlatform().transform.position + Vector3.up * 0.5f;
-        //SoundManager.Instance.PlayLandOnPlatformSound();
-        rb.velocity = Vector3.zero; // 停止所有移动
+        transform.position = hitPlatform.transform.position + Vector3.up * 0.5f;
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
     private IEnumerator CheckPlatformRules()
