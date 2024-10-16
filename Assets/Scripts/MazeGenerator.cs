@@ -6,7 +6,7 @@ public class MazeGenerator
     private static int[,] maze;
     private static int width;
     private static int height;
-    private const float SPACING = 2f; // 固定间距为2
+    private const float SPACING = 1f; 
 
     public static LevelData GenerateMazeLevel(string levelName, int mazeWidth, int mazeHeight)
     {
@@ -43,7 +43,8 @@ public class MazeGenerator
                     {
                         position = new Vector3(x * SPACING, 1, z * SPACING),
                         scale = new Vector3(1, 1, 1),
-                        color = Random.ColorHSV(), // 随机颜色
+                        //color = Random.ColorHSV(), // 随机颜色
+                        color = Color.cyan,
                         type = LevelData.PlatformType.Normal
                     };
                     levelData.platforms.Add(wall);
@@ -52,7 +53,7 @@ public class MazeGenerator
         }
 
         // 添加起点和终点
-        //AddStartAndGoal(levelData);
+        AddStartAndGoal(levelData);
 
         return levelData;
     }
@@ -96,7 +97,7 @@ public class MazeGenerator
         // 起点
         LevelData.PlatformData start = new LevelData.PlatformData
         {
-            position = new Vector3(SPACING, 0, SPACING),
+            position = new Vector3(SPACING, 1, SPACING),
             scale = Vector3.one,
             color = Color.green,
             type = LevelData.PlatformType.Start
@@ -106,7 +107,7 @@ public class MazeGenerator
         // 终点
         LevelData.PlatformData goal = new LevelData.PlatformData
         {
-            position = new Vector3((width - 2) * SPACING, 0, (height - 2) * SPACING),
+            position = new Vector3((width - 2) * SPACING, 1, (height - 2) * SPACING),
             scale = Vector3.one,
             color = Color.red,
             type = LevelData.PlatformType.Goal
