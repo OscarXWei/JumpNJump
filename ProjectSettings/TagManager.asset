@@ -12,6 +12,8 @@ TagManager:
   - EnemyBullet
   - Text
   - Image
+  - Platform
+  - Goal
   layers:
   - Default
   - TransparentFX
