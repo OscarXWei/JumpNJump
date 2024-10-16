@@ -192,8 +192,11 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 ResetSquashEffect();
             }
-            HandleRollingInput();
-            UpdateDirectionArrow();
+            if (!isSimpleRolling)
+            {
+                HandleRollingInput();  
+                UpdateDirectionArrow();          
+            }
             if (isSimpleRolling)
             {
                 UpdateRolling();
