@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     
     [Header("Simple Rolling")]
     public float simpleRollSpeed = 3636f; // 每秒旋转的角度
-    public float simpleRollDuration = 0.5f;
+    public float simpleRollDuration = 1f;
     private Vector3 simpleRollDirection;
     private bool isSimpleRolling = false;
     private float simpleRollTimer = 0f;
