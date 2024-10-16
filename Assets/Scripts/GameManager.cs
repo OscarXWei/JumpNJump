@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public PlayerController playerController;
-    public PlatformManager platformManager;
+    //public PlatformManager platformManager;
     public GameOverUI gameOverUI;
     public JumpPowerUI jumpPowerUI;
     public StartMenuUI startMenuUI;
@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
         // Find references if not set in inspector
         if (playerController == null)
             playerController = FindObjectOfType<PlayerController>();
-        if (platformManager == null)
-            platformManager = FindObjectOfType<PlatformManager>();
+        // if (platformManager == null)
+        //     platformManager = FindObjectOfType<PlatformManager>();
         if (gameOverUI == null)
             gameOverUI = FindObjectOfType<GameOverUI>();
         if (jumpPowerUI == null)
@@ -76,9 +76,9 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isStarting = true;
 
-        // Reset platforms
-        if (platformManager != null)
-            platformManager.ResetPlatforms();
+        // // Reset platforms
+        // if (platformManager != null)
+        //     platformManager.ResetPlatforms();
 
         // Reset player
         if (playerController != null)
@@ -133,8 +133,8 @@ public class GameManager : MonoBehaviour
             jumpPowerUI.gameObject.SetActive(true);
         if (gameOverUI != null)
             gameOverUI.SetTryAgainButtonActive(true);
-        if (platformManager != null)
-            platformManager.SetPlatformScale(Vector3.one);
+        // if (platformManager != null)
+        //     platformManager.SetPlatformScale(Vector3.one);
     }
 
     private void SetNormalMode()
@@ -143,8 +143,8 @@ public class GameManager : MonoBehaviour
             jumpPowerUI.gameObject.SetActive(false);
         if (gameOverUI != null)
             gameOverUI.SetTryAgainButtonActive(false);
-        if (platformManager != null)
-            platformManager.SetPlatformScale(Vector3.one);
+        // if (platformManager != null)
+        //     platformManager.SetPlatformScale(Vector3.one);
     }
 
     private void SetHardMode()
@@ -153,8 +153,8 @@ public class GameManager : MonoBehaviour
             jumpPowerUI.gameObject.SetActive(false);
         if (gameOverUI != null)
             gameOverUI.SetTryAgainButtonActive(false);
-        if (platformManager != null)
-            platformManager.SetPlatformScale(new Vector3(0.5f, 0.5f, 0.5f));
+        // if (platformManager != null)
+        //     platformManager.SetPlatformScale(new Vector3(0.5f, 0.5f, 0.5f));
     }
 }
 

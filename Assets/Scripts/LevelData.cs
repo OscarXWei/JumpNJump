@@ -18,16 +18,24 @@ public class LevelData : ScriptableObject
         public Vector3 scale = Vector3.one;
         public Color color = Color.white;
         public string directionTag;
+        public PlatformType type;
+
+        public bool isKinematic;
+        public bool useGravity;
+        public bool freezePosition;
+        public bool freezeRotation;
     }
 
     public enum PlatformType
     {
+        Start,
         Normal,
         Reward,
         Spring,
         Hidden,
         Explosive,
         Checkpoint,
+        Moving,
         Goal
     }
 }
