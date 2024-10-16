@@ -96,6 +96,7 @@ public class LevelDisplayManager : MonoBehaviour
         plane.transform.SetParent(parent, false);
         plane.transform.localPosition = Vector3.zero;
         plane.transform.localScale = new Vector3(groundSize / 10f, 1f, groundSize / 10f);
+        plane.tag = "Terrain";
         Renderer renderer = plane.GetComponent<Renderer>();
         if (renderer != null)
         {

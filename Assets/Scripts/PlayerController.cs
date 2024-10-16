@@ -420,19 +420,18 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
-        Vector3 platformPosition = hitPlatform.transform.position;
 
-        // if (hitPlatform == platformManager.GetNextPlatform() && transform.position.y > hitPlatform.transform.position.y + 0.6)        
-        // {
-        //     SucceedJump(hitPlatform);
-        // }
-        // else if (hitPlatform.CompareTag("Terrain"))
-        // {
-        //     FailJump();
-        // }
+        if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
+        {
+            //SucceedJump(hitPlatform);
+        }
+        else if (hitPlatform.CompareTag("Terrain"))
+        {
+            FailJump();
+        }
 
+      
 
-        
         isRolling = false;
   
         // transform.rotation = Quaternion.identity;
