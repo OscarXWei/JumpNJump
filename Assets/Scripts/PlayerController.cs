@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -81,6 +82,13 @@ public class PlayerController : MonoBehaviour
     private Transform startPlatform;
     private Transform goalPlatform;
 
+    [Header("UI Direction Arrow")]
+    public Image directionArrowImage;
+    public Sprite customArrowSprite; 
+    public float arrowRotationSpeed = 10f;
+    public Color arrowColor = Color.white;
+    public float arrowSize = 50f;
+    private bool isShowingArrow = false;
 
     private void Awake()
     {
@@ -96,8 +104,24 @@ public class PlayerController : MonoBehaviour
         jumpPowerUI.SetMaxPower(maxJumpForce);
         originalScale = transform.localScale;
 
-        // 设置初始关卡
         SetupLevel();
+
+        SetupArrow();
+    }
+
+    void SetupArrow()
+    {
+
+        directionArrowImage.color = arrowColor;
+
+        directionArrowImage.sprite = customArrowSprite;
+
+        RectTransform rectTransform = directionArrowImage.rectTransform;
+        rectTransform.sizeDelta = new Vector2(arrowSize, arrowSize);
+
+        directionArrowImage.transform.rotation = Quaternion.identity;
+
+        directionArrowImage.gameObject.SetActive(false);
     }
 
     public void SetupLevel()
@@ -169,6 +193,7 @@ public class PlayerController : MonoBehaviour
                 ResetSquashEffect();
             }
             HandleRollingInput();
+            UpdateDirectionArrow();
             if (isSimpleRolling)
             {
                 UpdateRolling();
@@ -187,8 +212,6 @@ public class PlayerController : MonoBehaviour
             ApplyRollingEffect();
         }
         
-        
-
         // if (Input.GetMouseButtonDown(0) && Time.time - lastShootTime > shootCooldown && !isGameOver)
         // {
         //     Shoot();
@@ -198,6 +221,39 @@ public class PlayerController : MonoBehaviour
         //{
         //    ReachGoal();
         //}
+    }
+
+    void UpdateDirectionArrow()
+    {
+        if (isShowingArrow && directionArrowImage != null)
+        {
+            // 计算箭头应该指向的角度
+            float targetAngle = Mathf.Atan2(simpleRollDirection.z, simpleRollDirection.x) * Mathf.Rad2Deg;
+            
+            // 创建目标旋转（只在Y轴上旋转，保持水平）
+            Quaternion targetRotation = Quaternion.Euler(0, -targetAngle, 0);
+            
+            // 平滑旋转箭头
+            directionArrowImage.transform.rotation = Quaternion.Slerp(directionArrowImage.transform.rotation, targetRotation, arrowRotationSpeed * Time.deltaTime);
+        }
+    }
+
+    void ShowDirectionArrow()
+    {
+        if (directionArrowImage != null)
+        {
+            directionArrowImage.gameObject.SetActive(true);
+            isShowingArrow = true;
+        }
+    }
+
+    void HideDirectionArrow()
+    {
+        if (directionArrowImage != null)
+        {
+            directionArrowImage.gameObject.SetActive(false);
+            isShowingArrow = false;
+        }
     }
 
     void ReachGoal()
@@ -554,29 +610,48 @@ public class PlayerController : MonoBehaviour
     
     void HandleRollingInput()
     {
-
-        if (Input.GetKey(KeyCode.LeftArrow))
+        bool hasInput = false;
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             simpleRollHorizontal = -1f;
             simpleRollVertical = 0f;
+            hasInput = true;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             simpleRollHorizontal = 1f;
             simpleRollVertical = 0f;
+            hasInput = true;
         }        
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             simpleRollHorizontal = 0f;
             simpleRollVertical = -1f;
+            hasInput = true;
         } 
-        else if (Input.GetKey(KeyCode.UpArrow))
+        else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             simpleRollHorizontal = 0f;
             simpleRollVertical = 1f;
+            hasInput = true;
         } 
         // Normalize the input to get a direction vector
         simpleRollDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
+
+        if (hasInput)
+        {
+            ShowDirectionArrow();  // 这里调用显示箭头
+        }
+        else
+        {
+            HideDirectionArrow();  // 这里调用隐藏箭头
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
+        {
+            StartRolling();
+            HideDirectionArrow();  // 开始滚动时隐藏箭头
+        }
 
         // Start rolling when Enter is pressed and we have a valid direction
         if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
