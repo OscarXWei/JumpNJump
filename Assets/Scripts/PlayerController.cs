@@ -336,7 +336,6 @@ public class PlayerController : MonoBehaviour
             jumpPowerUI.SetOptimalPowerRange(minOptimal, maxOptimal);
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         // Collision detection bugs
@@ -351,6 +350,7 @@ public class PlayerController : MonoBehaviour
         // {
         //     FailJump();
         // }
+
 
         
         isRolling = false;
