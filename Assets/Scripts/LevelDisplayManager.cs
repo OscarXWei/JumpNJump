@@ -38,9 +38,8 @@ public class LevelDisplayManager : MonoBehaviour
         levels.Add(MapGenerator.GenerateLevel("Fire"));
         levels.Add(MapGenerator.GenerateLevel("Hard"));
 
-        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
-        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
-        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 3", 50, 50));
+        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
+        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
    
     }
     public LevelData GetCurrentLevelData()
@@ -87,6 +86,15 @@ public class LevelDisplayManager : MonoBehaviour
         if (renderer != null)
         {
             renderer.material.color = platformData.color;
+        }
+               
+        if (platformData.type == LevelData.PlatformType.Goal)
+        {
+            platform.tag = "Goal";
+        }
+        else
+        {
+            platform.tag = "Platform";
         }
     }
 

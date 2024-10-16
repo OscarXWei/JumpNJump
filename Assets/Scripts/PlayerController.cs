@@ -700,6 +700,30 @@ public class PlayerController : MonoBehaviour
             // Ensure the player is upright at the end of the roll
             //Vector3 uprightRotation = new Vector3(0, transform.eulerAngles.y, 0);
             //transform.rotation = Quaternion.Euler(uprightRotation);
+            CheckGoalReached();
         }
+    }
+    void CheckGoalReached()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Goal"))
+            {
+                Debug.Log("Congratulations! You've reached the goal!");
+                StartCoroutine(CompleteLevel());
+                return;
+            }
+        }
+    }
+
+    IEnumerator CompleteLevel()
+    {
+        // 可以在这里添加一些过渡效果
+        yield return new WaitForSeconds(1f); 
+
+        // 切换到下一关
+        levelDisplayManager.SwitchToNextLevel();
+        SetupLevel(); 
     }
 }
