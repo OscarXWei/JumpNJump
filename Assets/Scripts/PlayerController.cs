@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     public JumpPowerUI jumpPowerUI;
-    private PlatformManager platformManager;
+    //private PlatformManager platformManager;
     private GameOverUI gameOverUI;
 
     [Header("Jump Settings")]
@@ -65,6 +65,13 @@ public class PlayerController : MonoBehaviour
     private float currentHealth = 100.0f;
     [SerializeField] HealthBarController healthBar;
 
+    [Header("Level Data")]
+    public LevelDisplayManager levelDisplayManager;
+    private LevelData currentLevelData;
+    private Transform startPlatform;
+    private Transform goalPlatform;
+
+
     private void Awake()
     {
         healthBar = GetComponentInChildren<HealthBarController>();
@@ -73,25 +80,62 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         healthBar.UpdateHp(currentHealth, maxHealth);
-        platformManager = FindObjectOfType<PlatformManager>();
         gameOverUI = FindObjectOfType<GameOverUI>();
+        levelDisplayManager = FindObjectOfType<LevelDisplayManager>();
 
-        if (platformManager == null)
-        {
-            Debug.LogError("PlatformManager not found in the scene!");
-        }
-
-        if (gameOverUI == null)
-        {
-            Debug.LogError("GameOverUI not found in the scene!");
-        }
-
-        UpdateCubeReferences();
         jumpPowerUI.SetMaxPower(maxJumpForce);
-        startPosition = transform.position;
-        startRotation = transform.rotation;
         originalScale = transform.localScale;
+
+        // 设置初始关卡
+        SetupLevel();
     }
+
+    public void SetupLevel()
+    {
+        currentLevelData = levelDisplayManager.GetCurrentLevelData();
+        SetStartAndGoalPlatforms();
+        SetPlayerToStartPosition();
+    }
+
+    void SetStartAndGoalPlatforms()
+    {
+        if (currentLevelData != null && currentLevelData.platforms != null)
+        {
+            var startPlatformData = currentLevelData.platforms.Find(p => p.type == LevelData.PlatformType.Start);
+            var goalPlatformData = currentLevelData.platforms.Find(p => p.type == LevelData.PlatformType.Goal);
+
+            if (startPlatformData != null)
+            {
+                startPlatform = FindPlatformTransform(startPlatformData.position);
+            }
+
+            if (goalPlatformData != null)
+            {
+                goalPlatform = FindPlatformTransform(goalPlatformData.position);
+            }
+        }
+    }
+
+        Transform FindPlatformTransform(Vector3 position)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, 0.1f);
+        return colliders.Length > 0 ? colliders[0].transform : null;
+    }
+
+    void SetPlayerToStartPosition()
+    {
+        if (startPlatform != null)
+        {
+            transform.position = startPlatform.position + Vector3.up * 0.5f;
+            startPosition = transform.position;
+            startRotation = transform.rotation;
+        }
+        else
+        {
+            Debug.LogError("Start platform not found!");
+        }
+    }
+
 
     void Update()
     {
@@ -126,13 +170,25 @@ public class PlayerController : MonoBehaviour
         // {
         //     Shoot();
         // }
+
+        if (goalPlatform != null && Vector3.Distance(transform.position, goalPlatform.position) < 0.5f)
+        {
+            ReachGoal();
+        }
+    }
+
+    void ReachGoal()
+    {
+        Debug.Log("Goal reached! Moving to next level.");
+        levelDisplayManager.SwitchToNextLevel();
+        SetupLevel();
     }
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position + transform.forward, Quaternion.identity);
         bullet.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed;
         lastShootTime = Time.time;
-        // SoundManager.Instance.PlayShootSound(); // 假设您有这个方法
+        // SoundManager.Instance.PlayShootSound(); 
     }
 
     public void TakeDamage(float damage)
@@ -141,15 +197,15 @@ public class PlayerController : MonoBehaviour
         healthBar.UpdateHp(currentHealth, maxHealth);
     }
 
-    void UpdateCubeReferences()
-    {
-        currentCube = platformManager.GetCurrentPlatform();
-        nextCube = platformManager.GetNextPlatform();
-        if (nextCube != null)
-        {
-            CalculateOptimalJumpForce();
-        }
-    }
+    // void UpdateCubeReferences()
+    // {
+    //     currentCube = platformManager.GetCurrentPlatform();
+    //     nextCube = platformManager.GetNextPlatform();
+    //     if (nextCube != null)
+    //     {
+    //         CalculateOptimalJumpForce();
+    //     }
+    // }
 
     void ApplySquashEffect()
     {
@@ -283,99 +339,42 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
+        Vector3 platformPosition = hitPlatform.transform.position;
 
-        if (hitPlatform == platformManager.GetNextPlatform())
-        {
-            SucceedJump();
-        }
-        else if (hitPlatform == platformManager.GetCurrentPlatform())
-        {
-            RetryJump();
-        }
-        else if (hitPlatform.CompareTag("Terrain"))
-        {
-            TakeDamage(100);
-            FailJump();
-        }
+        // if (hitPlatform == platformManager.GetNextPlatform() && transform.position.y > hitPlatform.transform.position.y + 0.6)        
+        // {
+        //     SucceedJump(hitPlatform);
+        // }
+        // else if (hitPlatform.CompareTag("Terrain"))
+        // {
+        //     FailJump();
+        // }
 
-        // 停止翻滚
+        
         isRolling = false;
-        // 重置旋转
+  
         // transform.rotation = Quaternion.identity;
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
-    private void SucceedJump()
+    private void SucceedJump(GameObject hitPlatform)
     {
         isJumping = false;
-        OnJumpSuccess?.Invoke();
-        platformManager.MoveToNextPlatform();
-        UpdateCubeReferences();
-        currentPlatformColor = platformManager.GetCurrentPlatform().GetComponent<Renderer>().material.color;
-        StartCoroutine(CheckPlatformRules());
-        if (debugMode) Debug.Log("Successfully jumped to next cube");
+        //platformManager.MoveToNextPlatform();
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
-        // 立即将玩家位置调整到平台中心上方
-        transform.position = platformManager.GetCurrentPlatform().transform.position + Vector3.up * 0.5f;
-        //SoundManager.Instance.PlayLandOnPlatformSound();
-        rb.velocity = Vector3.zero; // 停止所有移动
+        transform.position = hitPlatform.transform.position + Vector3.up * 0.5f;
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
-    private IEnumerator CheckPlatformRules()
-    {
-        if (ColorEquals(currentPlatformColor, Color.red))
-        {
-            ScoreManager.Instance.AddScore(1);
-        }
-        else if (ColorEquals(currentPlatformColor, Color.blue))
-        {
-            ScoreManager.Instance.AddScore(2);
-        }
-        else if (ColorEquals(currentPlatformColor, Color.yellow))
-        {
-            int randomScore = UnityEngine.Random.Range(0, 4); // 随机分数 0-3
-            ScoreManager.Instance.AddScore(randomScore);
-        }
-        else if (ColorEquals(currentPlatformColor, Color.cyan))
-        {
-            ScoreManager.Instance.AddScore(3);
-        }
-        else if (ColorEquals(currentPlatformColor, Color.green))
-        {
-            float startTime = Time.time;
-            while (Time.time - startTime < 2f)
-            {
-                if (!IsPlayerOnCurrentPlatform())
-                {
-                    yield break;
-                }
-                yield return null;
-            }
-            if (IsPlayerOnCurrentPlatform())
-            {
-                ScoreManager.Instance.AddScore(3);
-            }
-        }
-        else if (ColorEquals(currentPlatformColor, Color.black))
-        {
-            float startTime = Time.time;
-            while (Time.time - startTime < 2f)
-            {
-                if (!IsPlayerOnCurrentPlatform())
-                {
-                    yield break;
-                }
-                yield return null;
-            }
-            ExplodePlatform();
-        }
-    }
 
-    private bool IsPlayerOnCurrentPlatform()
-    {
-        return IsPlayerOnCube(platformManager.GetCurrentPlatform());
-    }
+    // private bool IsPlayerOnCurrentPlatform()
+    // {
+    //     return IsPlayerOnCube(platformManager.GetCurrentPlatform());
+    // }
 
     private bool ColorEquals(Color a, Color b)
     {
@@ -457,50 +456,50 @@ public class PlayerController : MonoBehaviour
     {
         if (debugMode) Debug.Log("Resetting player game state...");
 
-        if (platformManager != null && platformManager.GetCurrentPlatform() != null)
-        {
-            transform.position = platformManager.GetCurrentPlatform().transform.position + Vector3.up;
-            if (debugMode) Debug.Log($"Reset player position to: {transform.position}");
-        }
-        else
-        {
-            transform.position = startPosition;
-            if (debugMode) Debug.Log($"Reset player position to start position: {startPosition}");
-        }
-        transform.rotation = startRotation;
+        // if (platformManager != null && platformManager.GetCurrentPlatform() != null)
+        // {
+        //     transform.position = platformManager.GetCurrentPlatform().transform.position + Vector3.up;
+        //     if (debugMode) Debug.Log($"Reset player position to: {transform.position}");
+        // }
+        // else
+        // {
+        //     transform.position = startPosition;
+        //     if (debugMode) Debug.Log($"Reset player position to start position: {startPosition}");
+        // }
+        // transform.rotation = startRotation;
 
-        isGameOver = false;
-        isJumping = false;
-        isCharging = false;
-        currentJumpForce = 0f;
+        // isGameOver = false;
+        // isJumping = false;
+        // isCharging = false;
+        // currentJumpForce = 0f;
 
-        StopAllCoroutines();
+        // StopAllCoroutines();
 
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        // if (rb != null)
+        // {
+        //     rb.velocity = Vector3.zero;
+        //     rb.angularVelocity = Vector3.zero;
+        // }
 
-        if (jumpPowerUI != null)
-        {
-            jumpPowerUI.SetPower(0f);
-        }
+        // if (jumpPowerUI != null)
+        // {
+        //     jumpPowerUI.SetPower(0f);
+        // }
 
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null) renderer.enabled = true;
+        // Renderer renderer = GetComponent<Renderer>();
+        // if (renderer != null) renderer.enabled = true;
 
-        Collider collider = GetComponent<Collider>();
-        if (collider != null) collider.enabled = true;
+        // Collider collider = GetComponent<Collider>();
+        // if (collider != null) collider.enabled = true;
 
-        UpdateCubeReferences();
+        // UpdateCubeReferences();
 
-        if (debugMode)
-        {
-            Debug.Log("Player game state reset completed");
-            Debug.Log($"Current cube: {(currentCube != null ? currentCube.name : "null")}");
-            Debug.Log($"Next cube: {(nextCube != null ? nextCube.name : "null")}");
-        }
+        // if (debugMode)
+        // {
+        //     Debug.Log("Player game state reset completed");
+        //     Debug.Log($"Current cube: {(currentCube != null ? currentCube.name : "null")}");
+        //     Debug.Log($"Next cube: {(nextCube != null ? nextCube.name : "null")}");
+        // }
     }
 
     public void TryAgain()

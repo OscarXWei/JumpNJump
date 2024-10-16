@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour
 {
-    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f)
+    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0)
     {
         int[,] selectedLayout;
         switch (layoutName)
@@ -26,7 +26,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         LevelData levelData = ScriptableObject.CreateInstance<LevelData>();
-        levelData.levelName = layoutName;  // 设置关卡名称
+        levelData.levelName = layoutName; // 设置关卡名称
         levelData.timeLimit = timeLimit;
         levelData.checkpointIndex = -1;
 
@@ -37,16 +37,32 @@ public class MapGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                if (selectedLayout[z, x] == 1)
+                if (selectedLayout[z, x] == 1 || selectedLayout[z, x] == 2 || selectedLayout[z, x] == 3)
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
-                        position = new Vector3(x, 0, z),
+                        position = new Vector3(x * (1 + platformSpacing), 1, z * (1 + platformSpacing)),
                         scale = Vector3.one,
-                        color = Color.blue,
-                        type = LevelData.PlatformType.Normal,
+                        
                         directionTag = ""
                     };
+
+                    if (selectedLayout[z, x] == 2)
+                    {
+                        platform.type = LevelData.PlatformType.Start;
+                        platform.color = Color.blue;
+                    }
+                    else if (selectedLayout[z, x] == 3)
+                    {
+                        platform.type = LevelData.PlatformType.Goal;
+                        platform.color = Color.red;
+                    }
+                    else
+                    {
+                        platform.type = LevelData.PlatformType.Normal;
+                        platform.color = Color.cyan;
+                    }
+
                     levelData.platforms.Add(platform);
                 }
             }

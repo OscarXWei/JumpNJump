@@ -38,17 +38,27 @@ public class LevelDisplayManager : MonoBehaviour
         levels.Add(MapGenerator.GenerateLevel("Fire"));
         levels.Add(MapGenerator.GenerateLevel("Hard"));
 
-        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
-        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
-        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 3", 50, 50));
+        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
+        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
+        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 3", 50, 50));
    
+    }
+    public LevelData GetCurrentLevelData()
+    {
+        return levels[currentLevelIndex];
+    }
+
+    public void SwitchToNextLevel()
+    {
+        currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
+        DisplayCurrentLevel();
     }
 
 
 
     void DisplayCurrentLevel()
     {
-        if (currentLevelObject != null)
+     if (currentLevelObject != null)
         {
             Destroy(currentLevelObject);
         }
@@ -56,6 +66,9 @@ public class LevelDisplayManager : MonoBehaviour
         currentLevelObject = new GameObject($"Level_{currentLevelIndex}");
         CreateGround(currentLevelObject.transform);
         DisplayLevel(levels[currentLevelIndex], currentLevelObject.transform);
+
+        // 通知 PlayerController 重置玩家位置
+        FindObjectOfType<PlayerController>().SetupLevel();
     }
 
     void DisplayLevel(LevelData levelData, Transform parent)
@@ -90,11 +103,11 @@ public class LevelDisplayManager : MonoBehaviour
         }
     }
 
-    void SwitchToNextLevel()
-    {
-        currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
-        DisplayCurrentLevel();
-    }
+    // void SwitchToNextLevel()
+    // {
+    //     currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
+    //     DisplayCurrentLevel();
+    // }
 
     void SwitchToPreviousLevel()
     {

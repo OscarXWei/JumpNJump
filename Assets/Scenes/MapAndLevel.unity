@@ -1246,59 +1246,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 748162062}
   m_CullTransparentMesh: 1
---- !u!1 &781479684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 781479686}
-  - component: {fileID: 781479685}
-  m_Layer: 0
-  m_Name: PlatformManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &781479685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781479684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f9f039ca06794691b23f174629640d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 1969181671088013800, guid: 0188bfb47591c4f2aabcc63b89dc6062, type: 3}
-  playerController: {fileID: 1011524877}
-  minDistance: 1
-  maxDistance: 5
-  initialPosition: {x: 10, y: 1, z: 10}
-  xChangeProbability: 0.7
-  positiveDirectionBias: 0.95
-  colorProbabilities: []
-  debugMode: 1
---- !u!4 &781479686
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781479684}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.987583, y: 1, z: 9.42265}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &875761863
 GameObject:
   m_ObjectHideFlags: 0
@@ -3165,7 +3112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 1011524877}
-  platformManager: {fileID: 781479685}
   gameOverUI: {fileID: 1320550436}
   jumpPowerUI: {fileID: 893686946}
   startMenuUI: {fileID: 1704163372}
@@ -3272,6 +3218,7 @@ GameObject:
   - component: {fileID: 1821953790}
   - component: {fileID: 1821953789}
   - component: {fileID: 1821953792}
+  - component: {fileID: 1821953793}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3370,6 +3317,23 @@ MonoBehaviour:
   freeLookSensitivity: 3
   zoomSensitivity: 10
   fastZoomSensitivity: 50
+--- !u!114 &1821953793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821953788}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5972e7734cd1f432baffe5af2bfb6baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  height: 2
+  distance: 5
+  rotationSpeed: 5
+  smoothSpeed: 0.125
 --- !u!1 &1859108735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3928,4 +3892,3 @@ SceneRoots:
   - {fileID: 2050414662}
   - {fileID: 1011524884}
   - {fileID: 1194221157}
-  - {fileID: 781479686}

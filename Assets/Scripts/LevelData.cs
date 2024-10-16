@@ -19,6 +19,11 @@ public class LevelData : ScriptableObject
         public Color color = Color.white;
         public string directionTag;
         public PlatformType type;
+
+        public bool isKinematic;
+        public bool useGravity;
+        public bool freezePosition;
+        public bool freezeRotation;
     }
 
     public enum PlatformType
