@@ -96,6 +96,20 @@ public class LevelDisplayManager : MonoBehaviour
         {
             platform.tag = "Platform";
         }
+        
+        Rigidbody rb = platform.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = platform.AddComponent<Rigidbody>();
+        }
+
+        // Freeze position and rotation on all axes
+        rb.constraints = RigidbodyConstraints.FreezePositionX |
+                         RigidbodyConstraints.FreezePositionY |
+                         RigidbodyConstraints.FreezePositionZ |
+                         RigidbodyConstraints.FreezeRotationX |
+                         RigidbodyConstraints.FreezeRotationY |
+                         RigidbodyConstraints.FreezeRotationZ;
     }
 
     void CreateGround(Transform parent)
