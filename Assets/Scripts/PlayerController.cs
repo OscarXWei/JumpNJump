@@ -51,9 +51,19 @@ public class PlayerController : MonoBehaviour
     [Header("Rolling Effect")]
     public float rollSpeed = 3600f; // 每秒旋转的角度
     private Vector3 rollAxis;
-    private float totalRotation = 0f;
+    private float totalRotation = 1f;
     private bool isRolling = false;
     private float targetRotation = 3600f; // 完整的一周旋转
+    private float rollTimer = 0f;
+    
+    [Header("Simple Rolling")]
+    public float simpleRollSpeed = 3636f; // 每秒旋转的角度
+    public float simpleRollDuration = 1f;
+    private Vector3 simpleRollDirection;
+    private bool isSimpleRolling = false;
+    private float simpleRollTimer = 0f;
+    private float simpleRollHorizontal = 1f;
+    private float simpleRollVertical = 0f;
 
     [Header("Shooting")]
     public GameObject bulletPrefab;
@@ -158,6 +168,11 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 ResetSquashEffect();
             }
+            HandleRollingInput();
+            if (isSimpleRolling)
+            {
+                UpdateRolling();
+            }
         }
         else if (isJumping && isRolling)
         {
@@ -165,16 +180,24 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
+        else if (isRolling)
+        {
+            // 在跳跃过程中应用翻滚效果
+            Debug.Log("Attempting to apply rolling effect");
+            ApplyRollingEffect();
+        }
+        
+        
 
         // if (Input.GetMouseButtonDown(0) && Time.time - lastShootTime > shootCooldown && !isGameOver)
         // {
         //     Shoot();
         // }
 
-        if (goalPlatform != null && Vector3.Distance(transform.position, goalPlatform.position) < 0.5f)
-        {
-            ReachGoal();
-        }
+        //if (goalPlatform != null && Vector3.Distance(transform.position, goalPlatform.position) < 0.5f)
+        //{
+        //    ReachGoal();
+        //}
     }
 
     void ReachGoal()
@@ -261,6 +284,7 @@ public class PlayerController : MonoBehaviour
         if (isCharging && nextCube != null)
         {
             Vector3 jumpDirection = CalculateJumpDirection();
+            //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
             rb.AddForce(jumpDirection * currentJumpForce, ForceMode.Impulse);
             isCharging = false;
             isJumping = true;
@@ -356,6 +380,7 @@ public class PlayerController : MonoBehaviour
         isRolling = false;
   
         // transform.rotation = Quaternion.identity;
+        if (!isSimpleRolling)
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
@@ -525,5 +550,82 @@ public class PlayerController : MonoBehaviour
 
         ScoreManager.Instance.RetryScore();
         if (debugMode) Debug.Log("Player reset for Try Again");
+    }
+    
+    void HandleRollingInput()
+    {
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            simpleRollHorizontal = -1f;
+            simpleRollVertical = 0f;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            simpleRollHorizontal = 1f;
+            simpleRollVertical = 0f;
+        }        
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            simpleRollHorizontal = 0f;
+            simpleRollVertical = -1f;
+        } 
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            simpleRollHorizontal = 0f;
+            simpleRollVertical = 1f;
+        } 
+        // Normalize the input to get a direction vector
+        simpleRollDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
+
+        // Start rolling when Enter is pressed and we have a valid direction
+        if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
+        {
+            StartRolling();
+        }
+    }
+    
+    void StartRolling()
+    {
+        if (!isSimpleRolling)
+        {
+            isSimpleRolling = true;
+            simpleRollTimer = 0f;
+            
+            // Disable rigidbody physics during roll
+            rb.isKinematic = true;
+            //GetComponent<Collider>().enabled = false;
+        }
+    }
+    
+    
+    void UpdateRolling()
+    {
+        simpleRollTimer += Time.deltaTime;
+
+        if (simpleRollTimer < simpleRollDuration)
+        {
+            // Calculate rotation for this frame
+            float rotationThisFrame = simpleRollSpeed * Time.deltaTime * 0.1f;
+            
+            // Rotate around the axis perpendicular to both up vector and roll direction
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, simpleRollDirection).normalized;
+            transform.Rotate(rotationAxis, rotationThisFrame, Space.World);
+
+            // Move the player in the roll direction
+            float moveDistance = (simpleRollSpeed * Mathf.PI * transform.localScale.y / simpleRollSpeed) * Time.deltaTime * 1.05f;
+            transform.position += simpleRollDirection * moveDistance;
+        }
+        else
+        {
+            // End rolling
+            isSimpleRolling = false;
+            rb.isKinematic = false;
+            //GetComponent<Collider>().enabled = true;
+
+            // Ensure the player is upright at the end of the roll
+            //Vector3 uprightRotation = new Vector3(0, transform.eulerAngles.y, 0);
+            //transform.rotation = Quaternion.Euler(uprightRotation);
+        }
     }
 }
