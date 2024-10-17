@@ -37,6 +37,10 @@ public class LevelDisplayManager : MonoBehaviour
         levels.Add(MapGenerator.GenerateLevel("Medium"));
         levels.Add(MapGenerator.GenerateLevel("Fire"));
         levels.Add(MapGenerator.GenerateLevel("Hard"));
+        levels.Add(MapGenerator.GenerateLevel("MixedPath"));
+        levels.Add(MapGenerator.GenerateLevel("IslandPath"));
+        levels.Add(MapGenerator.GenerateLevel("SpiralPath"));
+        levels.Add(MapGenerator.GenerateLevel("ScatteredIslands"));
 
         levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
         levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));

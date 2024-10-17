@@ -20,6 +20,19 @@ public class MapGenerator : MonoBehaviour
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
                 break;
+            
+            case "MixedPath":
+                selectedLayout = MapLayouts.MixedPathLayout;
+                break;
+            case "IslandPath":
+                selectedLayout = MapLayouts.IslandPathLayout;
+                break;
+            case "SpiralPath":
+                selectedLayout = MapLayouts.SpiralPathLayout;
+                break;
+            case "ScatteredIslands":
+                selectedLayout = MapLayouts.ScatteredIslandsLayout;
+                break;
             default:
                 Debug.LogError("Invalid layout name: " + layoutName);
                 return null;
