@@ -31,11 +31,14 @@ public class LevelData : ScriptableObject
         Start,
         Normal,
         Reward,
-        Spring,
+        SpringStart,
+        SprintEnd,
         Hidden,
         Explosive,
         Checkpoint,
         Moving,
+        CoinTrigger,
+        Coin,
         Goal
     }
 }

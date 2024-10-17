@@ -33,6 +33,9 @@ public class MapGenerator : MonoBehaviour
             case "ScatteredIslands":
                 selectedLayout = MapLayouts.ScatteredIslandsLayout;
                 break;
+            case "AdvancedLayout":
+                selectedLayout = MapLayouts.AdvancedLayout;
+                break;
             default:
                 Debug.LogError("Invalid layout name: " + layoutName);
                 return null;
@@ -50,7 +53,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                if (selectedLayout[z, x] == 1 || selectedLayout[z, x] == 2 || selectedLayout[z, x] == 3)
+                if (selectedLayout[z, x] != 0)
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
@@ -69,6 +72,36 @@ public class MapGenerator : MonoBehaviour
                     {
                         platform.type = LevelData.PlatformType.Goal;
                         platform.color = Color.red;
+                    }
+                    else if (selectedLayout[z, x] == 4)
+                    {
+                        platform.type = LevelData.PlatformType.Explosive;
+                        platform.color = Color.black;
+                    }
+                    else if (selectedLayout[z, x] == 5)
+                    {
+                        platform.type = LevelData.PlatformType.SpringStart;
+                        platform.color = Color.green;
+                    }
+                    else if (selectedLayout[z, x] == 6)
+                    {
+                        platform.type = LevelData.PlatformType.SprintEnd;
+                        platform.color = Color.green;
+                    }
+                    else if (selectedLayout[z, x] == 7)
+                    {
+                        platform.type = LevelData.PlatformType.CoinTrigger;
+                        platform.color = Color.yellow;
+                    }
+                    else if (selectedLayout[z, x] == 8)
+                    {
+                        platform.type = LevelData.PlatformType.Coin;
+                        platform.color = Color.yellow;
+                    }
+                    else if (selectedLayout[z, x] == 9)
+                    {
+                        platform.type = LevelData.PlatformType.Moving;
+                        platform.color = Color.gray;
                     }
                     else
                     {

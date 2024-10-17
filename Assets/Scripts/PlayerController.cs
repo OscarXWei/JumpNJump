@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private float totalRotation = 1f;
     private bool isRolling = false;
     private float targetRotation = 3600f; // 完整的一周旋转
-    private float rollTimer = 0f;
+    //private float rollTimer = 0f;
     
     [Header("Simple Rolling")]
     public float simpleRollSpeed = 3636f; // 每秒旋转的角度
@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Start platform not found!");
+              Debug.LogError("Start platform not found!");
         }
     }
 

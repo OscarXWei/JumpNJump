@@ -19,7 +19,7 @@
             {
                 "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "buildOutputDirList",
-                "value": "{\"m_Value\":\"/Users/oscar/Downloads/COMP6540 Game Development/MyGame/WebGL Builds;;;;;;;;;\"}"
+                "value": "{\"m_Value\":\"/Users/oscarwei/Documents/GameDev/JumpNJump/web;/Users/oscar/Downloads/COMP6540 Game Development/MyGame/WebGL Builds;;;;;;;;\"}"
             }
         ]
     }
