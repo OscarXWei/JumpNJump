@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour
 {
-    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0)
+    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0.01f)
     {
         int[,] selectedLayout;
         switch (layoutName)
@@ -41,7 +41,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
-                        position = new Vector3(x * (1 + platformSpacing), 1, z * (1 + platformSpacing)),
+                        position = new Vector3(x * (1 + platformSpacing), 0.5f, z * (1 + platformSpacing)),
                         scale = Vector3.one,
                         
                         directionTag = ""
