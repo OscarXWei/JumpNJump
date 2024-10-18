@@ -343,6 +343,7 @@ public class PlayerController : MonoBehaviour
         //if (isCharging && nextCube != null)
         if (isCharging)
         {
+            turnOnPhysics(); 
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
             rb.AddForce(jumpDirection * currentJumpForce, ForceMode.Impulse);
@@ -709,10 +710,15 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    public void turnOffPhysicsWhenRolling()
+    public void turnOffPhysics()
     {
         // Disable rigidbody physics during roll
         rb.isKinematic = true;    
+    }
+    public void turnOnPhysics()
+    {
+        // Disable rigidbody physics during roll
+        rb.isKinematic = false;    
     }
     void CheckGoalReached()
     {
