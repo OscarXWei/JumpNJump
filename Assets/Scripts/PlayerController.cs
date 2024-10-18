@@ -175,18 +175,18 @@ public class PlayerController : MonoBehaviour
     {
         if (!isJumping && !isGameOver && GameManager.Instance.isStarting)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
             {
                 StartCharging();
             }
 
-            if (Input.GetKey(KeyCode.Space) && isCharging)
+            if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
             {
                 ContinueCharging();
                 ApplySquashEffect();
             }
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
             {
                 if (debugMode) Debug.Log("Space key released, attempting to jump");
                 Jump();
@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
                 HandleRollingInput(); 
                 UpdateDirectionArrow();           
             }
-            if (isSimpleRolling)
+            if (isSimpleRolling && !isCharging && !isJumping)
             {
                 UpdateRolling();
             }
@@ -343,7 +343,7 @@ public class PlayerController : MonoBehaviour
         //if (isCharging && nextCube != null)
         if (isCharging)
         {
-            turnOnPhysics(); 
+            turnOnHorizontalPhysics(); 
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
             rb.AddForce(jumpDirection * currentJumpForce, ForceMode.Impulse);
@@ -660,7 +660,7 @@ public class PlayerController : MonoBehaviour
         //}
 
         // Start rolling when Enter is pressed and we have a valid direction
-        if (simpleRollDirection.magnitude > 0.1f && Input.GetKey(KeyCode.Return))
+        if (simpleRollDirection.magnitude > 0.1f && Input.GetKey(KeyCode.Return) && !isCharging && !isJumping)
         {
             StartRolling();
             HideDirectionArrow();
@@ -678,6 +678,17 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    public void turnOffHorizontalPhysics()
+    {
+    	Rigidbody rb = GetComponent<Rigidbody>();
+	rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+    }
+    public void turnOnHorizontalPhysics()
+    {
+    	Rigidbody rb = GetComponent<Rigidbody>();
+	rb.constraints = RigidbodyConstraints.None;
+    }
+
     
     void UpdateRolling()
     {
