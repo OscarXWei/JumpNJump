@@ -22,6 +22,10 @@ public class CubeSquashEffect : MonoBehaviour
             {
                 ApplySquashEffect(player.currentJumpForce / player.maxJumpForce);
             }
+            else if (distanceToPlayer < 1f && player.isSimpleRolling)
+            {
+                player.turnOffPhysics();
+            }
             else
             {
                 ResetSquashEffect();
@@ -41,6 +45,7 @@ public class CubeSquashEffect : MonoBehaviour
             originalScale.y * (1 - squashAmount),
             originalScale.z * (1 + squashAmount)
         );
+        player.turnOffHorizontalPhysics();
         transform.localScale = Vector3.Lerp(transform.localScale, newScale, Time.deltaTime * squashSpeed);
     }
 
