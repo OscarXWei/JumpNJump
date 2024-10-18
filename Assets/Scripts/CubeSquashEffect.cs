@@ -22,6 +22,10 @@ public class CubeSquashEffect : MonoBehaviour
             {
                 ApplySquashEffect(player.currentJumpForce / player.maxJumpForce);
             }
+            else if (distanceToPlayer < 1f && player.isSimpleRolling)
+            {
+                player.turnOffPhysicsWhenRolling();
+            }
             else
             {
                 ResetSquashEffect();
