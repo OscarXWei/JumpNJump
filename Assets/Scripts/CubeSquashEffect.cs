@@ -24,7 +24,7 @@ public class CubeSquashEffect : MonoBehaviour
             }
             else if (distanceToPlayer < 1f && player.isSimpleRolling)
             {
-                player.turnOffPhysicsWhenRolling();
+                player.turnOffPhysics();
             }
             else
             {
@@ -39,6 +39,7 @@ public class CubeSquashEffect : MonoBehaviour
 
     void ApplySquashEffect(float chargePercentage)
     {
+        player.turnOffPhysics();
         float squashAmount = Mathf.Lerp(0, maxSquashAmount, chargePercentage);
         Vector3 newScale = new Vector3(
             originalScale.x * (1 + squashAmount),
@@ -46,6 +47,7 @@ public class CubeSquashEffect : MonoBehaviour
             originalScale.z * (1 + squashAmount)
         );
         transform.localScale = Vector3.Lerp(transform.localScale, newScale, Time.deltaTime * squashSpeed);
+        player.turnOnPhysics();
     }
 
     void ResetSquashEffect()
