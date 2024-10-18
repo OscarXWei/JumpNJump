@@ -39,15 +39,14 @@ public class CubeSquashEffect : MonoBehaviour
 
     void ApplySquashEffect(float chargePercentage)
     {
-        player.turnOffPhysics();
         float squashAmount = Mathf.Lerp(0, maxSquashAmount, chargePercentage);
         Vector3 newScale = new Vector3(
             originalScale.x * (1 + squashAmount),
             originalScale.y * (1 - squashAmount),
             originalScale.z * (1 + squashAmount)
         );
+        player.turnOffHorizontalPhysics();
         transform.localScale = Vector3.Lerp(transform.localScale, newScale, Time.deltaTime * squashSpeed);
-        player.turnOnPhysics();
     }
 
     void ResetSquashEffect()
