@@ -101,8 +101,7 @@ public class MapGenerator : MonoBehaviour
                     else if (selectedLayout[z, x] == 9)
                     {
                         platform.type = LevelData.PlatformType.Moving;
-                        platform.color = Color.gray;
-                        platform.color = Color.gray;
+                        platform.color = Color.green;
                         platform.isMoving = true;
                         platform.moveStart = platform.position;
                         platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位

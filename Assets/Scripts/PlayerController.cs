@@ -89,6 +89,11 @@ public class PlayerController : MonoBehaviour
     public Color arrowColor = Color.white;
     public float arrowSize = 50f;
     private bool isShowingArrow = false;
+
+    private Transform currentPlatform;
+    private Vector3 lastPlatformPosition;
+    private Vector3 platformVelocity;
+
     private void Awake()
     {
         healthBar = GetComponentInChildren<HealthBarController>();
@@ -106,6 +111,11 @@ public class PlayerController : MonoBehaviour
         SetupLevel();
 
         SetupArrow();
+
+        // 初始化平台相关变量
+        currentPlatform = null;
+        lastPlatformPosition = Vector3.zero;
+        platformVelocity = Vector3.zero;
     }
 
     void SetupArrow()
@@ -223,6 +233,39 @@ public class PlayerController : MonoBehaviour
         //{
         //    ReachGoal();
         //}
+    }
+
+    void FixedUpdate()
+    {
+        if (currentPlatform != null)
+        {
+            // 计算平台的速度
+            Vector3 platformDelta = currentPlatform.position - lastPlatformPosition;
+            platformVelocity = platformDelta / Time.fixedDeltaTime;
+
+            // 使玩家跟随平台移动
+            rb.MovePosition(rb.position + platformVelocity * Time.fixedDeltaTime);
+
+            // 更新平台的上一个位置
+            lastPlatformPosition = currentPlatform.position;
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            currentPlatform = collision.transform;
+            lastPlatformPosition = currentPlatform.position;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            currentPlatform = null;
+        }
     }
 
     void UpdateDirectionArrow()
@@ -345,6 +388,9 @@ public class PlayerController : MonoBehaviour
             turnOnHorizontalPhysics();
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
+            // 考虑平台速度
+            Vector3 initialVelocity = platformVelocity;
+            rb.velocity = initialVelocity;
             rb.AddForce(jumpDirection * currentJumpForce, ForceMode.Impulse);
             isCharging = false;
             isJumping = true;
@@ -441,6 +487,13 @@ public class PlayerController : MonoBehaviour
 
             // transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
+
+        // 处理移动平台
+        if (hitPlatform.CompareTag("Platform"))
+        {
+            currentPlatform = hitPlatform.transform;
+            lastPlatformPosition = currentPlatform.position;
         }
     }
 
