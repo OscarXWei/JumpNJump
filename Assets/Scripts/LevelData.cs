@@ -24,6 +24,11 @@ public class LevelData : ScriptableObject
         public bool useGravity;
         public bool freezePosition;
         public bool freezeRotation;
+        
+        public bool isMoving;
+        public Vector3 moveStart;
+        public Vector3 moveEnd;
+        public float moveDuration = 2f;
     }
 
     public enum PlatformType
