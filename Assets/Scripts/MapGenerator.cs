@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour
 {
-    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0)
+    public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0.01f)
     {
         int[,] selectedLayout;
         switch (layoutName)
@@ -19,6 +19,22 @@ public class MapGenerator : MonoBehaviour
                 break;
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
+                break;
+            
+            case "MixedPath":
+                selectedLayout = MapLayouts.MixedPathLayout;
+                break;
+            case "IslandPath":
+                selectedLayout = MapLayouts.IslandPathLayout;
+                break;
+            case "SpiralPath":
+                selectedLayout = MapLayouts.SpiralPathLayout;
+                break;
+            case "ScatteredIslands":
+                selectedLayout = MapLayouts.ScatteredIslandsLayout;
+                break;
+            case "AdvancedLayout":
+                selectedLayout = MapLayouts.AdvancedLayout;
                 break;
             default:
                 Debug.LogError("Invalid layout name: " + layoutName);
@@ -37,11 +53,11 @@ public class MapGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                if (selectedLayout[z, x] == 1 || selectedLayout[z, x] == 2 || selectedLayout[z, x] == 3)
+                if (selectedLayout[z, x] != 0)
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
-                        position = new Vector3(x * (1 + platformSpacing), 1, z * (1 + platformSpacing)),
+                        position = new Vector3(x * (1 + platformSpacing), 0.5f, z * (1 + platformSpacing)),
                         scale = Vector3.one,
                         
                         directionTag = ""
@@ -56,6 +72,36 @@ public class MapGenerator : MonoBehaviour
                     {
                         platform.type = LevelData.PlatformType.Goal;
                         platform.color = Color.red;
+                    }
+                    else if (selectedLayout[z, x] == 4)
+                    {
+                        platform.type = LevelData.PlatformType.Explosive;
+                        platform.color = Color.black;
+                    }
+                    else if (selectedLayout[z, x] == 5)
+                    {
+                        platform.type = LevelData.PlatformType.SpringStart;
+                        platform.color = Color.green;
+                    }
+                    else if (selectedLayout[z, x] == 6)
+                    {
+                        platform.type = LevelData.PlatformType.SprintEnd;
+                        platform.color = Color.green;
+                    }
+                    else if (selectedLayout[z, x] == 7)
+                    {
+                        platform.type = LevelData.PlatformType.CoinTrigger;
+                        platform.color = Color.yellow;
+                    }
+                    else if (selectedLayout[z, x] == 8)
+                    {
+                        platform.type = LevelData.PlatformType.Coin;
+                        platform.color = Color.yellow;
+                    }
+                    else if (selectedLayout[z, x] == 9)
+                    {
+                        platform.type = LevelData.PlatformType.Moving;
+                        platform.color = Color.gray;
                     }
                     else
                     {

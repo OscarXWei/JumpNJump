@@ -55,13 +55,13 @@ public class PlayerController : MonoBehaviour
     private float totalRotation = 1f;
     private bool isRolling = false;
     private float targetRotation = 3600f; // 完整的一周旋转
-    private float rollTimer = 0f;
-    
+                                          //private float rollTimer = 0f;
+
     [Header("Simple Rolling")]
     public float simpleRollSpeed = 3636f; // 每秒旋转的角度
     public float simpleRollDuration = 1f;
     private Vector3 simpleRollDirection;
-    private bool isSimpleRolling = false;
+    public bool isSimpleRolling = false;
     private float simpleRollTimer = 0f;
     private float simpleRollHorizontal = 1f;
     private float simpleRollVertical = 0f;
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("UI Direction Arrow")]
     public Image directionArrowImage;
-    public Sprite customArrowSprite; 
+    public Sprite customArrowSprite;
     public float arrowRotationSpeed = 10f;
     public Color arrowColor = Color.white;
     public float arrowSize = 50f;
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        Transform FindPlatformTransform(Vector3 position)
+    Transform FindPlatformTransform(Vector3 position)
     {
         Collider[] colliders = Physics.OverlapSphere(position, 0.1f);
         return colliders.Length > 0 ? colliders[0].transform : null;
@@ -174,26 +174,29 @@ public class PlayerController : MonoBehaviour
     {
         if (!isJumping && !isGameOver && GameManager.Instance.isStarting)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
             {
                 StartCharging();
             }
 
-            if (Input.GetKey(KeyCode.Space) && isCharging)
+            if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
             {
                 ContinueCharging();
                 ApplySquashEffect();
             }
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
             {
                 if (debugMode) Debug.Log("Space key released, attempting to jump");
                 Jump();
                 ResetSquashEffect();
             }
-            HandleRollingInput();
-            UpdateDirectionArrow();
-            if (isSimpleRolling)
+            if (!isSimpleRolling)
+            {
+                HandleRollingInput();
+                UpdateDirectionArrow();
+            }
+            if (isSimpleRolling && !isCharging && !isJumping)
             {
                 UpdateRolling();
             }
@@ -228,10 +231,10 @@ public class PlayerController : MonoBehaviour
         {
             // 计算箭头应该指向的角度
             float targetAngle = Mathf.Atan2(simpleRollDirection.z, simpleRollDirection.x) * Mathf.Rad2Deg;
-            
+
             // 创建目标旋转（只在Y轴上旋转，保持水平）
             Quaternion targetRotation = Quaternion.Euler(0, -targetAngle, 0);
-            
+
             // 平滑旋转箭头
             directionArrowImage.transform.rotation = Quaternion.Slerp(directionArrowImage.transform.rotation, targetRotation, arrowRotationSpeed * Time.deltaTime);
         }
@@ -305,7 +308,7 @@ public class PlayerController : MonoBehaviour
     {
         isCharging = true;
         currentJumpForce = 0f;
-        CalculateOptimalJumpForce();
+        //CalculateOptimalJumpForce();
     }
 
     void ContinueCharging()
@@ -336,8 +339,10 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (isCharging && nextCube != null)
+        //if (isCharging && nextCube != null)
+        if (isCharging)
         {
+            turnOnHorizontalPhysics();
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
             rb.AddForce(jumpDirection * currentJumpForce, ForceMode.Impulse);
@@ -377,7 +382,8 @@ public class PlayerController : MonoBehaviour
 
     Vector3 CalculateJumpDirection()
     {
-        Vector3 targetDirection = nextCube.transform.position - transform.position;
+        //Vector3 targetDirection = nextCube.transform.position - transform.position;
+        Vector3 targetDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
         float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
         float radianAngle = jumpAngle * Mathf.Deg2Rad;
 
@@ -420,20 +426,22 @@ public class PlayerController : MonoBehaviour
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
 
-        if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
-        {
-            
-        }
-        else if (hitPlatform.CompareTag("Terrain"))
-        {
-            FailJump();
-        }
-
-        isRolling = false;
-  
-        // transform.rotation = Quaternion.identity;
         if (!isSimpleRolling)
-        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        {
+            if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
+            {
+
+            }
+            else if (hitPlatform.CompareTag("Terrain"))
+            {
+                FailJump();
+            }
+
+            isRolling = false;
+
+            // transform.rotation = Quaternion.identity;
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
     }
 
     private void SucceedJump(GameObject hitPlatform)
@@ -443,7 +451,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = hitPlatform.transform.position + Vector3.up * 0.5f;
+        transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
@@ -603,7 +611,7 @@ public class PlayerController : MonoBehaviour
         ScoreManager.Instance.RetryScore();
         if (debugMode) Debug.Log("Player reset for Try Again");
     }
-    
+
     void HandleRollingInput()
     {
         bool hasInput = false;
@@ -618,19 +626,19 @@ public class PlayerController : MonoBehaviour
             simpleRollHorizontal = 1f;
             simpleRollVertical = 0f;
             hasInput = true;
-        }        
+        }
         else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             simpleRollHorizontal = 0f;
             simpleRollVertical = -1f;
             hasInput = true;
-        } 
+        }
         else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             simpleRollHorizontal = 0f;
             simpleRollVertical = 1f;
             hasInput = true;
-        } 
+        }
         // Normalize the input to get a direction vector
         simpleRollDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
 
@@ -643,33 +651,43 @@ public class PlayerController : MonoBehaviour
             HideDirectionArrow();  // 这里调用隐藏箭头
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
-        {
-            StartRolling();
-            HideDirectionArrow();  // 开始滚动时隐藏箭头
-        }
+        //if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
+        //{
+        //    StartRolling();
+        //    HideDirectionArrow();  // 开始滚动时隐藏箭头
+        //}
 
         // Start rolling when Enter is pressed and we have a valid direction
-        if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
+        if (simpleRollDirection.magnitude > 0.1f && Input.GetKey(KeyCode.Return) && !isCharging && !isJumping)
         {
             StartRolling();
+            HideDirectionArrow();
         }
     }
-    
+
     void StartRolling()
     {
         if (!isSimpleRolling)
         {
             isSimpleRolling = true;
             simpleRollTimer = 0f;
-            
-            // Disable rigidbody physics during roll
-            rb.isKinematic = true;
+
             //GetComponent<Collider>().enabled = false;
         }
     }
-    
-    
+
+    public void turnOffHorizontalPhysics()
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+    }
+    public void turnOnHorizontalPhysics()
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.None;
+    }
+
+
     void UpdateRolling()
     {
         simpleRollTimer += Time.deltaTime;
@@ -678,7 +696,7 @@ public class PlayerController : MonoBehaviour
         {
             // Calculate rotation for this frame
             float rotationThisFrame = simpleRollSpeed * Time.deltaTime * 0.1f;
-            
+
             // Rotate around the axis perpendicular to both up vector and roll direction
             Vector3 rotationAxis = Vector3.Cross(Vector3.up, simpleRollDirection).normalized;
             transform.Rotate(rotationAxis, rotationThisFrame, Space.World);
@@ -700,6 +718,17 @@ public class PlayerController : MonoBehaviour
             CheckGoalReached();
         }
     }
+
+    public void turnOffPhysics()
+    {
+        // Disable rigidbody physics during roll
+        rb.isKinematic = true;
+    }
+    public void turnOnPhysics()
+    {
+        // Disable rigidbody physics during roll
+        rb.isKinematic = false;
+    }
     void CheckGoalReached()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
@@ -717,10 +746,10 @@ public class PlayerController : MonoBehaviour
     IEnumerator CompleteLevel()
     {
         // 可以在这里添加一些过渡效果
-        yield return new WaitForSeconds(1f); 
+        yield return new WaitForSeconds(1f);
 
         // 切换到下一关
         levelDisplayManager.SwitchToNextLevel();
-        SetupLevel(); 
+        SetupLevel();
     }
 }
