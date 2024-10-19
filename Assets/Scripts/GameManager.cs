@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -72,7 +73,9 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         // Apply difficulty settings
-        ApplyDifficultySettings();
+        // ApplyDifficultySettings();
+        startMenuUI.HideStartMenu();
+        gameOverUI.HideGameOver();
         isGameOver = false;
         isStarting = true;
 
@@ -95,8 +98,7 @@ public class GameManager : MonoBehaviour
         // Hide game over UI
         if (gameOverUI != null)
             gameOverUI.HideGameOver();
-        isGameOver = false;
-        ShowStartMenu();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GameOver(string message = "Game Over")

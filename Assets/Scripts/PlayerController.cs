@@ -89,7 +89,6 @@ public class PlayerController : MonoBehaviour
     public Color arrowColor = Color.white;
     public float arrowSize = 50f;
     private bool isShowingArrow = false;
-
     private void Awake()
     {
         healthBar = GetComponentInChildren<HealthBarController>();
@@ -211,7 +210,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
-        
+
         // if (Input.GetMouseButtonDown(0) && Time.time - lastShootTime > shootCooldown && !isGameOver)
         // {
         //     Shoot();
@@ -423,14 +422,12 @@ public class PlayerController : MonoBehaviour
 
         if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
         {
-            //SucceedJump(hitPlatform);
+            
         }
         else if (hitPlatform.CompareTag("Terrain"))
         {
             FailJump();
         }
-
-      
 
         isRolling = false;
   

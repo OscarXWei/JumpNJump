@@ -19,9 +19,6 @@ public class GameOverUI : MonoBehaviour
         // Add listener to the restart button
         restartButton.onClick.AddListener(RestartGame);
 
-        // Add listener to the try again button
-        tryAgainButton.onClick.AddListener(TryAgain);
-
         // Get reference to the PlayerController
         playerController = FindObjectOfType<PlayerController>();
     }
@@ -37,7 +34,6 @@ public class GameOverUI : MonoBehaviour
     {
         gameOverPanel.SetActive(false);
         restartButton.gameObject.SetActive(false);
-        tryAgainButton.gameObject.SetActive(false);
     }
 
     public void SetTryAgainButtonActive(bool active)
@@ -45,11 +41,6 @@ public class GameOverUI : MonoBehaviour
         tryAgainButton.gameObject.SetActive(active);
     }
 
-    private void TryAgain()
-    {
-        HideGameOver();
-        playerController.TryAgain();
-    }
 
     private void RestartGame()
     {

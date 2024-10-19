@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CubeSquashEffect : MonoBehaviour
@@ -6,6 +7,8 @@ public class CubeSquashEffect : MonoBehaviour
     public float squashSpeed = 2f;
     private Vector3 originalScale;
     private PlayerController player;
+    private float timeStill = 0f;          // Tracks the player's last position
+    private float timeToFreeze = 5f;
 
     void Start()
     {
@@ -33,6 +36,12 @@ public class CubeSquashEffect : MonoBehaviour
         }
     }
 
+    private IEnumerator DestroyCubeAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject); // Destroy the cube
+    }
+
     void ApplySquashEffect(float chargePercentage)
     {
         float squashAmount = Mathf.Lerp(0, maxSquashAmount, chargePercentage);
@@ -48,4 +57,13 @@ public class CubeSquashEffect : MonoBehaviour
     {
         transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime * squashSpeed);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) // Assuming your player has the "Player" tag
+        {
+            StartCoroutine(DestroyCubeAfterDelay(5f));
+        }
+    }
+
 }

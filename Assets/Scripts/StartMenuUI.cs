@@ -6,29 +6,28 @@ public class StartMenuUI : MonoBehaviour
 {
     public GameObject startMenuPanel;
     public TextMeshProUGUI gameTitleText;
-    public Button easyModeButton;
-    public Button normalModeButton;
-    public Button hardModeButton;
+    public Button StartBtn;
+    //public Button normalModeButton;
+    //public Button hardModeButton;
     public Button gameInfoButton;
 
     private void Start()
     {
         // Set game title
-        gameTitleText.text = "Cubes Jump";
+        gameTitleText.text = "Cube Adventure";
 
         // Add listeners to buttons
-        easyModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Easy));
-        normalModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Normal));
-        hardModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Hard));
+        StartBtn.onClick.AddListener(() => StartGame());
+        //normalModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Normal));
+        //hardModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Hard));
         //gameInfoButton.onClick.AddListener(ShowGameInfo);
 
         // Show start menu
         ShowStartMenu();
     }
 
-    private void StartGame(GameDifficulty difficulty)
+    private void StartGame()
     {
-        GameManager.Instance.SetDifficulty(difficulty);
         GameManager.Instance.StartGame();
         HideStartMenu();
     }
