@@ -478,22 +478,23 @@ public class PlayerController : MonoBehaviour
             {
                 SucceedJump(hitPlatform);
             }
-            else if (hitPlatform.CompareTag("Terrain"))
-            {
-                FailJump();
-            }
-
             isRolling = false;
 
             // transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         }
 
+
         // 处理移动平台
         if (hitPlatform.CompareTag("Platform"))
         {
             currentPlatform = hitPlatform.transform;
             lastPlatformPosition = currentPlatform.position;
+        }
+
+        if (hitPlatform.CompareTag("Terrain"))
+        {
+            FailJump();
         }
     }
 

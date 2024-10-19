@@ -17,7 +17,7 @@ public class StartMenuUI : MonoBehaviour
         gameTitleText.text = "Cube Adventure";
 
         // Add listeners to buttons
-        StartBtn.onClick.AddListener(() => StartGame());
+        //StartBtn.onClick.AddListener(() => StartGame());
         //normalModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Normal));
         //hardModeButton.onClick.AddListener(() => StartGame(GameDifficulty.Hard));
         //gameInfoButton.onClick.AddListener(ShowGameInfo);

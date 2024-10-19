@@ -14,6 +14,8 @@ TagManager:
   - Image
   - Platform
   - Goal
+  - Explosive
+  - Start
   layers:
   - Default
   - TransparentFX
