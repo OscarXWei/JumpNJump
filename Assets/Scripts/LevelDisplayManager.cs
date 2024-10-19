@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class LevelDisplayManager : MonoBehaviour
@@ -86,7 +87,7 @@ public class LevelDisplayManager : MonoBehaviour
         }
     }
 
-    void CreatePlatform(LevelData.PlatformData platformData, Transform parent)
+ void CreatePlatform(LevelData.PlatformData platformData, Transform parent)
     {
         GameObject platform = Instantiate(platformPrefab, platformData.position, Quaternion.identity, parent);
         platform.transform.localScale = platformData.scale;
@@ -95,7 +96,7 @@ public class LevelDisplayManager : MonoBehaviour
         {
             renderer.material.color = platformData.color;
         }
-               
+        
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
@@ -111,6 +112,13 @@ public class LevelDisplayManager : MonoBehaviour
             rb = platform.AddComponent<Rigidbody>();
         }
 
+        rb.isKinematic = true;
+
+        if (platformData.isMoving)
+        {
+            StartMovingPlatform(platform.transform, platformData);
+        }
+
         // Freeze position and rotation on all axes
         rb.constraints = RigidbodyConstraints.FreezePositionX |
                          RigidbodyConstraints.FreezePositionY |
@@ -119,6 +127,37 @@ public class LevelDisplayManager : MonoBehaviour
                          RigidbodyConstraints.FreezeRotationY |
                          RigidbodyConstraints.FreezeRotationZ;
     }
+
+   void StartMovingPlatform(Transform platformTransform, LevelData.PlatformData platformData)
+    {
+        StartCoroutine(MovePlatformCoroutine(platformTransform, platformData));
+    }
+
+    IEnumerator MovePlatformCoroutine(Transform platform, LevelData.PlatformData platformData)
+    {
+        Vector3 startPos = platformData.moveStart;
+        Vector3 endPos = platformData.moveEnd;
+        float duration = platformData.moveDuration;
+
+        while (true)
+        {
+            yield return StartCoroutine(MoveFromTo(platform, startPos, endPos, duration));
+            yield return StartCoroutine(MoveFromTo(platform, endPos, startPos, duration));
+        }
+    }
+
+    IEnumerator MoveFromTo(Transform objectToMove, Vector3 a, Vector3 b, float duration)
+    {
+        float step = 0f;
+        float rate = 1f / duration;
+        while (step < 1.0f)
+        {
+            step += Time.deltaTime * rate;
+            objectToMove.position = Vector3.Lerp(a, b, Mathf.SmoothStep(0f, 1f, step));
+            yield return null;
+        }
+    }
+
 
     void CreateGround(Transform parent)
     {
