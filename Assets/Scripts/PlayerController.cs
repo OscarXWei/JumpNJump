@@ -430,7 +430,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
-
+                SucceedJump(hitPlatform);
             }
             else if (hitPlatform.CompareTag("Terrain"))
             {
@@ -451,7 +451,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
+        //transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
