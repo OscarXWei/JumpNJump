@@ -7,13 +7,13 @@ public class CubeSquashEffect : MonoBehaviour
     public float squashSpeed = 2f;
     private Vector3 originalScale;
     private PlayerController player;
-    private float timeStill = 0f;          // Tracks the player's last position
-    private float timeToFreeze = 5f;
+    public GameObject shatteredPlayerPrefab;
 
     void Start()
     {
         originalScale = transform.localScale;
         player = FindObjectOfType<PlayerController>();
+        shatteredPlayerPrefab = Resources.Load<GameObject>("Prefabs/Shatter");
     }
 
     void Update()
@@ -43,6 +43,7 @@ public class CubeSquashEffect : MonoBehaviour
     private IEnumerator DestroyCubeAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        GameObject shatteredPlayer = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject); // Destroy the cube
     }
 
@@ -65,7 +66,13 @@ public class CubeSquashEffect : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player")) // Assuming your player has the "Player" tag
+        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Explosive")) // Assuming your player has the "Player" tag
+        {
+            Debug.Log("Explodeing!");
+            StartCoroutine(DestroyCubeAfterDelay(3f));
+        }
+
+        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Platform")) // Assuming your player has the "Player" tag
         {
             StartCoroutine(DestroyCubeAfterDelay(5f));
         }

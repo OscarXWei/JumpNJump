@@ -11,7 +11,7 @@ public class LevelDisplayManager : MonoBehaviour
     private GameObject currentLevelObject;
 
     void Start()
-    {   
+    {
         AddGeneratedLevels();
         DisplayCurrentLevel();
     }
@@ -30,11 +30,11 @@ public class LevelDisplayManager : MonoBehaviour
 
     void AddGeneratedLevels()
     {
- 
+
         levels = new List<LevelData>();
-        
+
         levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
-    
+
         levels.Add(MapGenerator.GenerateLevel("Easy"));
         levels.Add(MapGenerator.GenerateLevel("Medium"));
         levels.Add(MapGenerator.GenerateLevel("Fire"));
@@ -48,7 +48,7 @@ public class LevelDisplayManager : MonoBehaviour
 
         levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
         levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
-   
+
     }
     public LevelData GetCurrentLevelData()
     {
@@ -65,7 +65,7 @@ public class LevelDisplayManager : MonoBehaviour
 
     void DisplayCurrentLevel()
     {
-     if (currentLevelObject != null)
+        if (currentLevelObject != null)
         {
             Destroy(currentLevelObject);
         }
@@ -95,16 +95,24 @@ public class LevelDisplayManager : MonoBehaviour
         {
             renderer.material.color = platformData.color;
         }
-               
+
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
+        }
+        if (platformData.type == LevelData.PlatformType.Explosive)
+        {
+            platform.tag = "Explosive";
+        }
+        if (platformData.type == LevelData.PlatformType.Start)
+        {
+            platform.tag = "Start";
         }
         else
         {
             platform.tag = "Platform";
         }
-        
+
         Rigidbody rb = platform.GetComponent<Rigidbody>();
         if (rb == null)
         {

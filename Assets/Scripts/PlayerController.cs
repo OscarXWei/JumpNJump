@@ -432,15 +432,15 @@ public class PlayerController : MonoBehaviour
             {
                 SucceedJump(hitPlatform);
             }
-            else if (hitPlatform.CompareTag("Terrain"))
-            {
-                FailJump();
-            }
-
             isRolling = false;
 
             // transform.rotation = Quaternion.identity;
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
+
+        if (hitPlatform.CompareTag("Terrain"))
+        {
+            FailJump();
         }
     }
 
