@@ -57,7 +57,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
-                        position = new Vector3(x * (1 + platformSpacing), 0.5f, z * (1 + platformSpacing)),
+                        position = new Vector3(x * (1 + platformSpacing), 8.0f, z * (1 + platformSpacing)),
                         scale = Vector3.one,
                         
                         directionTag = ""
