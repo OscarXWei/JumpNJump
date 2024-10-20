@@ -6,10 +6,12 @@ public class MapGenerator : MonoBehaviour
     public static LevelData GenerateLevel(string layoutName, float timeLimit = 60f, float platformSpacing = 0.01f)
     {
         int[,] selectedLayout;
+        Dictionary<(int, int), (int, int)> selectedConnections = new Dictionary<(int, int), (int, int)>();
         switch (layoutName)
         {
             case "Easy":
                 selectedLayout = MapLayouts.EasyMazeLayout;
+                selectedConnections = MapLayouts.EasyMazeConnections;
                 break;
             case "Medium":
                 selectedLayout = MapLayouts.ObstacleLayout;
@@ -113,10 +115,17 @@ public class MapGenerator : MonoBehaviour
                         platform.color = Color.cyan;
                     }
 
+                    platform.zInArray = z;
+                    platform.xInArray = x;
                     levelData.platforms.Add(platform);
                 }
             }
         }
+        levelData.platformsConnections = new Dictionary<(int, int), (int, int)>();
+        foreach (var connection in selectedConnections)
+	    {
+		levelData.platformsConnections[connection.Key] = connection.Value;
+	    }
 
         return levelData;
     }

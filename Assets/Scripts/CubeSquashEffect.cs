@@ -8,12 +8,14 @@ public class CubeSquashEffect : MonoBehaviour
     private Vector3 originalScale;
     private PlayerController player;
     public GameObject shatteredPlayerPrefab;
+    private LevelDisplayManager displayManager; 
 
     void Start()
     {
         originalScale = transform.localScale;
         player = FindObjectOfType<PlayerController>();
         shatteredPlayerPrefab = Resources.Load<GameObject>("Prefabs/Shatter");
+        displayManager = FindObjectOfType<LevelDisplayManager>();
     }
 
     void Update()
@@ -55,7 +57,7 @@ public class CubeSquashEffect : MonoBehaviour
             originalScale.y * (1 - squashAmount),
             originalScale.z * (1 + squashAmount)
         );
-        player.turnOffHorizontalPhysics();
+        //player.turnOffHorizontalPhysics();
         transform.localScale = Vector3.Lerp(transform.localScale, newScale, Time.deltaTime * squashSpeed);
     }
 
@@ -71,11 +73,23 @@ public class CubeSquashEffect : MonoBehaviour
             Debug.Log("Explodeing!");
             StartCoroutine(DestroyCubeAfterDelay(3f));
         }
-
-        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Platform")) // Assuming your player has the "Player" tag
+        
+        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("SpringStart")) // Assuming your player has the "Player" tag
         {
-            StartCoroutine(DestroyCubeAfterDelay(5f));
+            var result = displayManager.findMatchedPlatform(gameObject);
+            if (result.success)
+            	player.setTargetCubeJumping(result.val);
+            	//sss
         }
+        
+        
+
+        //if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Platform")) // Assuming your player has the "Player" tag
+        //{
+        //    StartCoroutine(DestroyCubeAfterDelay(5f));
+        //}
     }
+    
+    
 
 }

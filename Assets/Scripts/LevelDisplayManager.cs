@@ -10,6 +10,7 @@ public class LevelDisplayManager : MonoBehaviour
 
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
+    
 
     void Start()
     {
@@ -83,11 +84,14 @@ public class LevelDisplayManager : MonoBehaviour
     {
         foreach (var platformData in levelData.platforms)
         {
-            CreatePlatform(platformData, parent);
+            GameObject thisOne= CreatePlatform(platformData, parent);
+            levelData.platformPositions[thisOne] = (platformData.zInArray, platformData.xInArray);
+            levelData.positionPlatforms[(platformData.zInArray, platformData.xInArray)] = thisOne;
+            
         }
     }
 
- void CreatePlatform(LevelData.PlatformData platformData, Transform parent)
+ public GameObject CreatePlatform(LevelData.PlatformData platformData, Transform parent)
     {
         GameObject platform = Instantiate(platformPrefab, platformData.position, Quaternion.identity, parent);
         platform.transform.localScale = platformData.scale;
@@ -108,6 +112,10 @@ public class LevelDisplayManager : MonoBehaviour
         if (platformData.type == LevelData.PlatformType.Start)
         {
             platform.tag = "Start";
+        }
+        if (platformData.type == LevelData.PlatformType.SpringStart)
+        {
+            platform.tag = "SpringStart";
         }
         else
         {
@@ -134,6 +142,7 @@ public class LevelDisplayManager : MonoBehaviour
                          RigidbodyConstraints.FreezeRotationX |
                          RigidbodyConstraints.FreezeRotationY |
                          RigidbodyConstraints.FreezeRotationZ;
+        return platform;
     }
 
    void StartMovingPlatform(Transform platformTransform, LevelData.PlatformData platformData)
@@ -191,5 +200,26 @@ public class LevelDisplayManager : MonoBehaviour
     {
         currentLevelIndex = (currentLevelIndex - 1 + levels.Count) % levels.Count;
         DisplayCurrentLevel();
+    }
+    
+    public (bool success, GameObject val) findMatchedPlatform(GameObject theGameObject)
+    {
+        
+        // Check if the given gameObject is in the platformPositions dictionary
+        if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
+        {
+             // Check if this position has a connection in the platformsConnections dictionary
+            if (levels[currentLevelIndex].platformsConnections.TryGetValue(position, out (int targetZ, int targetX) targetPosition))
+            {
+                // Check if there's a platform at the target position
+                if (levels[currentLevelIndex].positionPlatforms.TryGetValue(targetPosition, out GameObject targetPlatform))
+                {
+                    return (true, targetPlatform);
+                }
+            }
+        }
+    
+        // If no match was found, return false and the original gameObject
+        return (false, theGameObject);
     }
 }

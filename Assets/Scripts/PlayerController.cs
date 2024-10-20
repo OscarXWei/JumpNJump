@@ -93,6 +93,11 @@ public class PlayerController : MonoBehaviour
     private Transform currentPlatform;
     private Vector3 lastPlatformPosition;
     private Vector3 platformVelocity;
+    
+    [Header("Target Cube")]
+    private bool nowHasTargetCube = false;
+    private GameObject targetCube;
+
 
     private void Awake()
     {
@@ -211,16 +216,17 @@ public class PlayerController : MonoBehaviour
                 UpdateRolling();
             }
         }
-        else if (isJumping && isRolling)
+        if (isJumping && isRolling)
         {
             // 在跳跃过程中应用翻滚效果
-            Debug.Log("Attempting to apply rolling effect");
+            
+            //Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
         else if (isRolling)
         {
             // 在跳跃过程中应用翻滚效果
-            Debug.Log("Attempting to apply rolling effect");
+            //Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
 
@@ -369,7 +375,7 @@ public class PlayerController : MonoBehaviour
             float rotationThisFrame = rollSpeed * Time.deltaTime;
             transform.Rotate(rollAxis, rotationThisFrame, Space.World);
             totalRotation += rotationThisFrame;
-            Debug.Log($"Applying rotation. Total rotation: {totalRotation}, Roll axis: {rollAxis}"); // 调试日志
+            //Debug.Log($"Applying rotation. Total rotation: {totalRotation}, Roll axis: {rollAxis}"); // 调试日志
         }
         else
         {
@@ -471,8 +477,11 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
+        
+        if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
+        	nowHasTargetCube = false;
 
-        if (!isSimpleRolling)
+        if (!isSimpleRolling && !nowHasTargetCube)
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
@@ -505,7 +514,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        //transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
+        transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 
@@ -806,4 +815,95 @@ public class PlayerController : MonoBehaviour
         levelDisplayManager.SwitchToNextLevel();
         SetupLevel();
     }
+    
+    public void setTargetCubeJumping(GameObject theGameObject)
+    {
+    	if (!isJumping && !nowHasTargetCube)
+    	{
+    		targetCube = theGameObject;
+    	nowHasTargetCube = true;
+    	jumpToTarget();
+    	}
+    	
+    }
+    
+    private void jumpToTarget()
+    {
+    	if (nowHasTargetCube)
+        {
+            turnOnHorizontalPhysics();
+            float exactJumpForce = CalculateTargetJumpForce();
+            Vector3 jumpDirection = CalculateTargetJumpDirection();
+            //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
+            // 考虑平台速度
+            Vector3 initialVelocity = platformVelocity;
+            rb.velocity = initialVelocity;
+            rb.AddForce(jumpDirection * exactJumpForce, ForceMode.Impulse);
+            isJumping = true;
+            isRolling = true;
+            totalRotation = 0f;
+
+            // 计算翻滚轴（与跳跃方向和上向量的叉积）
+            Vector3 horizontalJumpDir = new Vector3(jumpDirection.x, 0, jumpDirection.z).normalized;
+            rollAxis = Vector3.Cross(horizontalJumpDir, Vector3.up).normalized;
+
+            // 根据跳跃方向决定是前翻还是后翻
+            if (Vector3.Dot(transform.forward, horizontalJumpDir) >= 0)
+            {
+                rollAxis = -rollAxis; // 前翻
+            }
+            
+        }
+    }
+    
+    private float CalculateTargetJumpForce()
+    {
+        if (nowHasTargetCube)
+        {
+            Vector3 targetDirection = targetCube.transform.position - transform.position;
+            float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
+            float verticalDistance = targetDirection.y;
+            float gravity = Physics.gravity.magnitude;
+            float radianAngle = jumpAngle * Mathf.Deg2Rad;
+
+            float v0Squared = (gravity * horizontalDistance * horizontalDistance) /
+                              (2 * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle) *
+                               (horizontalDistance * Mathf.Tan(radianAngle) - verticalDistance));
+            float v0 = Mathf.Sqrt(v0Squared);
+
+            float exactJumpForce = v0 * rb.mass * forceAdjustment + 0.5f;
+            
+            return exactJumpForce;
+
+        }
+        
+        return 0.0f;
+    }
+    
+   private Vector3 CalculateTargetJumpDirection()
+    {
+        if (nowHasTargetCube)
+        { 
+		//Vector3 targetDirection = nextCube.transform.position - transform.position;
+		Vector3 targetDirection = targetCube.transform.position - transform.position;
+		float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
+		float radianAngle = jumpAngle * Mathf.Deg2Rad;
+
+		float cosAngle = Mathf.Cos(radianAngle);
+		float tanAngle = Mathf.Tan(radianAngle);
+
+		Vector3 horizontalDir = new Vector3(targetDirection.x, 0, targetDirection.z).normalized;
+		Vector3 jumpDirection = horizontalDir * cosAngle + Vector3.up * tanAngle;
+
+		return jumpDirection.normalized;
+	}
+	return new Vector3();
+    }
+    
+    private IEnumerator WaitCoroutine(float num)
+    {
+        yield return new WaitForSeconds(num);
+        // Put any code here that you want to run after the delay
+    }
+    
 }
