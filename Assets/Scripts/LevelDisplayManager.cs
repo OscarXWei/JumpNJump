@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class LevelDisplayManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class LevelDisplayManager : MonoBehaviour
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
 
+    // Add references for background objects
+    public GameObject backGround1;
+    public GameObject backGround2;
+    public GameObject backGround3;
 
     void Start()
     {
@@ -60,6 +65,24 @@ public class LevelDisplayManager : MonoBehaviour
     public void SwitchToNextLevel()
     {
         currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
+        if (currentLevelIndex == 1)
+        {
+            backGround1.SetActive(true);
+            backGround2.SetActive(false);
+            backGround3.SetActive(false);
+        }
+        else if (currentLevelIndex == 2)
+        {
+            backGround2.SetActive(true);
+            backGround1.SetActive(false);
+            backGround3.SetActive(false);
+        }
+        else if (currentLevelIndex == 3)
+        {
+            backGround1.SetActive(false);
+            backGround2.SetActive(false);
+            backGround3.SetActive(true);
+        }
         DisplayCurrentLevel();
     }
 
