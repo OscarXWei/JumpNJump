@@ -158,6 +158,36 @@ public class GameManager : MonoBehaviour
         // if (platformManager != null)
         //     platformManager.SetPlatformScale(new Vector3(0.5f, 0.5f, 0.5f));
     }
+
+    public void SaveGame()
+    {
+        if (SaveLoadManager.Instance != null)
+        {
+            SaveLoadManager.Instance.SaveGame();
+            Debug.Log("Game saved successfully.");
+        }
+        else
+        {
+            Debug.LogError("SaveLoadManager instance not found!");
+        }
+    }
+
+    public void LoadGame()
+    {
+        if (SaveLoadManager.Instance != null)
+        {
+            SaveLoadManager.Instance.LoadGame();
+            isStarting = true;
+            isGameOver = false;
+            if (gameOverUI != null) gameOverUI.HideGameOver();
+            if (jumpPowerUI != null) jumpPowerUI.gameObject.SetActive(true);
+            Debug.Log("Game loaded successfully.");
+        }
+        else
+        {
+            Debug.LogError("SaveLoadManager instance not found!");
+        }
+    }
 }
 
 public enum GameDifficulty

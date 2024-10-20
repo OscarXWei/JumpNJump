@@ -215,6 +215,15 @@ public class PlayerController : MonoBehaviour
             {
                 UpdateRolling();
             }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                SaveGame();
+            }
+            else if (Input.GetKeyDown(KeyCode.O))
+            {
+                LoadGame();
+            }
+
         }
         if (isJumping && isRolling)
         {
@@ -803,6 +812,33 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(CompleteLevel());
                 return;
             }
+        }
+    }
+
+    private void SaveGame()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SaveGame();
+            Debug.Log("Game saved.");
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found!");
+        }
+    }
+
+    // 新增：加载游戏方法
+    private void LoadGame()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadGame();
+            Debug.Log("Game loaded.");
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found!");
         }
     }
 
