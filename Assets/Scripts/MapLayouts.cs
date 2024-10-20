@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class MapLayouts
@@ -20,16 +22,22 @@ public static class MapLayouts
 
     public static readonly int[,] EasyMazeLayout = new int[,]
     {
-        {1,1,1,1,1,1,1,1,1,3},
+        {1,1,5,1,1,1,5,1,1,3},
         {1,0,0,0,0,0,0,0,0,1},
         {1,0,1,1,1,1,1,1,0,1},
         {1,0,1,0,0,0,0,1,0,1},
-        {1,0,1,0,1,1,0,1,0,1},
+        {1,0,1,0,1,6,0,1,0,1},
         {1,0,1,0,1,1,0,1,0,1},
         {1,0,1,0,0,0,0,1,0,1},
-        {1,0,1,1,1,1,1,1,0,1},
+        {1,0,6,1,1,1,1,1,0,1},
         {1,0,0,0,0,0,0,0,0,1},
         {2,1,1,1,1,1,1,1,1,1}
+    };
+    
+    public static readonly Dictionary<(int, int), (int, int)> EasyMazeConnections = new Dictionary<(int, int), (int, int)>
+    {
+        { (0, 2), (4, 5) },
+        { (0, 6), (7, 2) }
     };
 
     public static readonly int[,] ObstacleLayout = new int[,]

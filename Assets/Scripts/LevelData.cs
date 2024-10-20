@@ -8,8 +8,13 @@ public class LevelData : ScriptableObject
     public string levelName;
     public Vector3 playerStartPosition;
     public List<PlatformData> platforms = new List<PlatformData>();
+    public Dictionary<GameObject, (int, int)> platformPositions = new Dictionary<GameObject, (int, int)>();
+    public Dictionary<(int, int), GameObject> positionPlatforms = new Dictionary<(int, int), GameObject>();
+    public Dictionary<(int, int), (int, int)> platformsConnections = new Dictionary<(int, int), (int, int)>();
     public float timeLimit = 60f;
     public int checkpointIndex = -1;
+    
+    
 
     [Serializable]
     public class PlatformData
@@ -29,6 +34,8 @@ public class LevelData : ScriptableObject
         public Vector3 moveStart;
         public Vector3 moveEnd;
         public float moveDuration = 2f;
+        public int zInArray = -1;
+        public int xInArray = -1;
     }
 
     public enum PlatformType
