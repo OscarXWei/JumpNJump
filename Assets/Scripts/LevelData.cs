@@ -13,8 +13,8 @@ public class LevelData : ScriptableObject
     public Dictionary<(int, int), (int, int)> platformsConnections = new Dictionary<(int, int), (int, int)>();
     public float timeLimit = 60f;
     public int checkpointIndex = -1;
-    
-    
+
+
 
     [Serializable]
     public class PlatformData
@@ -29,7 +29,7 @@ public class LevelData : ScriptableObject
         public bool useGravity;
         public bool freezePosition;
         public bool freezeRotation;
-        
+
         public bool isMoving;
         public Vector3 moveStart;
         public Vector3 moveEnd;
@@ -40,18 +40,19 @@ public class LevelData : ScriptableObject
 
     public enum PlatformType
     {
-        Start,
-        Normal,
+        Start, // 2
+        Normal, // 1
         Reward,
-        SpringStart,
-        SprintEnd,
+        SpringStart, // 5
+        SprintEnd, // 6
         Hidden,
-        Explosive,
-        Checkpoint,
-        Moving,
+        Explosive, // 4
+        Checkpoint, // 12
+        Moving, // 9
         CoinTrigger,
-        Coin,
-        Goal,
-        Invincible
+        Coin, // 7
+        Goal, // 3
+        Invincible,
+        Elongate // 11 
     }
 }

@@ -98,6 +98,13 @@ public class PlayerController : MonoBehaviour
     private bool nowHasTargetCube = false;
     private GameObject targetCube;
 
+    [Header("Elongate Effect")]
+    public float elongateFactor = 3f;
+    public float elongateDuration = 10f;
+    private bool isElongated = false;
+    //private Vector3 originalScale;
+    private Coroutine elongateCoroutine;
+
 
     public Material invincibleMaterial; 
     public Material originalMaterial;
@@ -554,6 +561,12 @@ public class PlayerController : MonoBehaviour
         {
             FailJump();
         }
+
+        // longer
+        if (hitPlatform.CompareTag("Elongate"))
+        {
+            StartElongateEffect();
+        }
     }
 
     private IEnumerator InvincibilityTimer(float duration)
@@ -981,6 +994,30 @@ public class PlayerController : MonoBehaviour
             return jumpDirection.normalized;
         }
         return new Vector3();
+    }
+
+    private void StartElongateEffect()
+    {
+        if (!isElongated)
+        {
+            if (elongateCoroutine != null)
+            {
+                StopCoroutine(elongateCoroutine);
+            }
+            elongateCoroutine = StartCoroutine(ElongatePlayer());
+        }
+    }
+
+    private IEnumerator ElongatePlayer()
+    {
+        isElongated = true;
+        Vector3 elongatedScale = new Vector3(originalScale.x, originalScale.y * elongateFactor, originalScale.z);
+        transform.localScale = elongatedScale;
+
+        yield return new WaitForSeconds(elongateDuration);
+
+        transform.localScale = originalScale;
+        isElongated = false;
     }
 
     private IEnumerator WaitCoroutine(float num)

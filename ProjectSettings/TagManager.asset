@@ -22,6 +22,7 @@ TagManager:
   - Powerup
   - SpringStart
   - coinPlatform
+  - Elongate
   layers:
   - Default
   - TransparentFX

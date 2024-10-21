@@ -187,6 +187,14 @@ public class LevelDisplayManager : MonoBehaviour
         {
             platform.tag = "Platform";
         }
+        if (platformData.type == LevelData.PlatformType.Elongate)
+        {
+            platform.tag = "Elongate";
+        }
+        else
+        {
+            platform.tag = "Platform";
+        }
 
         Rigidbody rb = platform.GetComponent<Rigidbody>();
         if (rb == null)
