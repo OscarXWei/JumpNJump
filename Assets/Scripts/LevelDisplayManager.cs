@@ -10,7 +10,7 @@ public class LevelDisplayManager : MonoBehaviour
 
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
-    
+
 
     void Start()
     {
@@ -84,14 +84,14 @@ public class LevelDisplayManager : MonoBehaviour
     {
         foreach (var platformData in levelData.platforms)
         {
-            GameObject thisOne= CreatePlatform(platformData, parent);
+            GameObject thisOne = CreatePlatform(platformData, parent);
             levelData.platformPositions[thisOne] = (platformData.zInArray, platformData.xInArray);
             levelData.positionPlatforms[(platformData.zInArray, platformData.xInArray)] = thisOne;
-            
+
         }
     }
 
- public GameObject CreatePlatform(LevelData.PlatformData platformData, Transform parent)
+    public GameObject CreatePlatform(LevelData.PlatformData platformData, Transform parent)
     {
         GameObject platform = Instantiate(platformPrefab, platformData.position, Quaternion.identity, parent);
         platform.transform.localScale = platformData.scale;
@@ -100,7 +100,7 @@ public class LevelDisplayManager : MonoBehaviour
         {
             renderer.material.color = platformData.color;
         }
-        
+
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
@@ -145,7 +145,7 @@ public class LevelDisplayManager : MonoBehaviour
         return platform;
     }
 
-   void StartMovingPlatform(Transform platformTransform, LevelData.PlatformData platformData)
+    void StartMovingPlatform(Transform platformTransform, LevelData.PlatformData platformData)
     {
         StartCoroutine(MovePlatformCoroutine(platformTransform, platformData));
     }
@@ -201,14 +201,14 @@ public class LevelDisplayManager : MonoBehaviour
         currentLevelIndex = (currentLevelIndex - 1 + levels.Count) % levels.Count;
         DisplayCurrentLevel();
     }
-    
+
     public (bool success, GameObject val) findMatchedPlatform(GameObject theGameObject)
     {
-        
+
         // Check if the given gameObject is in the platformPositions dictionary
         if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
         {
-             // Check if this position has a connection in the platformsConnections dictionary
+            // Check if this position has a connection in the platformsConnections dictionary
             if (levels[currentLevelIndex].platformsConnections.TryGetValue(position, out (int targetZ, int targetX) targetPosition))
             {
                 // Check if there's a platform at the target position
@@ -218,8 +218,27 @@ public class LevelDisplayManager : MonoBehaviour
                 }
             }
         }
-    
+
         // If no match was found, return false and the original gameObject
         return (false, theGameObject);
     }
+
+    public int GetCurrentLevelIndex()
+    {
+        return currentLevelIndex;
+    }
+
+    public void SetCurrentLevelIndex(int index)
+    {
+        if (index >= 0 && index < levels.Count)
+        {
+            currentLevelIndex = index;
+            DisplayCurrentLevel();
+        }
+        else
+        {
+            Debug.LogError("Invalid level index");
+        }
+    }
+
 }

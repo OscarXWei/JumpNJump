@@ -54,4 +54,16 @@ public class ScoreManager : MonoBehaviour
             scoreText.text = $"Score: {currentScore}";
         }
     }
+
+    public int GetCurrentScore()
+    {
+        return currentScore;
+    }
+
+    public void SetScore(int score)
+    {
+        currentScore = score;
+        UpdateScoreDisplay();
+    }
+
 }
