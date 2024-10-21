@@ -8,7 +8,7 @@ public class CubeSquashEffect : MonoBehaviour
     private Vector3 originalScale;
     private PlayerController player;
     public GameObject shatteredPlayerPrefab;
-    private LevelDisplayManager displayManager; 
+    private LevelDisplayManager displayManager;
 
     void Start()
     {
@@ -73,23 +73,23 @@ public class CubeSquashEffect : MonoBehaviour
             Debug.Log("Explodeing!");
             StartCoroutine(DestroyCubeAfterDelay(3f));
         }
-        
+
         if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("SpringStart")) // Assuming your player has the "Player" tag
         {
             var result = displayManager.findMatchedPlatform(gameObject);
             if (result.success)
-            	player.setTargetCubeJumping(result.val);
-            	//sss
+                player.setTargetCubeJumping(result.val);
+            //sss
         }
-        
-        
+
+
 
         //if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Platform")) // Assuming your player has the "Player" tag
         //{
         //    StartCoroutine(DestroyCubeAfterDelay(5f));
         //}
     }
-    
-    
+
+
 
 }

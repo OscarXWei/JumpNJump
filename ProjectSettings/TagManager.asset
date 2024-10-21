@@ -16,6 +16,10 @@ TagManager:
   - Goal
   - Explosive
   - Start
+  - CoinPlatform
+  - powerupPlatform
+  - Coin
+  - Powerup
   layers:
   - Default
   - TransparentFX
