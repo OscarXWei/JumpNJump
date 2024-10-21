@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
                 break;
-            
+
             case "MixedPath":
                 selectedLayout = MapLayouts.MixedPathLayout;
                 break;
@@ -61,7 +61,7 @@ public class MapGenerator : MonoBehaviour
                     {
                         position = new Vector3(x * (1 + platformSpacing), 8.0f, z * (1 + platformSpacing)),
                         scale = Vector3.one,
-                        
+
                         directionTag = ""
                     };
 
@@ -109,6 +109,11 @@ public class MapGenerator : MonoBehaviour
                         platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位
                         platform.moveDuration = 2f; // 移动周期为2秒
                     }
+                    else if (selectedLayout[z, x] == 11)
+                    {
+                        platform.type = LevelData.PlatformType.Elongate;
+                        platform.color = Color.magenta; // Choose a distinct color for the new platform type
+                    }
                     else
                     {
                         platform.type = LevelData.PlatformType.Normal;
@@ -123,9 +128,9 @@ public class MapGenerator : MonoBehaviour
         }
         levelData.platformsConnections = new Dictionary<(int, int), (int, int)>();
         foreach (var connection in selectedConnections)
-	    {
-		levelData.platformsConnections[connection.Key] = connection.Value;
-	    }
+        {
+            levelData.platformsConnections[connection.Key] = connection.Value;
+        }
 
         return levelData;
     }
