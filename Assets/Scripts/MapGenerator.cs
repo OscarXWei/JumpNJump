@@ -92,7 +92,7 @@ public class MapGenerator : MonoBehaviour
                     }
                     else if (selectedLayout[z, x] == 7)
                     {
-                        platform.type = LevelData.PlatformType.CoinTrigger;
+                        platform.type = LevelData.PlatformType.Invincible;
                         platform.color = Color.yellow;
                     }
                     else if (selectedLayout[z, x] == 8)

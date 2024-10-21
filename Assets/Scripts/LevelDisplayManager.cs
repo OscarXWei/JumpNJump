@@ -16,6 +16,9 @@ public class LevelDisplayManager : MonoBehaviour
     public GameObject backGround1;
     public GameObject backGround2;
     public GameObject backGround3;
+    public GameObject backGround4;
+    public GameObject coin;
+    public GameObject invincible;
 
     void Start()
     {
@@ -59,6 +62,13 @@ public class LevelDisplayManager : MonoBehaviour
     }
     public LevelData GetCurrentLevelData()
     {
+        if (currentLevelIndex == 0)
+        {
+            backGround1.SetActive(true);
+            backGround2.SetActive(false);
+            backGround3.SetActive(false);
+            backGround4.SetActive(false);
+        }
         return levels[currentLevelIndex];
     }
 
@@ -70,18 +80,28 @@ public class LevelDisplayManager : MonoBehaviour
             backGround1.SetActive(true);
             backGround2.SetActive(false);
             backGround3.SetActive(false);
+            backGround4.SetActive(false);
         }
         else if (currentLevelIndex == 2)
         {
             backGround2.SetActive(true);
             backGround1.SetActive(false);
             backGround3.SetActive(false);
+            backGround4.SetActive(false);
         }
         else if (currentLevelIndex == 3)
         {
             backGround1.SetActive(false);
             backGround2.SetActive(false);
             backGround3.SetActive(true);
+            backGround4.SetActive(false);
+        }
+        else if (currentLevelIndex == 4)
+        {
+            backGround1.SetActive(false);
+            backGround2.SetActive(false);
+            backGround3.SetActive(false);
+            backGround4.SetActive(true);
         }
         DisplayCurrentLevel();
     }
@@ -135,6 +155,20 @@ public class LevelDisplayManager : MonoBehaviour
         if (platformData.type == LevelData.PlatformType.Start)
         {
             platform.tag = "Start";
+        }
+        if (platformData.type == LevelData.PlatformType.Coin)
+        {
+            platform.tag = "coinPlatform";
+            Vector3 coinPosition = platformData.position + new Vector3(0, 1f, 0);
+            GameObject Coin = Instantiate(coin, coinPosition, Quaternion.identity, parent);
+            Coin.tag = "Coin";
+        }
+        if (platformData.type == LevelData.PlatformType.Invincible)
+        {
+            platform.tag = "powerupPlatform";
+            Vector3 invinciblePosition = platformData.position + new Vector3(0, 1f, 0);
+            GameObject Invincible = Instantiate(invincible, invinciblePosition, Quaternion.identity, parent);
+            Invincible.tag = "Powerup";
         }
         if (platformData.type == LevelData.PlatformType.SpringStart)
         {

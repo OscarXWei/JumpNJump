@@ -51,6 +51,7 @@ public class LevelData : ScriptableObject
         Moving,
         CoinTrigger,
         Coin,
-        Goal
+        Goal,
+        Invincible
     }
 }

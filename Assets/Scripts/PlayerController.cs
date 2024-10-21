@@ -93,11 +93,15 @@ public class PlayerController : MonoBehaviour
     private Transform currentPlatform;
     private Vector3 lastPlatformPosition;
     private Vector3 platformVelocity;
-    
+
     [Header("Target Cube")]
     private bool nowHasTargetCube = false;
     private GameObject targetCube;
 
+
+
+    public int score;
+    private bool isInvincible = false;
 
     private void Awake()
     {
@@ -228,7 +232,7 @@ public class PlayerController : MonoBehaviour
         if (isJumping && isRolling)
         {
             // 在跳跃过程中应用翻滚效果
-            
+
             //Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
@@ -486,11 +490,28 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
-        
+
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
-        	nowHasTargetCube = false;
+            nowHasTargetCube = false;
 
         if (!isSimpleRolling && !nowHasTargetCube)
+
+            if (hitPlatform.CompareTag("Terrain"))
+            {
+                FailJump();
+            }
+        if (hitPlatform.CompareTag("Coin"))
+        {
+            score += 1;
+            Destroy(hitPlatform);
+        }
+        if (hitPlatform.CompareTag("Powerup"))
+        {
+            isInvincible = true;
+            Destroy(hitPlatform);
+        }
+
+        if (!isSimpleRolling)
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
@@ -851,21 +872,21 @@ public class PlayerController : MonoBehaviour
         levelDisplayManager.SwitchToNextLevel();
         SetupLevel();
     }
-    
+
     public void setTargetCubeJumping(GameObject theGameObject)
     {
-    	if (!isJumping && !nowHasTargetCube)
-    	{
-    		targetCube = theGameObject;
-    	nowHasTargetCube = true;
-    	jumpToTarget();
-    	}
-    	
+        if (!isJumping && !nowHasTargetCube)
+        {
+            targetCube = theGameObject;
+            nowHasTargetCube = true;
+            jumpToTarget();
+        }
+
     }
-    
+
     private void jumpToTarget()
     {
-    	if (nowHasTargetCube)
+        if (nowHasTargetCube)
         {
             turnOnHorizontalPhysics();
             float exactJumpForce = CalculateTargetJumpForce();
@@ -888,10 +909,10 @@ public class PlayerController : MonoBehaviour
             {
                 rollAxis = -rollAxis; // 前翻
             }
-            
+
         }
     }
-    
+
     private float CalculateTargetJumpForce()
     {
         if (nowHasTargetCube)
@@ -908,38 +929,38 @@ public class PlayerController : MonoBehaviour
             float v0 = Mathf.Sqrt(v0Squared);
 
             float exactJumpForce = v0 * rb.mass * forceAdjustment + 0.5f;
-            
+
             return exactJumpForce;
 
         }
-        
+
         return 0.0f;
     }
-    
-   private Vector3 CalculateTargetJumpDirection()
+
+    private Vector3 CalculateTargetJumpDirection()
     {
         if (nowHasTargetCube)
-        { 
-		//Vector3 targetDirection = nextCube.transform.position - transform.position;
-		Vector3 targetDirection = targetCube.transform.position - transform.position;
-		float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
-		float radianAngle = jumpAngle * Mathf.Deg2Rad;
+        {
+            //Vector3 targetDirection = nextCube.transform.position - transform.position;
+            Vector3 targetDirection = targetCube.transform.position - transform.position;
+            float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
+            float radianAngle = jumpAngle * Mathf.Deg2Rad;
 
-		float cosAngle = Mathf.Cos(radianAngle);
-		float tanAngle = Mathf.Tan(radianAngle);
+            float cosAngle = Mathf.Cos(radianAngle);
+            float tanAngle = Mathf.Tan(radianAngle);
 
-		Vector3 horizontalDir = new Vector3(targetDirection.x, 0, targetDirection.z).normalized;
-		Vector3 jumpDirection = horizontalDir * cosAngle + Vector3.up * tanAngle;
+            Vector3 horizontalDir = new Vector3(targetDirection.x, 0, targetDirection.z).normalized;
+            Vector3 jumpDirection = horizontalDir * cosAngle + Vector3.up * tanAngle;
 
-		return jumpDirection.normalized;
-	}
-	return new Vector3();
+            return jumpDirection.normalized;
+        }
+        return new Vector3();
     }
-    
+
     private IEnumerator WaitCoroutine(float num)
     {
         yield return new WaitForSeconds(num);
         // Put any code here that you want to run after the delay
     }
-    
+
 }
