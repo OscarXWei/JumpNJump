@@ -2,14 +2,23 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target; // 玩家的 Transform
-    public float height = 5.0f; // 相机高度
-    public float distance = 8.5f; // 相机与玩家的水平距离
-    public float rotationSpeed = 5f; // 鼠标旋转速度
-    public float smoothSpeed = 0.125f; // 相机跟随的平滑度
-    public float defaultYaw = 0f; // 默认水平角度
-    public float defaultPitch = 20f; // 默认垂直角度
-    public float resetSpeed = 10f; // 视角复位速度
+    // 保持原有参数不变
+    public Transform target;
+    public float height = 2f;
+    public float distance = 5f;
+    public float rotationSpeed = 5f;
+    public float smoothSpeed = 0.125f;
+    public float defaultYaw = 0f;
+    public float defaultPitch = 20f;
+    public float resetSpeed = 10f;
+
+    // 初始视角参数
+    public float overviewHeight = 1000f;  // 初始高度
+    public float overviewDistance = 1000f; // 初始距离
+    public float overviewYaw = -45f;    // 初始水平旋转角度
+    public float overviewPitch = 10f;   // 初始俯视角度
+    public float transitionDuration = 2f;
+    public float delayBeforeTransition = 2f;
 
     private float yaw;
     private float pitch;
@@ -17,6 +26,13 @@ public class CameraController : MonoBehaviour
     private bool isAdjustingView = false;
     private float targetYaw;
     private float targetPitch;
+
+    // 转换状态
+    private bool isTransitioning = false;
+    private float transitionStartTime;
+    private Vector3 initialPosition;
+    private bool hasStartedTransition = false;
+    private float initialYaw;
 
     void Start()
     {
@@ -26,18 +42,81 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        // 初始化视角
-        ResetToDefaultView();
+        // 设置初始视角
+        yaw = overviewYaw;
+        pitch = overviewPitch;
+        initialYaw = overviewYaw;
+
+        // 计算并设置初始位置
+        Vector3 overviewPosition = target.position -
+            (Quaternion.Euler(overviewPitch, overviewYaw, 0f) * Vector3.forward * overviewDistance) +
+            Vector3.up * overviewHeight;
+
+        transform.position = overviewPosition;
+        transform.LookAt(target.position);
+
+        // 保存初始状态
+        initialPosition = transform.position;
+
+        // 延迟开始转换
+        Invoke("StartTransition", delayBeforeTransition);
+    }
+
+    void StartTransition()
+    {
+        isTransitioning = true;
+        hasStartedTransition = true;
+        transitionStartTime = Time.time;
     }
 
     void LateUpdate()
     {
-        if (target == null)
+        if (target == null) return;
+
+        if (isTransitioning)
         {
+            HandleTransition();
+        }
+        else if (hasStartedTransition)
+        {
+            HandleNormalCamera();
+        }
+    }
+
+    void HandleTransition()
+    {
+        float elapsedTime = Time.time - transitionStartTime;
+        float t = elapsedTime / transitionDuration;
+
+        if (t >= 1f)
+        {
+            isTransitioning = false;
+            pitch = defaultPitch;
+            yaw = defaultYaw;
+            ResetToDefaultView();
             return;
         }
 
-        // 检查鼠标左键的状态
+        // 使用平滑的插值曲线
+        t = Mathf.SmoothStep(0, 1, t);
+
+        // 计算过渡中的参数
+        float currentHeight = Mathf.Lerp(overviewHeight, height, t);
+        float currentPitch = Mathf.Lerp(overviewPitch, defaultPitch, t);
+        float currentYaw = Mathf.Lerp(initialYaw, defaultYaw, t);
+        float currentDistance = Mathf.Lerp(overviewDistance, distance, t);
+
+        // 计算并设置相机位置
+        Vector3 targetPosition = target.position -
+            (Quaternion.Euler(currentPitch, currentYaw, 0f) * Vector3.forward * currentDistance) +
+            Vector3.up * currentHeight;
+
+        transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+        transform.LookAt(target.position + Vector3.up * height * 0.5f);
+    }
+
+    void HandleNormalCamera()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             isAdjustingView = true;
@@ -50,31 +129,24 @@ public class CameraController : MonoBehaviour
 
         if (isAdjustingView)
         {
-            // 鼠标输入来控制视角
             targetYaw += Input.GetAxis("Mouse X") * rotationSpeed;
             targetPitch -= Input.GetAxis("Mouse Y") * rotationSpeed;
-
-            // 限制 pitch 角度
             targetPitch = Mathf.Clamp(targetPitch, -30f, 60f);
         }
         else
         {
-            // 平滑地恢复到默认视角
             targetYaw = Mathf.MoveTowards(targetYaw, defaultYaw, resetSpeed * Time.deltaTime);
             targetPitch = Mathf.MoveTowards(targetPitch, defaultPitch, resetSpeed * Time.deltaTime);
         }
 
-        // 平滑地更新实际的 yaw 和 pitch
         yaw = Mathf.Lerp(yaw, targetYaw, smoothSpeed);
         pitch = Mathf.Lerp(pitch, targetPitch, smoothSpeed);
 
-        // 计算相机的位置
-        Vector3 targetPosition = target.position - (Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward * distance) + Vector3.up * height;
+        Vector3 targetPosition = target.position -
+            (Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward * distance) +
+            Vector3.up * height;
 
-        // 平滑移动相机
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref refVelocity, smoothSpeed);
-
-        // 使相机始终看向玩家
         transform.LookAt(target.position + Vector3.up * height * 0.5f);
     }
 
