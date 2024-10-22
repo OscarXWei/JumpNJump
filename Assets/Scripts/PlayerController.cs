@@ -99,7 +99,9 @@ public class PlayerController : MonoBehaviour
     private GameObject targetCube;
 
 
-
+    public Material invincibleMaterial; 
+    public Material originalMaterial;
+    private Renderer playerRenderer;
     public int score;
     private bool isInvincible = false;
 
@@ -113,6 +115,7 @@ public class PlayerController : MonoBehaviour
         healthBar.UpdateHp(currentHealth, maxHealth);
         gameOverUI = FindObjectOfType<GameOverUI>();
         levelDisplayManager = FindObjectOfType<LevelDisplayManager>();
+        playerRenderer = GetComponent<Renderer>();
 
         jumpPowerUI.SetMaxPower(maxJumpForce);
         originalScale = transform.localScale;
@@ -188,7 +191,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (!isJumping && !isGameOver && GameManager.Instance.isStarting)
@@ -242,6 +244,14 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Attempting to apply rolling effect");
             ApplyRollingEffect();
         }
+        if (isInvincible)
+        {
+            playerRenderer.material = invincibleMaterial;
+        }
+        else
+        {
+            playerRenderer.material = originalMaterial;
+        }
 
         // if (Input.GetMouseButtonDown(0) && Time.time - lastShootTime > shootCooldown && !isGameOver)
         // {
@@ -253,6 +263,7 @@ public class PlayerController : MonoBehaviour
         //    ReachGoal();
         //}
     }
+
 
     void FixedUpdate()
     {
@@ -494,12 +505,13 @@ public class PlayerController : MonoBehaviour
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
 
-        if (!isSimpleRolling && !nowHasTargetCube)
-
+        if (!isSimpleRolling && !nowHasTargetCube) {
             if (hitPlatform.CompareTag("Terrain"))
             {
                 FailJump();
             }
+        }
+            
         if (hitPlatform.CompareTag("Coin"))
         {
             score += 1;
@@ -507,8 +519,8 @@ public class PlayerController : MonoBehaviour
         }
         if (hitPlatform.CompareTag("Powerup"))
         {
-            isInvincible = true;
             Destroy(hitPlatform);
+            StartCoroutine(InvincibilityTimer(12f));
         }
 
         if (!isSimpleRolling)
@@ -535,6 +547,13 @@ public class PlayerController : MonoBehaviour
         {
             FailJump();
         }
+    }
+
+    private IEnumerator InvincibilityTimer(float duration)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(duration);
+        isInvincible = false;
     }
 
     private void SucceedJump(GameObject hitPlatform)

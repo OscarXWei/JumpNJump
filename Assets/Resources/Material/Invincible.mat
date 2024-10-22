@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Lock Silver
+  m_Name: Invincible
   m_Shader: {fileID: 3, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 2100000, guid: a562445fd1ba11c44bc14465f0aa4302, type: 2}
+  m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,14 +23,19 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Cube:
+        m_Texture: {fileID: 8900000, guid: dc040cde3d92b624ca71f0f6c4d213f5, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fa403a19e4733dd46b6250770d1c6e89, type: 3}
+        m_Texture: {fileID: 2800000, guid: f7cdbf8f5e55fed478dac7b0ab07b701, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Shininess: 0.18017116
+    - _Shininess: 0.060209606
     m_Colors:
-    - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5372549}
-    - _SpecColor: {r: 0.71323526, g: 0.67652464, b: 0.67652464, a: 1}
+    - _Color: {r: 0.99371064, g: 0.92986906, b: 0.059372455, a: 1}
+    - _ReflectColor: {r: 0.8117647, g: 0, b: 0, a: 0.5019608}
+    - _SpecColor: {r: 0.9559748, g: 0.8499926, b: 0.04509303, a: 1}
   m_BuildTextureStacks: []
