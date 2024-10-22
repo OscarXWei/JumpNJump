@@ -3,8 +3,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform target; // 玩家的 Transform
-    public float height = 2f; // 相机高度
-    public float distance = 5f; // 相机与玩家的水平距离
+    public float height = 5.0f; // 相机高度
+    public float distance = 8.5f; // 相机与玩家的水平距离
     public float rotationSpeed = 5f; // 鼠标旋转速度
     public float smoothSpeed = 0.125f; // 相机跟随的平滑度
     public float defaultYaw = 0f; // 默认水平角度
