@@ -998,6 +998,7 @@ public class PlayerController : MonoBehaviour
 
     private void StartElongateEffect()
     {
+        turnOffPhysics();
         if (!isElongated)
         {
             if (elongateCoroutine != null)
