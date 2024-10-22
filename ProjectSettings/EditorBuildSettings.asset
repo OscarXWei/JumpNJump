@@ -6,24 +6,36 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MapAndLevel.unity
-    guid: 2522ce07d98a44c1cae92dccae9f4d1b
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 1ecec3ed48656ad409a87510dbcf7c8b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level1.unity
     guid: 9e350ad7ed36fe14d84a6aca25c00227
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level2.unity
     guid: d6eff43502881284b9ed8da8f296de0a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level3.unity
     guid: e160368a15531e44f9810ec3b9c003ef
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level4.unity
     guid: 88f7c2a79abec0f47afcfd97da4ec658
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 22d7a091541011c4a9a8e24859ab759d
+  - enabled: 1
+    path: Assets/Scenes/SettingWindow.unity
+    guid: 189f421869043e144a504b092419a2d9
+  - enabled: 0
+    path: Assets/Scenes/GameMemory.unity
+    guid: 6917759be5b0b1e418f870ec2c186526
+  - enabled: 1
+    path: Assets/Scenes/HelpWindow.unity
+    guid: d4a404cfc879ee0489518f32c7b7b5a5
+  - enabled: 0
+    path: Assets/Scenes/LevelSelectWindow.unity
+    guid: 149ec5b4cbc6db54db0534af6e7c64ab
+  - enabled: 1
+    path: Assets/Scenes/MapAndLevel.unity
+    guid: 2522ce07d98a44c1cae92dccae9f4d1b
   m_configObjects: {}
