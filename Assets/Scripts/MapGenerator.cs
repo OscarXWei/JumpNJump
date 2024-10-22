@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
                 break;
-            
+
             case "MixedPath":
                 selectedLayout = MapLayouts.MixedPathLayout;
                 break;
@@ -59,9 +59,9 @@ public class MapGenerator : MonoBehaviour
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
-                        position = new Vector3(x * (1 + platformSpacing), 8.0f, z * (1 + platformSpacing)),
+                        position = new Vector3(x * (1 + platformSpacing), 5.0f, z * (1 + platformSpacing)),
                         scale = Vector3.one,
-                        
+
                         directionTag = ""
                     };
 
@@ -123,9 +123,9 @@ public class MapGenerator : MonoBehaviour
         }
         levelData.platformsConnections = new Dictionary<(int, int), (int, int)>();
         foreach (var connection in selectedConnections)
-	    {
-		levelData.platformsConnections[connection.Key] = connection.Value;
-	    }
+        {
+            levelData.platformsConnections[connection.Key] = connection.Value;
+        }
 
         return levelData;
     }
