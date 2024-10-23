@@ -152,7 +152,6 @@ public class LevelDisplayManager : MonoBehaviour
         {
             renderer.material.color = platformData.color;
         }
-
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
@@ -183,15 +182,11 @@ public class LevelDisplayManager : MonoBehaviour
         {
             platform.tag = "SpringStart";
         }
-        else
-        {
-            platform.tag = "Platform";
-        }
         if (platformData.type == LevelData.PlatformType.Elongate)
         {
             platform.tag = "Elongate";
         }
-        else
+        if (platformData.type == LevelData.PlatformType.Normal)
         {
             platform.tag = "Platform";
         }

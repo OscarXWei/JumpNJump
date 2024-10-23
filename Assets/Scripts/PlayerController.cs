@@ -589,6 +589,14 @@ public class PlayerController : MonoBehaviour
         {
             StartElongateEffect();
         }
+
+        // reach goal
+        if (hitPlatform.CompareTag("Goal"))
+        {
+            Debug.Log("Congratulations! You've reached the goal!");
+            StartCoroutine(CompleteLevel());
+            return;
+        }
     }
 
     private IEnumerator InvincibilityTimer(float duration)
