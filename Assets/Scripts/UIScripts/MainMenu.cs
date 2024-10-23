@@ -10,7 +10,11 @@ public class MainMenu : MonoBehaviour
     }
     public void NewGame()
     {
-        SceneManager.LoadSceneAsync(10);
+        //SceneManager.LoadSceneAsync(1);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGame();
+        }
     }
     public void GoToTutorial()
     {

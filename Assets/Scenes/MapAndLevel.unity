@@ -11679,10 +11679,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ButtonChooseLevel, Assembly-CSharp
-        m_MethodName: LoadSceneWithLevelIndex
-        m_Mode: 3
+      - m_Target: {fileID: 1741838639}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18466,7 +18466,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f13d6a7ebb174f06877cca6343f49dd, type: 2}
   - {fileID: 11400000, guid: dbf1f91d7739f43f798ab8faef7118e2, type: 2}
   platformPrefab: {fileID: 1969181671088013800, guid: 0188bfb47591c4f2aabcc63b89dc6062, type: 3}
-  groundSize: 1000
   backGround1: {fileID: 1281454892}
   backGround2: {fileID: 87156412}
   backGround3: {fileID: 1451040037}
