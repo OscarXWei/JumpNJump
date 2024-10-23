@@ -9,6 +9,10 @@ public class CubeSquashEffect : MonoBehaviour
     private PlayerController player;
     public GameObject shatteredPlayerPrefab;
     private LevelDisplayManager displayManager;
+    private bool hasGeneratedObject = false;
+    
+    private int enemyType = 0;
+    private int enemyRewardType = 0;
 
     void Start()
     {
@@ -20,14 +24,14 @@ public class CubeSquashEffect : MonoBehaviour
 
     void Update()
     {
-        if (player != null && player.transform.position.y > transform.position.y)
+        if (player != null && player.transform.position.y - player.transform.localScale.y/2 > transform.position.y + transform.localScale.y/2)
         {
-            float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+            float distanceToPlayer = Mathf.Sqrt(Mathf.Pow(player.transform.position.x - transform.position.x, 2) + Mathf.Pow(player.transform.position.z - transform.position.z, 2));
             if (distanceToPlayer < 1f && player.isCharging)
             {
                 ApplySquashEffect(player.currentJumpForce / player.maxJumpForce);
             }
-            else if (distanceToPlayer < 1f && player.isSimpleRolling)
+            else if (player.isSimpleRolling && distanceToPlayer < 0.5f)
             {
                 player.turnOffPhysics();
             }
@@ -68,17 +72,30 @@ public class CubeSquashEffect : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(gameObject.tag);
         if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Explosive")) // Assuming your player has the "Player" tag
         {
             Debug.Log("Explodeing!");
             StartCoroutine(DestroyCubeAfterDelay(3f));
         }
 
-        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("SpringStart")) // Assuming your player has the "Player" tag
+        else if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("SpringStart")) // Assuming your player has the "Player" tag
         {
+            Debug.Log("should do spring");
             var result = displayManager.findMatchedPlatform(gameObject);
             if (result.success)
                 player.setTargetCubeJumping(result.val);
+            //sss
+        }
+        else if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("EnemySrc")) // Assuming your player has the "Player" tag
+        {
+            var result = displayManager.findMatchedPlatform(gameObject);
+            var resultLevel = displayManager.findPlatformEnemyType(gameObject);
+            var resultRewardLevel = displayManager.findPlatformEnemyType(gameObject);
+            if (result.success && resultLevel.success && resultRewardLevel.success)
+            	if (!hasGeneratedObject)
+                	displayManager.generateEnemy(resultLevel.val, resultRewardLevel.val, result.val.transform.localPosition);
+            hasGeneratedObject = true;
             //sss
         }
 
@@ -88,6 +105,16 @@ public class CubeSquashEffect : MonoBehaviour
         //{
         //    StartCoroutine(DestroyCubeAfterDelay(5f));
         //}
+    }
+    
+    public void setEnemyType(int type)
+    {
+    	enemyType = type;
+    }
+    
+    public void setEnemyRewardType(int type)
+    {
+    	enemyRewardType = type;
     }
 
 

@@ -7,11 +7,15 @@ public class MapGenerator : MonoBehaviour
     {
         int[,] selectedLayout;
         Dictionary<(int, int), (int, int)> selectedConnections = new Dictionary<(int, int), (int, int)>();
+        Dictionary<(int, int), int> enemyTypes = new Dictionary<(int, int), int>();
+        Dictionary<(int, int), int> enemyRewardTypes = new Dictionary<(int, int), int>();
         switch (layoutName)
         {
             case "Easy":
                 selectedLayout = MapLayouts.EasyMazeLayout;
                 selectedConnections = MapLayouts.EasyMazeConnections;
+                enemyTypes = MapLayouts.EasyMazeEnemyTypes;
+                enemyRewardTypes = MapLayouts.EasyMazeEnemyRewardTypes;
                 break;
             case "Medium":
                 selectedLayout = MapLayouts.ObstacleLayout;
@@ -109,6 +113,11 @@ public class MapGenerator : MonoBehaviour
                         platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位
                         platform.moveDuration = 2f; // 移动周期为2秒
                     }
+                    else if (selectedLayout[z, x] == 11)
+                    {
+                        platform.type = LevelData.PlatformType.EnemySrc;
+                        platform.color = Color.red;
+                    }
                     else
                     {
                         platform.type = LevelData.PlatformType.Normal;
@@ -125,6 +134,18 @@ public class MapGenerator : MonoBehaviour
         foreach (var connection in selectedConnections)
 	    {
 		levelData.platformsConnections[connection.Key] = connection.Value;
+	    }
+	    
+	levelData.platformsEnemyTypes = new Dictionary<(int, int), int>();
+        foreach (var connection in enemyTypes)
+	    {
+		levelData.platformsEnemyTypes[connection.Key] = connection.Value;
+	    }
+	    
+	levelData.platformsEnemyRewardTypes = new Dictionary<(int, int), int>();
+        foreach (var connection in enemyRewardTypes)
+	    {
+		levelData.platformsEnemyTypes[connection.Key] = connection.Value;
 	    }
 
         return levelData;

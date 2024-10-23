@@ -490,11 +490,10 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
-
+        
+        
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
-
-        if (!isSimpleRolling && !nowHasTargetCube)
 
             if (hitPlatform.CompareTag("Terrain"))
             {
@@ -510,8 +509,13 @@ public class PlayerController : MonoBehaviour
             isInvincible = true;
             Destroy(hitPlatform);
         }
-
-        if (!isSimpleRolling)
+        
+        if (hitPlatform.CompareTag("Enemy0"))
+        {
+            
+            
+        }
+        else if (!isSimpleRolling && !nowHasTargetCube)
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
@@ -787,6 +791,7 @@ public class PlayerController : MonoBehaviour
 
         if (simpleRollTimer < simpleRollDuration)
         {
+            //turnOnPhysics();
             // Calculate rotation for this frame
             float rotationThisFrame = simpleRollSpeed * Time.deltaTime * 0.1f;
 
@@ -802,7 +807,7 @@ public class PlayerController : MonoBehaviour
         {
             // End rolling
             isSimpleRolling = false;
-            rb.isKinematic = false;
+            turnOnPhysics();
             //GetComponent<Collider>().enabled = true;
 
             // Ensure the player is upright at the end of the roll
@@ -961,6 +966,18 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(num);
         // Put any code here that you want to run after the delay
+    }
+    
+    public void PlayerDead()
+    {
+    	Invoke("ShatterPlayer", shatterDelay);
+    	//SoundManager.Instance.PlayShatterSound();
+    	StartCoroutine(ShowGameOverAfterDelay());
+    }
+    
+    public bool isNowInvicible()
+    {
+    	return isInvincible;
     }
 
 }

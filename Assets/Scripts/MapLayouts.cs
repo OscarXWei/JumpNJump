@@ -26,19 +26,34 @@ public static class MapLayouts
         {1,0,0,0,0,0,0,0,0,1},
         {1,0,1,1,1,1,1,1,0,1},
         {1,0,1,0,0,0,0,1,0,1},
-        {1,0,1,0,1,6,0,1,0,1},
+        {11,0,1,0,1,6,0,1,0,1},
         {1,0,1,0,1,1,0,1,0,1},
-        {1,0,1,0,0,0,0,1,0,1},
+        {12,0,1,0,0,0,0,1,0,1},
         {1,0,6,1,1,1,1,1,0,1},
         {1,0,0,0,0,0,0,0,0,1},
-        {2,7,8,1,1,1,1,1,1,1}
+        {2,7,8,1,1,11,1,12,1,1}
     };
     
     public static readonly Dictionary<(int, int), (int, int)> EasyMazeConnections = new Dictionary<(int, int), (int, int)>
     {
         { (0, 2), (4, 5) },
-        { (0, 6), (7, 2) }
+        { (0, 6), (7, 2) },
+        { (4, 0), (6, 0) },
+        { (9, 5), (9, 7) }
     };
+    
+    public static readonly Dictionary<(int, int), int> EasyMazeEnemyTypes = new Dictionary<(int, int), int>
+    {
+        { (4, 0), 0},
+        { (9, 5), 1}
+    };
+    
+    public static readonly Dictionary<(int, int), int> EasyMazeEnemyRewardTypes = new Dictionary<(int, int), int>
+    {
+        { (4, 0), 0 },
+        { (9, 5), 1}
+    };
+
 
     public static readonly int[,] ObstacleLayout = new int[,]
     {

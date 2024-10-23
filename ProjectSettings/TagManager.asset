@@ -22,6 +22,8 @@ TagManager:
   - Powerup
   - SpringStart
   - coinPlatform
+  - EnemySrc
+  - Enemy0
   layers:
   - Default
   - TransparentFX
