@@ -23,13 +23,15 @@ public class LevelDisplayManager : MonoBehaviour
     void Start()
     {
         AddGeneratedLevels();
-        if (PlayerPrefs.HasKey("LevelToLoad"))
-        {
-            int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
-            SetCurrentLevelIndex(levelIndex);
+        DisplayCurrentLevel();
+        // if (PlayerPrefs.HasKey("LevelToLoad"))
+        // {
+        //     int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
+        //     currentLevelIndex = levelIndex;
+        //     DisplayCurrentLevel();
 
-            PlayerPrefs.DeleteKey("LevelToLoad");
-        }
+        //     PlayerPrefs.DeleteKey("LevelToLoad");
+        // }
 
     }
 
@@ -180,6 +182,14 @@ public class LevelDisplayManager : MonoBehaviour
         if (platformData.type == LevelData.PlatformType.SpringStart)
         {
             platform.tag = "SpringStart";
+        }
+        else
+        {
+            platform.tag = "Platform";
+        }
+        if (platformData.type == LevelData.PlatformType.Elongate)
+        {
+            platform.tag = "Elongate";
         }
         else
         {

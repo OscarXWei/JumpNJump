@@ -20,14 +20,14 @@ public class CubeSquashEffect : MonoBehaviour
 
     void Update()
     {
-        if (player != null && player.transform.position.y > transform.position.y)
+        if (player != null && player.transform.position.y - player.transform.localScale.y / 2 > transform.position.y + transform.localScale.y / 2)
         {
-            float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+            float distanceToPlayer = Mathf.Sqrt(Mathf.Pow(player.transform.position.x - transform.position.x, 2) + Mathf.Pow(player.transform.position.z - transform.position.z, 2));
             if (distanceToPlayer < 1f && player.isCharging)
             {
                 ApplySquashEffect(player.currentJumpForce / player.maxJumpForce);
             }
-            else if (distanceToPlayer < 1f && player.isSimpleRolling)
+            else if (distanceToPlayer < 0.5f && player.isSimpleRolling)
             {
                 player.turnOffPhysics();
             }
