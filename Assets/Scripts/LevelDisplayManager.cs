@@ -7,7 +7,7 @@ public class LevelDisplayManager : MonoBehaviour
 {
     public List<LevelData> levels;
     public GameObject platformPrefab;
-    public float groundSize = 100f; // Plane 的大小
+    //public float groundSize = 100f; // Plane 的大小
 
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
@@ -56,17 +56,17 @@ public class LevelDisplayManager : MonoBehaviour
 
         levels.Add(MapGenerator.GenerateLevel("Easy"));
         levels.Add(MapGenerator.GenerateLevel("Medium"));
-        levels.Add(MapGenerator.GenerateLevel("Fire"));
-        levels.Add(MapGenerator.GenerateLevel("Hard"));
-        levels.Add(MapGenerator.GenerateLevel("MixedPath"));
-        levels.Add(MapGenerator.GenerateLevel("IslandPath"));
-        levels.Add(MapGenerator.GenerateLevel("SpiralPath"));
+        // levels.Add(MapGenerator.GenerateLevel("Fire"));
+        // levels.Add(MapGenerator.GenerateLevel("Hard"));
+        // levels.Add(MapGenerator.GenerateLevel("MixedPath"));
+        // levels.Add(MapGenerator.GenerateLevel("IslandPath"));
+        // levels.Add(MapGenerator.GenerateLevel("SpiralPath"));
         levels.Add(MapGenerator.GenerateLevel("ScatteredIslands"));
 
 
 
-        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
-        levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
+        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 1", 15, 15));
+        // levels.Add(MazeGenerator.GenerateMazeLevel("Maze Level 2", 20, 20));
 
     }
     public LevelData GetCurrentLevelData()
@@ -86,32 +86,32 @@ public class LevelDisplayManager : MonoBehaviour
         currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
         if (currentLevelIndex == 1)
         {
-            backGround1.SetActive(true);
-            backGround2.SetActive(false);
+            backGround1.SetActive(false);
+            backGround2.SetActive(true);
             backGround3.SetActive(false);
             backGround4.SetActive(false);
         }
         else if (currentLevelIndex == 2)
         {
-            backGround2.SetActive(true);
+            backGround2.SetActive(false);
             backGround1.SetActive(false);
-            backGround3.SetActive(false);
+            backGround3.SetActive(true);
             backGround4.SetActive(false);
         }
         else if (currentLevelIndex == 3)
         {
             backGround1.SetActive(false);
             backGround2.SetActive(false);
-            backGround3.SetActive(true);
-            backGround4.SetActive(false);
-        }
-        else if (currentLevelIndex == 4)
-        {
-            backGround1.SetActive(false);
-            backGround2.SetActive(false);
             backGround3.SetActive(false);
             backGround4.SetActive(true);
         }
+        // else if (currentLevelIndex == 4)
+        // {
+        //     backGround1.SetActive(false);
+        //     backGround2.SetActive(false);
+        //     backGround3.SetActive(false);
+        //     backGround4.SetActive(true);
+        // }
         DisplayCurrentLevel();
     }
 
@@ -125,7 +125,7 @@ public class LevelDisplayManager : MonoBehaviour
         }
 
         currentLevelObject = new GameObject($"Level_{currentLevelIndex}");
-        CreateGround(currentLevelObject.transform);
+        //CreateGround(currentLevelObject.transform);
         DisplayLevel(levels[currentLevelIndex], currentLevelObject.transform);
 
         // 通知 PlayerController 重置玩家位置
@@ -250,19 +250,19 @@ public class LevelDisplayManager : MonoBehaviour
     }
 
 
-    void CreateGround(Transform parent)
-    {
-        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        plane.transform.SetParent(parent, false);
-        plane.transform.localPosition = Vector3.zero;
-        plane.transform.localScale = new Vector3(groundSize / 10f, 1f, groundSize / 10f);
-        plane.tag = "Terrain";
-        Renderer renderer = plane.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            renderer.material.color = new Color(0.5f, 0.5f, 0.5f); // 中灰色
-        }
-    }
+    // void CreateGround(Transform parent)
+    // {
+    //     GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+    //     plane.transform.SetParent(parent, false);
+    //     plane.transform.localPosition = Vector3.zero;
+    //     plane.transform.localScale = new Vector3(groundSize / 10f, 1f, groundSize / 10f);
+    //     plane.tag = "Terrain";
+    //     Renderer renderer = plane.GetComponent<Renderer>();
+    //     if (renderer != null)
+    //     {
+    //         renderer.material.color = new Color(0.5f, 0.5f, 0.5f); // 中灰色
+    //     }
+    // }
 
     // void SwitchToNextLevel()
     // {
