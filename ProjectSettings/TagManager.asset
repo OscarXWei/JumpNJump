@@ -24,6 +24,7 @@ TagManager:
   - coinPlatform
   - EnemySrc
   - Enemy0
+  - SpringsTrigger
   layers:
   - Default
   - TransparentFX

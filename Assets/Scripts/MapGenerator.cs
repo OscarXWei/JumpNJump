@@ -7,8 +7,10 @@ public class MapGenerator : MonoBehaviour
     {
         int[,] selectedLayout;
         Dictionary<(int, int), (int, int)> selectedConnections = new Dictionary<(int, int), (int, int)>();
+        Dictionary<(int, int), (float, float, float, float)> selectedMoving = new Dictionary<(int, int), (float, float, float, float)>();
         Dictionary<(int, int), int> enemyTypes = new Dictionary<(int, int), int>();
         Dictionary<(int, int), int> enemyRewardTypes = new Dictionary<(int, int), int>();
+        Dictionary<(int, int), (int, int)[]> selectedSpringsTrigger = new Dictionary<(int, int), (int, int)[]>();
         switch (layoutName)
         {
             case "Easy":
@@ -25,6 +27,8 @@ public class MapGenerator : MonoBehaviour
                 break;
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
+                selectedConnections = MapLayouts.FireLayoutConnections;
+                selectedSpringsTrigger = MapLayouts.FireLayoutSpringsTrigger;
                 break;
             
             case "MixedPath":
@@ -41,6 +45,7 @@ public class MapGenerator : MonoBehaviour
                 break;
             case "AdvancedLayout":
                 selectedLayout = MapLayouts.AdvancedLayout;
+                selectedMoving = MapLayouts.AdvancedLayoutMoving;
                 break;
             default:
                 Debug.LogError("Invalid layout name: " + layoutName);
@@ -59,7 +64,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                if (selectedLayout[z, x] != 0)
+                if (selectedLayout[z, x] > -1)
                 {
                     LevelData.PlatformData platform = new LevelData.PlatformData
                     {
@@ -68,8 +73,14 @@ public class MapGenerator : MonoBehaviour
                         
                         directionTag = ""
                     };
+                    
+                    if (selectedLayout[z, x] == 0)
+                    {
+                        platform.type = LevelData.PlatformType.Empty;
+                        platform.color = Color.clear;
+                    }
 
-                    if (selectedLayout[z, x] == 2)
+                    else if (selectedLayout[z, x] == 2)
                     {
                         platform.type = LevelData.PlatformType.Start;
                         platform.color = Color.blue;
@@ -106,17 +117,23 @@ public class MapGenerator : MonoBehaviour
                     }
                     else if (selectedLayout[z, x] == 9)
                     {
+                        var moveData = selectedMoving[(z,x)];  // Get the tuple from dictionary
                         platform.type = LevelData.PlatformType.Moving;
                         platform.color = Color.green;
                         platform.isMoving = true;
                         platform.moveStart = platform.position;
-                        platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位
-                        platform.moveDuration = 2f; // 移动周期为2秒
+                        platform.moveEnd = platform.position + new Vector3(moveData.Item1, moveData.Item2, moveData.Item3); 
+                        platform.moveDuration = moveData.Item4;
                     }
                     else if (selectedLayout[z, x] == 11)
                     {
                         platform.type = LevelData.PlatformType.EnemySrc;
                         platform.color = Color.red;
+                    }
+                    else if (selectedLayout[z, x] == 12)
+                    {
+                        platform.type = LevelData.PlatformType.SpringsTrigger;
+                        platform.color = Color.green;
                     }
                     else
                     {
@@ -134,6 +151,12 @@ public class MapGenerator : MonoBehaviour
         foreach (var connection in selectedConnections)
 	    {
 		levelData.platformsConnections[connection.Key] = connection.Value;
+	    }
+	    
+	levelData.springsTrigger =  new Dictionary<(int, int), (int, int)[]>();
+        foreach (var connection in selectedSpringsTrigger)
+	    {
+		levelData.springsTrigger[connection.Key] = connection.Value;
 	    }
 	    
 	levelData.platformsEnemyTypes = new Dictionary<(int, int), int>();

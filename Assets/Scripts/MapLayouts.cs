@@ -28,7 +28,7 @@ public static class MapLayouts
         {1,0,1,0,0,0,0,1,0,1},
         {11,0,1,0,1,6,0,1,0,1},
         {1,0,1,0,1,1,0,1,0,1},
-        {12,0,1,0,0,0,0,1,0,1},
+        {1,0,1,0,0,0,0,1,0,1},
         {1,0,6,1,1,1,1,1,0,1},
         {1,0,0,0,0,0,0,0,0,1},
         {2,7,8,1,1,11,1,12,1,1}
@@ -78,8 +78,20 @@ public static class MapLayouts
         {0,0,1,1,0,0,1,1,1,0,0,1,1,1},
         {1,1,1,1,0,0,1,1,1,1,1,1,3,1},
         {1,1,1,1,0,0,0,0,0,0,0,1,1,1},
-        {1,2,1,1,0,0,0,0,0,0,0,1,1,1},
+        {1,2,1,12,0,0,0,0,0,0,0,1,1,1},
         {1,1,1,0,0,0,0,0,0,0,0,0,0,0}
+    };
+    
+    public static readonly Dictionary<(int, int), (int, int)[]> FireLayoutSpringsTrigger = new Dictionary<(int, int), (int, int)[]>
+    {
+        { (4, 3), new (int, int)[] { (4, 5), (4, 7), (4, 9) } }
+    };
+    
+    public static readonly Dictionary<(int, int), (int, int)> FireLayoutConnections = new Dictionary<(int, int), (int, int)>
+    {
+        { (4, 5), (4, 7) },
+        { (4, 7), (4, 9) },
+        { (4, 9), (4, 11) }
     };
 
     public static readonly int[,] MixedPathLayout = new int[,]
@@ -173,5 +185,10 @@ public static class MapLayouts
         {0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,0,0,0,0,8,8,0,0,0},
         {0,0,9,0,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,1,0,0},
         {2,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,1,1,7,7,1,1,0,0}
+    };
+    
+    public static readonly Dictionary<(int, int), (float, float, float, float)> AdvancedLayoutMoving = new Dictionary<(int, int), (float, float, float, float)>
+    {
+        { (33, 2), (0f, 0f, 2f, 2f) }
     };
 }

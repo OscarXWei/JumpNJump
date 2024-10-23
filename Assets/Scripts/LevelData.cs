@@ -13,6 +13,7 @@ public class LevelData : ScriptableObject
     public Dictionary<(int, int), (int, int)> platformsConnections = new Dictionary<(int, int), (int, int)>();
     public Dictionary<(int, int), int> platformsEnemyTypes = new Dictionary<(int, int), int>();
     public Dictionary<(int, int), int> platformsEnemyRewardTypes = new Dictionary<(int, int), int>();
+    public Dictionary<(int, int), (int, int)[]> springsTrigger = new Dictionary<(int, int), (int, int)[]>();
     public float timeLimit = 60f;
     public int checkpointIndex = -1;
     
@@ -42,6 +43,7 @@ public class LevelData : ScriptableObject
 
     public enum PlatformType
     {
+        Empty,
         Start,
         Normal,
         Reward,
@@ -55,6 +57,8 @@ public class LevelData : ScriptableObject
         Coin,
         Goal,
         Invincible,
-        EnemySrc
+        EnemySrc,
+        SpringsTrigger,
+        SpringTemp
     }
 }

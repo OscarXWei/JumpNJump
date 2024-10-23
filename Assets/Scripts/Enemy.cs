@@ -33,6 +33,44 @@ public class Enemy : MonoBehaviour
         }
         	
     }
+    
+    private void LateUpdate()
+    {
+    	if (playerObj != null)
+    	{
+    	    float distanceToPlayer = Mathf.Sqrt(Mathf.Pow(playerObj.transform.position.x - transform.position.x, 2) + Mathf.Pow(playerObj.transform.position.z - transform.position.z, 2));
+    	    if (distanceToPlayer < 0.5f)
+    	    {
+    	    	if (level < 2 && !isDead)
+	    	    {
+	    	    	if (gameObject.transform.position.y + (transform.localScale.y/2) <= playerObj.transform.position.y -(playerObj.transform.localScale.y/2) || (playerObj.isNowInvicible() && playerObj.isSimpleRolling))
+		        {
+		    	    TakeDamage();
+		        } 
+		        else if (!playerObj.isNowInvicible())
+		        {
+			    playerObj.SendMessage("PlayerDead");
+		        }	
+	    	    }
+	    	    else if (level >= 2 && !isDead)
+	    	    {
+	    	    	if (playerObj.isNowInvicible())
+		        {
+		    	    TakeDamage();
+		        }
+		        else
+		        {
+			    playerObj.SendMessage("PlayerDead");
+		        }	
+	    	    }
+	    	    }
+	    	    //Debug.Log($"enemy y {gameObject.transform.position.y}, player y {hitObject.transform.position.y}");
+    	    
+            
+    	}
+    	
+    	
+    }
 
     private IEnumerator ShootAtPlayer()
     {
@@ -119,34 +157,7 @@ public class Enemy : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
-    	GameObject hitObject = collision.gameObject;
-    	if (hitObject.CompareTag("Player"))
-    	{
-    	    Debug.Log($"enemy y {gameObject.transform.position.y}, player y {hitObject.transform.position.y}");
-    	    if (level < 2 && !isDead)
-    	    {
-    	    	if (gameObject.transform.position.y + (transform.localScale.y/2) <= hitObject.transform.position.y -(hitObject.transform.localScale.y/2) || playerObj.isNowInvicible())
-                {
-            	    TakeDamage();
-                }
-                else
-                {
-		    hitObject.SendMessage("PlayerDead");
-                }	
-    	    }
-    	    else if (level >= 2 && !isDead)
-    	    {
-    	    	if (playerObj.isNowInvicible())
-                {
-            	    TakeDamage();
-                }
-                else
-                {
-		    hitObject.SendMessage("PlayerDead");
-                }	
-    	    }
-            
-    	}
+    	
     	
     	
     }

@@ -924,7 +924,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 targetDirection = targetCube.transform.position - transform.position;
             float horizontalDistance = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
-            float verticalDistance = targetDirection.y;
+            float verticalDistance = targetDirection.y + 1f;
             float gravity = Physics.gravity.magnitude;
             float radianAngle = jumpAngle * Mathf.Deg2Rad;
 
@@ -933,7 +933,7 @@ public class PlayerController : MonoBehaviour
                                (horizontalDistance * Mathf.Tan(radianAngle) - verticalDistance));
             float v0 = Mathf.Sqrt(v0Squared);
 
-            float exactJumpForce = v0 * rb.mass * forceAdjustment + 0.5f;
+            float exactJumpForce = v0 * rb.mass * forceAdjustment;
 
             return exactJumpForce;
 

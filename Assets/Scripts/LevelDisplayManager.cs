@@ -143,12 +143,27 @@ public class LevelDisplayManager : MonoBehaviour
         Renderer renderer = platform.GetComponent<Renderer>();
         if (renderer != null)
         {
+            // Set up material for transparency
+	    Material material = renderer.material;
+	    material.SetFloat("_Mode", 3); // Set to transparent mode
+	    material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+	    material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+	    material.SetInt("_ZWrite", 0);
+	    material.DisableKeyword("_ALPHATEST_ON");
+	    material.EnableKeyword("_ALPHABLEND_ON");
+	    material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+	    material.renderQueue = 3000;
+	    
             renderer.material.color = platformData.color;
         }
 
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
+        }
+        else if (platformData.type == LevelData.PlatformType.Empty)
+        {
+            platform.tag = "Empty";
         }
         else if (platformData.type == LevelData.PlatformType.Explosive)
         {
@@ -181,6 +196,10 @@ public class LevelDisplayManager : MonoBehaviour
         else if (platformData.type == LevelData.PlatformType.EnemySrc)
         {
             platform.tag = "EnemySrc";
+        }
+        else if (platformData.type == LevelData.PlatformType.SpringsTrigger)
+        {
+            platform.tag = "SpringsTrigger";
         }
         else
         {
@@ -324,6 +343,32 @@ public class LevelDisplayManager : MonoBehaviour
 
         // If no match was found, return false and the original gameObject
         return (false, 0);
+    }
+    
+    public (bool success, GameObject[] vals) findTempSprings(GameObject theGameObject)
+    {
+
+        List<GameObject> objs = new List<GameObject>(); 
+        // Check if the given gameObject is in the platformPositions dictionary
+        if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
+        {
+            // Check if this position has a connection in the platformsConnections dictionary
+            if (levels[currentLevelIndex].springsTrigger.TryGetValue(position, out var arrayVal))
+            {
+                
+                foreach (var pos in arrayVal)
+		    {
+			if (levels[currentLevelIndex].positionPlatforms.TryGetValue(pos, out GameObject targetPlatform))
+		        {
+		            objs.Add(targetPlatform);
+		        }
+		    }
+                
+            }
+        }
+
+        // If no match was found, return false and the original gameObject
+        return (true, objs.ToArray());
     }
     
     public void generateEnemy(int level, int rewardLevel, Vector3 cubePos)
