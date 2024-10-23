@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +18,7 @@ public class GameManager : MonoBehaviour
     public bool IsEasyMode { get; private set; } = false;
 
     private GameDifficulty currentDifficulty = GameDifficulty.Easy;
+    public RawImage screenshotDisplay;
 
     private void Awake()
     {
@@ -161,6 +165,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame()
     {
+        // save game state
         if (SaveLoadManager.Instance != null)
         {
             SaveLoadManager.Instance.SaveGame();
@@ -170,6 +175,9 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("SaveLoadManager instance not found!");
         }
+
+        // capture screenshot and display it
+        StartCoroutine(CaptureScreenshot());
     }
 
     public void LoadGame()
@@ -188,11 +196,60 @@ public class GameManager : MonoBehaviour
             Debug.LogError("SaveLoadManager instance not found!");
         }
     }
-}
 
-public enum GameDifficulty
-{
-    Easy,
-    Normal,
-    Hard
+    // Coroutine to capture and save screenshot
+    private IEnumerator CaptureScreenshot()
+    {
+        // 等待结束帧，以确保所有渲染完成
+        yield return new WaitForEndOfFrame();
+
+        // 获取当前相机视图
+        Camera camera = Camera.main;
+        if (camera != null)
+        {
+            // 创建一个Texture2D来保存截图
+            Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            camera.Render();
+
+            // 把相机渲染结果复制到Texture2D中
+            RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+            camera.targetTexture = renderTexture;
+
+            RenderTexture.active = renderTexture;
+            screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            screenshot.Apply();
+
+            camera.targetTexture = null;
+            RenderTexture.active = null;
+            Destroy(renderTexture);
+
+            // 显示截图在UI面板上
+            ShowScreenshot(screenshot);
+            Debug.Log("Screenshot captured and displayed.");
+        }
+        else
+        {
+            Debug.LogError("Main camera not found!");
+        }
+    }
+
+    private void ShowScreenshot(Texture2D screenshot)
+    {
+        if (screenshotDisplay != null)
+        {
+            screenshotDisplay.texture = screenshot; // 将截图设置为RawImage的纹理
+            screenshotDisplay.gameObject.SetActive(true); // 确保RawImage可见
+        }
+        else
+        {
+            Debug.LogError("Screenshot display UI element not assigned!");
+        }
+    }
+
+    public enum GameDifficulty
+    {
+        Easy,
+        Normal,
+        Hard
+    }
 }

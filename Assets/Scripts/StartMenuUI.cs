@@ -14,7 +14,7 @@ public class StartMenuUI : MonoBehaviour
     private void Start()
     {
         // Set game title
-        gameTitleText.text = "Cube Adventure";
+        //gameTitleText.text = "Cube Adventure";
 
         // Add listeners to buttons
         //StartBtn.onClick.AddListener(() => StartGame());
