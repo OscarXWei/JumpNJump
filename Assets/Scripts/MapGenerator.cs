@@ -109,6 +109,11 @@ public class MapGenerator : MonoBehaviour
                         platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位
                         platform.moveDuration = 2f; // 移动周期为2秒
                     }
+                    else if (selectedLayout[z, x] == 11)
+                    {
+                        platform.type = LevelData.PlatformType.Elongate;
+                        platform.color = Color.magenta; // Choose a distinct color for the new platform type
+                    }
                     else
                     {
                         platform.type = LevelData.PlatformType.Normal;

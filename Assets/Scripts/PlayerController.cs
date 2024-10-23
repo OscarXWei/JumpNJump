@@ -98,8 +98,16 @@ public class PlayerController : MonoBehaviour
     private bool nowHasTargetCube = false;
     private GameObject targetCube;
 
+    [Header("Elongate Effect")]
+    public float elongateFactor = 3f;
+    private float elongateDuration = 20f;
+    public float scrollSensitivity = 0.1f;
+    private bool isElongated = false;
+    private float currentElongation;
+    private Coroutine elongateCoroutine;
 
-    public Material invincibleMaterial; 
+
+    public Material invincibleMaterial;
     public Material originalMaterial;
     private Renderer playerRenderer;
     public int score;
@@ -119,9 +127,9 @@ public class PlayerController : MonoBehaviour
 
         jumpPowerUI.SetMaxPower(maxJumpForce);
         originalScale = transform.localScale;
+        currentElongation = elongateFactor;
 
         SetupLevel();
-
         SetupArrow();
 
         // 初始化平台相关变量
@@ -235,6 +243,21 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.O))
             {
                 LoadGame();
+            }
+
+            if (isElongated && !isJumping && !isSimpleRolling)
+            {
+                float scrollDelta = Input.mouseScrollDelta.y;
+                if (scrollDelta != 0)
+                {
+                    currentElongation = Mathf.Clamp(
+                        currentElongation - scrollDelta * scrollSensitivity,
+                        1f,
+                        elongateFactor
+                    );
+                    UpdatePlayerLength();
+                    Debug.Log($"Adjusted length: {currentElongation}x"); // 调试信息
+                }
             }
 
         }
@@ -512,13 +535,14 @@ public class PlayerController : MonoBehaviour
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
 
-        if (!isSimpleRolling && !nowHasTargetCube) {
+        if (!isSimpleRolling && !nowHasTargetCube)
+        {
             if (hitPlatform.CompareTag("Terrain"))
             {
                 FailJump();
             }
         }
-            
+
         if (hitPlatform.CompareTag("Coin"))
         {
             score += 1;
@@ -553,6 +577,12 @@ public class PlayerController : MonoBehaviour
         if (hitPlatform.CompareTag("Terrain"))
         {
             FailJump();
+        }
+
+        // longer
+        if (hitPlatform.CompareTag("Elongate"))
+        {
+            StartElongateEffect();
         }
     }
 
@@ -982,6 +1012,47 @@ public class PlayerController : MonoBehaviour
         }
         return new Vector3();
     }
+    private void StartElongateEffect()
+    {
+        //turnOffPhysics();
+        if (!isElongated)
+        {
+            if (elongateCoroutine != null)
+            {
+                StopCoroutine(elongateCoroutine);
+            }
+            currentElongation = elongateFactor; // 开始时设置为最大长度
+            elongateCoroutine = StartCoroutine(ElongatePlayer());
+        }
+    }
+
+    // 更新变长协程
+    private IEnumerator ElongatePlayer()
+    {
+        isElongated = true;
+        UpdatePlayerLength(); // 立即应用长度
+        Debug.Log("Elongate effect started");
+
+        yield return new WaitForSeconds(elongateDuration);
+
+        // 重置所有状态
+        transform.localScale = originalScale;
+        isElongated = false;
+        currentElongation = elongateFactor;
+        Debug.Log("Elongate effect ended");
+    }
+
+    // 更新玩家长度的方法
+    private void UpdatePlayerLength()
+    {
+        Vector3 newScale = new Vector3(
+            originalScale.x,
+            originalScale.y * currentElongation,
+            originalScale.z
+        );
+        transform.localScale = newScale;
+    }
+
 
     private IEnumerator WaitCoroutine(float num)
     {
