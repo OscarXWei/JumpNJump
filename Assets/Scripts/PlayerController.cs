@@ -100,14 +100,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Elongate Effect")]
     public float elongateFactor = 3f;
-    public float elongateDuration = 20f;
+    private float elongateDuration = 20f;
     public float scrollSensitivity = 0.1f;
     private bool isElongated = false;
     private float currentElongation;
     private Coroutine elongateCoroutine;
 
 
-    public Material invincibleMaterial; 
+    public Material invincibleMaterial;
     public Material originalMaterial;
     private Renderer playerRenderer;
     public int score;
@@ -535,13 +535,14 @@ public class PlayerController : MonoBehaviour
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
 
-        if (!isSimpleRolling && !nowHasTargetCube) {
+        if (!isSimpleRolling && !nowHasTargetCube)
+        {
             if (hitPlatform.CompareTag("Terrain"))
             {
                 FailJump();
             }
         }
-            
+
         if (hitPlatform.CompareTag("Coin"))
         {
             score += 1;
@@ -1013,7 +1014,7 @@ public class PlayerController : MonoBehaviour
     }
     private void StartElongateEffect()
     {
-        turnOffPhysics();
+        //turnOffPhysics();
         if (!isElongated)
         {
             if (elongateCoroutine != null)
