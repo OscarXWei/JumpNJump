@@ -23,13 +23,15 @@ public class LevelDisplayManager : MonoBehaviour
     void Start()
     {
         AddGeneratedLevels();
-        if (PlayerPrefs.HasKey("LevelToLoad"))
-        {
-            int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
-            SetCurrentLevelIndex(levelIndex);
+        DisplayCurrentLevel();
+        // if (PlayerPrefs.HasKey("LevelToLoad"))
+        // {
+        //     int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
+        //     currentLevelIndex = levelIndex;
+        //     DisplayCurrentLevel();
 
-            PlayerPrefs.DeleteKey("LevelToLoad");
-        }
+        //     PlayerPrefs.DeleteKey("LevelToLoad");
+        // }
 
     }
 
