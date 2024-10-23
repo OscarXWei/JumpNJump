@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private float totalRotation = 1f;
     private bool isRolling = false;
     private float targetRotation = 3600f; // 完整的一周旋转
-                                          //private float rollTimer = 0f;
+    // private float rollTimer = 0f;
 
     [Header("Simple Rolling")]
     public float simpleRollSpeed = 3636f; // 每秒旋转的角度
@@ -201,6 +201,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < 1f)
+        {
+            FailJump();
+            return;  // 返回以避免执行其他更新逻辑
+        }
 
         //Debug.Log("is in update");
         //Debug.Log($"isJumping {isJumping}, isGameOver {isGameOver}, isStarting {GameManager.Instance.isStarting}");
