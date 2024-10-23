@@ -125,12 +125,12 @@ public class MapGenerator : MonoBehaviour
                         platform.moveEnd = platform.position + new Vector3(moveData.Item1, moveData.Item2, moveData.Item3); 
                         platform.moveDuration = moveData.Item4;
                     }
-                    else if (selectedLayout[z, x] == 11)
+                    else if (selectedLayout[z, x] == 12)
                     {
                         platform.type = LevelData.PlatformType.EnemySrc;
                         platform.color = Color.red;
                     }
-                    else if (selectedLayout[z, x] == 12)
+                    else if (selectedLayout[z, x] == 13)
                     {
                         platform.type = LevelData.PlatformType.SpringsTrigger;
                         platform.color = Color.green;
