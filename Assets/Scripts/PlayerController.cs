@@ -191,10 +191,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        //Debug.Log("is in update");
+        //Debug.Log($"isJumping {isJumping}, isGameOver {isGameOver}, isStarting {GameManager.Instance.isStarting}");
         if (!isJumping && !isGameOver && GameManager.Instance.isStarting)
         {
+            //Debug.Log($"isJumping {isJumping}, isGameOver {isGameOver}, isStarting {GameManager.Instance.isStarting}");
+
+            //Debug.Log("is in first if");
             if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
             {
+                //Debug.Log("space keydown");
                 StartCharging();
             }
 
