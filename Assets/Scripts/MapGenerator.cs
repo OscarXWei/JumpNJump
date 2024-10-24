@@ -11,7 +11,7 @@ public class MapGenerator : MonoBehaviour
         {
             case "Easy":
                 selectedLayout = MapLayouts.EasyMazeLayout;
-                selectedConnections = MapLayouts.EasyMazeConnections;
+                //selectedConnections = MapLayouts.EasyMazeConnections;
                 break;
             case "Medium":
                 selectedLayout = MapLayouts.ObstacleLayout;
@@ -21,6 +21,7 @@ public class MapGenerator : MonoBehaviour
                 break;
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
+                selectedConnections = MapLayouts.FireLayoutConnections;
                 break;
 
             case "MixedPath":
@@ -106,8 +107,8 @@ public class MapGenerator : MonoBehaviour
                         platform.color = Color.green;
                         platform.isMoving = true;
                         platform.moveStart = platform.position;
-                        platform.moveEnd = platform.position + new Vector3(0, 0, 2f); // 移动2个单位
-                        platform.moveDuration = 2f; // 移动周期为2秒
+                        platform.moveEnd = platform.position + new Vector3(0, 0, -7f); // 移动2个单位
+                        platform.moveDuration = 5f; // 移动周期为2秒
                     }
                     else if (selectedLayout[z, x] == 11)
                     {

@@ -51,17 +51,19 @@ public class LevelDisplayManager : MonoBehaviour
     {
 
         levels = new List<LevelData>();
-
-        levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
-
         levels.Add(MapGenerator.GenerateLevel("Easy"));
         levels.Add(MapGenerator.GenerateLevel("Medium"));
+        levels.Add(MapGenerator.GenerateLevel("Fire"));
+        levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
+
+
+
         // levels.Add(MapGenerator.GenerateLevel("Fire"));
         // levels.Add(MapGenerator.GenerateLevel("Hard"));
         // levels.Add(MapGenerator.GenerateLevel("MixedPath"));
         // levels.Add(MapGenerator.GenerateLevel("IslandPath"));
         // levels.Add(MapGenerator.GenerateLevel("SpiralPath"));
-        levels.Add(MapGenerator.GenerateLevel("ScatteredIslands"));
+        //levels.Add(MapGenerator.GenerateLevel("ScatteredIslands"));
 
 
 
@@ -189,6 +191,10 @@ public class LevelDisplayManager : MonoBehaviour
         if (platformData.type == LevelData.PlatformType.Normal)
         {
             platform.tag = "Platform";
+        }
+        if (platformData.type == LevelData.PlatformType.Moving)
+        {
+            platform.tag = "Moving";
         }
 
         Rigidbody rb = platform.GetComponent<Rigidbody>();

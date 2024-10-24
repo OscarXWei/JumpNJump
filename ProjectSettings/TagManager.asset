@@ -23,6 +23,7 @@ TagManager:
   - SpringStart
   - coinPlatform
   - Elongate
+  - Moving
   layers:
   - Default
   - TransparentFX

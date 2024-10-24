@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
     private GameObject targetCube;
 
     [Header("Elongate Effect")]
-    public float elongateFactor = 3f;
+    private float elongateFactor = 5f;
     private float elongateDuration = 20f;
     public float scrollSensitivity = 0.1f;
     private bool isElongated = false;
@@ -559,7 +559,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(InvincibilityTimer(12f));
         }
 
-        if (!isSimpleRolling)
+        if (!isSimpleRolling && !nowHasTargetCube)
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
@@ -573,7 +573,7 @@ public class PlayerController : MonoBehaviour
 
 
         // 处理移动平台
-        if (hitPlatform.CompareTag("Platform"))
+        if (hitPlatform.CompareTag("Moving"))
         {
             currentPlatform = hitPlatform.transform;
             lastPlatformPosition = currentPlatform.position;
