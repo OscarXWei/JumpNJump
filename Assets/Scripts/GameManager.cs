@@ -200,22 +200,19 @@ public class GameManager : MonoBehaviour
     // Coroutine to capture and save screenshot
     private IEnumerator CaptureScreenshot()
     {
-        // 等待结束帧，以确保所有渲染完成
         yield return new WaitForEndOfFrame();
 
-        // 获取当前相机视图
         Camera camera = Camera.main;
         if (camera != null)
         {
-            // 创建一个Texture2D来保存截图
-            Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-            camera.Render();
-
-            // 把相机渲染结果复制到Texture2D中
             RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
             camera.targetTexture = renderTexture;
 
             RenderTexture.active = renderTexture;
+            camera.Render();
+
+            // 创建Texture2D来保存截图
+            Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
             screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
             screenshot.Apply();
 
@@ -223,8 +220,12 @@ public class GameManager : MonoBehaviour
             RenderTexture.active = null;
             Destroy(renderTexture);
 
-            // 显示截图在UI面板上
             ShowScreenshot(screenshot);
+
+            // 保存截图到文件
+            // byte[] bytes = screenshot.EncodeToPNG();
+            // System.IO.File.WriteAllBytes(Application.persistentDataPath + "/screenshot.png", bytes);
+
             Debug.Log("Screenshot captured and displayed.");
         }
         else
@@ -237,7 +238,7 @@ public class GameManager : MonoBehaviour
     {
         if (screenshotDisplay != null)
         {
-            screenshotDisplay.texture = screenshot; // 将截图设置为RawImage的纹理
+            screenshotDisplay.texture = screenshot; // 将截图设置为RawImage的纹理,RawImage是memory window的screensho component
             screenshotDisplay.gameObject.SetActive(true); // 确保RawImage可见
         }
         else
