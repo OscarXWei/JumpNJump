@@ -51,6 +51,7 @@ public class LevelDisplayManager : MonoBehaviour
     {
 
         levels = new List<LevelData>();
+
         levels.Add(MapGenerator.GenerateLevel("Easy"));
         levels.Add(MapGenerator.GenerateLevel("Medium"));
         levels.Add(MapGenerator.GenerateLevel("Fire"));
@@ -85,38 +86,46 @@ public class LevelDisplayManager : MonoBehaviour
 
     public void SwitchToNextLevel()
     {
+        // 保存当前关卡索引
+        int previousIndex = currentLevelIndex;
+
+        // 计算下一关索引
         currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
-        if (currentLevelIndex == 1)
-        {
-            backGround1.SetActive(false);
-            backGround2.SetActive(true);
-            backGround3.SetActive(false);
-            backGround4.SetActive(false);
-        }
-        else if (currentLevelIndex == 2)
-        {
-            backGround2.SetActive(false);
-            backGround1.SetActive(false);
-            backGround3.SetActive(true);
-            backGround4.SetActive(false);
-        }
-        else if (currentLevelIndex == 3)
-        {
-            backGround1.SetActive(false);
-            backGround2.SetActive(false);
-            backGround3.SetActive(false);
-            backGround4.SetActive(true);
-        }
-        // else if (currentLevelIndex == 4)
-        // {
-        //     backGround1.SetActive(false);
-        //     backGround2.SetActive(false);
-        //     backGround3.SetActive(false);
-        //     backGround4.SetActive(true);
-        // }
+
+        // 更新背景
+        UpdateBackground();
+
+        // 显示新关卡
         DisplayCurrentLevel();
+
+        Debug.Log($"Switching from level {previousIndex} to level {currentLevelIndex}");
     }
 
+    private void UpdateBackground()
+    {
+        // 关闭所有背景
+        backGround1.SetActive(false);
+        backGround2.SetActive(false);
+        backGround3.SetActive(false);
+        backGround4.SetActive(false);
+
+        // 根据当前关卡索引激活对应背景
+        switch (currentLevelIndex)
+        {
+            case 0:
+                backGround1.SetActive(true);
+                break;
+            case 1:
+                backGround2.SetActive(true);
+                break;
+            case 2:
+                backGround3.SetActive(true);
+                break;
+            case 3:
+                backGround4.SetActive(true);
+                break;
+        }
+    }
 
 
     void DisplayCurrentLevel()

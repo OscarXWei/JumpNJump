@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO.Compression;
 
 public class PlayerController : MonoBehaviour
 {
@@ -203,7 +204,9 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < 1f)
         {
+
             FailJump();
+
             return;  // 返回以避免执行其他更新逻辑
         }
 
@@ -658,18 +661,22 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = false;
         isGameOver = true;
-        Invoke("ShatterPlayer", shatterDelay);
+        //Invoke("ShatterPlayer", shatterDelay);
+        GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+        //Destroy(gameObject);
         //SoundManager.Instance.PlayShatterSound();
         StartCoroutine(ShowGameOverAfterDelay());
+
     }
 
     private IEnumerator ShowGameOverAfterDelay()
     {
-        yield return new WaitForSeconds(gameOverDelay);
+        yield return new WaitForSeconds(0.1f);
 
         if (gameOverUI != null)
         {
             gameOverUI.ShowGameOver();
+            Destroy(gameObject);
         }
         else
         {
@@ -935,11 +942,11 @@ public class PlayerController : MonoBehaviour
     IEnumerator CompleteLevel()
     {
         // 可以在这里添加一些过渡效果
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.01f);
 
         // 切换到下一关
         levelDisplayManager.SwitchToNextLevel();
-        SetupLevel();
+        //SetupLevel();
     }
 
     public void setTargetCubeJumping(GameObject theGameObject)

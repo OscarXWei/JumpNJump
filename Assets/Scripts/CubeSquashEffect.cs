@@ -46,6 +46,7 @@ public class CubeSquashEffect : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         GameObject shatteredPlayer = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+
         Destroy(gameObject); // Destroy the cube
     }
 
