@@ -45,6 +45,35 @@ public class LevelDisplayManager : MonoBehaviour
         {
             SwitchToNextLevel();
         }
+
+        if (currentLevelIndex == 0)
+        {
+            backGround1.SetActive(true);
+            backGround2.SetActive(false);
+            backGround3.SetActive(false);
+            backGround4.SetActive(false);
+        }
+        else if (currentLevelIndex == 1)
+        {
+            backGround1.SetActive(false);
+            backGround2.SetActive(true);
+            backGround3.SetActive(false);
+            backGround4.SetActive(false);
+        }
+        else if (currentLevelIndex == 2)
+        {
+            backGround1.SetActive(false);
+            backGround2.SetActive(false);
+            backGround3.SetActive(true);
+            backGround4.SetActive(false);
+        }
+        else if (currentLevelIndex == 3)
+        {
+            backGround1.SetActive(false);
+            backGround2.SetActive(false);
+            backGround3.SetActive(false);
+            backGround4.SetActive(true);
+        }
     }
 
     void AddGeneratedLevels()
@@ -91,9 +120,6 @@ public class LevelDisplayManager : MonoBehaviour
 
         // 计算下一关索引
         currentLevelIndex = (currentLevelIndex + 1) % levels.Count;
-
-        // 更新背景
-        UpdateBackground();
 
         // 显示新关卡
         DisplayCurrentLevel();
