@@ -19,7 +19,7 @@ public class PlayerShatter : MonoBehaviour
     void Shatter()
     {
         Vector3 center = transform.position;
-        
+
         // 胶囊体碎片
         ShatterCapsule(center);
 
@@ -65,7 +65,7 @@ public class PlayerShatter : MonoBehaviour
         GameObject fragment = GameObject.CreatePrimitive(type);
         fragment.transform.localScale = Vector3.one * fragmentSize;
         fragment.transform.position = position;
-        
+
         Renderer fragmentRenderer = fragment.GetComponent<Renderer>();
         fragmentRenderer.material = new Material(Shader.Find("Standard"));
         fragmentRenderer.material.color = color;
@@ -74,8 +74,8 @@ public class PlayerShatter : MonoBehaviour
         rb.mass = 0.1f;
         rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
 
-        Debug.Log($"Created {type} fragment at position: {position}, Size: {fragmentSize}");
-        Debug.DrawLine(position, position + Vector3.up * 0.5f, Color.yellow, 5f);
+        //Debug.Log($"Created {type} fragment at position: {position}, Size: {fragmentSize}");
+        //Debug.DrawLine(position, position + Vector3.up * 0.5f, Color.yellow, 5f);
 
         Destroy(fragment, fadeTime);
     }

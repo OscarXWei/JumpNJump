@@ -594,12 +594,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // reach goal
-        if (hitPlatform.CompareTag("Goal"))
-        {
-            Debug.Log("Congratulations! You've reached the goal!");
-            StartCoroutine(CompleteLevel());
-            return;
-        }
+        // if (hitPlatform.CompareTag("Goal"))
+        // {
+        //     Debug.Log("Congratulations! You've reached the goal!");
+        //     StartCoroutine(CompleteLevel());
+        //     return;
+        // }
     }
 
     private IEnumerator InvincibilityTimer(float duration)
