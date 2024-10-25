@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target; // 玩家的 Transform
-    public float height = 5.0f; // 相机高度
-    public float distance = 8.5f; // 相机与玩家的水平距离
-    public float rotationSpeed = 5f; // 鼠标旋转速度
-    public float smoothSpeed = 0.125f; // 相机跟随的平滑度
-    public float defaultYaw = 0f; // 默认水平角度
-    public float defaultPitch = 20f; // 默认垂直角度
-    public float resetSpeed = 10f; // 视角复位速度
+    public Transform target;
+    public float height = 5.0f;
+    public float distance = 8.5f;
+    public float rotationSpeed = 5f;
+    public float smoothSpeed = 0.1f; // 降低平滑速度以减少抖动
+    public float defaultYaw = 0f;
+    public float defaultPitch = 20f;
+    public float resetSpeed = 10f;
 
-    private float yaw;
-    private float pitch;
-    private Vector3 refVelocity = Vector3.zero;
+    private float currentYaw;
+    private float currentPitch;
     private bool isAdjustingView = false;
     private float targetYaw;
     private float targetPitch;
+    private Vector3 currentVelocity = Vector3.zero;
 
     void Start()
     {
@@ -25,19 +25,23 @@ public class CameraController : MonoBehaviour
             Debug.LogError("Camera target is not set!");
             return;
         }
-
-        // 初始化视角
         ResetToDefaultView();
+        // 初始化当前角度为目标角度
+        currentYaw = targetYaw;
+        currentPitch = targetPitch;
     }
 
     void LateUpdate()
     {
-        if (target == null)
-        {
-            return;
-        }
+        if (target == null) return;
 
-        // 检查鼠标左键的状态
+        HandleInput();
+        UpdateCameraRotation();
+        UpdateCameraPosition();
+    }
+
+    void HandleInput()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             isAdjustingView = true;
@@ -50,32 +54,45 @@ public class CameraController : MonoBehaviour
 
         if (isAdjustingView)
         {
-            // 鼠标输入来控制视角
             targetYaw += Input.GetAxis("Mouse X") * rotationSpeed;
             targetPitch -= Input.GetAxis("Mouse Y") * rotationSpeed;
-
-            // 限制 pitch 角度
             targetPitch = Mathf.Clamp(targetPitch, -30f, 60f);
         }
         else
         {
-            // 平滑地恢复到默认视角
             targetYaw = Mathf.MoveTowards(targetYaw, defaultYaw, resetSpeed * Time.deltaTime);
             targetPitch = Mathf.MoveTowards(targetPitch, defaultPitch, resetSpeed * Time.deltaTime);
         }
+    }
 
-        // 平滑地更新实际的 yaw 和 pitch
-        yaw = Mathf.Lerp(yaw, targetYaw, smoothSpeed);
-        pitch = Mathf.Lerp(pitch, targetPitch, smoothSpeed);
+    void UpdateCameraRotation()
+    {
+        // 平滑过渡角度，使用更小的平滑系数
+        currentYaw = Mathf.Lerp(currentYaw, targetYaw, smoothSpeed);
+        currentPitch = Mathf.Lerp(currentPitch, targetPitch, smoothSpeed);
+    }
 
-        // 计算相机的位置
-        Vector3 targetPosition = target.position - (Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward * distance) + Vector3.up * height;
+    void UpdateCameraPosition()
+    {
+        // 计算目标位置
+        Quaternion rotation = Quaternion.Euler(currentPitch, currentYaw, 0f);
+        Vector3 negDistance = rotation * Vector3.forward * -distance;
+        Vector3 targetPosition = target.position + Vector3.up * height + negDistance;
 
-        // 平滑移动相机
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref refVelocity, smoothSpeed);
+        // 使用 SmoothDamp 进行位置平滑，可以提供更平滑的移动
+        transform.position = Vector3.SmoothDamp(
+            transform.position,
+            targetPosition,
+            ref currentVelocity,
+            smoothSpeed * 2f  // 位置平滑时间稍长一些
+        );
 
-        // 使相机始终看向玩家
-        transform.LookAt(target.position + Vector3.up * height * 0.5f);
+        // 计算目标点，稍微提高注视点以获得更好的视角
+        Vector3 lookAtPoint = target.position + Vector3.up * height * 0.7f;
+
+        // 平滑旋转
+        Quaternion targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothSpeed * 1.5f);
     }
 
     void ResetToDefaultView()
