@@ -19,6 +19,7 @@ public class LevelDisplayManager : MonoBehaviour
     public GameObject backGround4;
     public GameObject coin;
     public GameObject invincible;
+    public GameObject enemyPrefab;
 
     void Start()
     {
@@ -85,6 +86,9 @@ public class LevelDisplayManager : MonoBehaviour
         levels.Add(MapGenerator.GenerateLevel("Medium"));
         levels.Add(MapGenerator.GenerateLevel("Fire"));
         levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
+        levels.Add(MapGenerator.GenerateLevel("EasyTesting"));
+        levels.Add(MapGenerator.GenerateLevel("FireTesting"));
+        levels.Add(MapGenerator.GenerateLevel("FireTesting2"));
 
 
 
@@ -187,49 +191,84 @@ public class LevelDisplayManager : MonoBehaviour
         Renderer renderer = platform.GetComponent<Renderer>();
         if (renderer != null)
         {
+            // Set up material for transparency
+            Material material = renderer.material;
+            material.SetFloat("_Mode", 3); // Set to transparent mode
+            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            material.SetInt("_ZWrite", 0);
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.EnableKeyword("_ALPHABLEND_ON");
+            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            material.renderQueue = 3000;
+
             renderer.material.color = platformData.color;
         }
         if (platformData.type == LevelData.PlatformType.Goal)
         {
             platform.tag = "Goal";
         }
-        if (platformData.type == LevelData.PlatformType.Explosive)
+        else if (platformData.type == LevelData.PlatformType.Empty)
+        {
+            platform.tag = "Empty";
+        }
+        else if (platformData.type == LevelData.PlatformType.Explosive)
         {
             platform.tag = "Explosive";
         }
-        if (platformData.type == LevelData.PlatformType.Start)
+        else if (platformData.type == LevelData.PlatformType.Start)
         {
             platform.tag = "Start";
         }
-        if (platformData.type == LevelData.PlatformType.Coin)
+        else if (platformData.type == LevelData.PlatformType.Coin)
         {
             platform.tag = "coinPlatform";
             Vector3 coinPosition = platformData.position + new Vector3(0, 1f, 0);
             GameObject Coin = Instantiate(coin, coinPosition, Quaternion.identity, parent);
             Coin.tag = "Coin";
         }
-        if (platformData.type == LevelData.PlatformType.Invincible)
+        else if (platformData.type == LevelData.PlatformType.Invincible)
         {
             platform.tag = "powerupPlatform";
             Vector3 invinciblePosition = platformData.position + new Vector3(0, 1f, 0);
             GameObject Invincible = Instantiate(invincible, invinciblePosition, Quaternion.identity, parent);
             Invincible.tag = "Powerup";
         }
-        if (platformData.type == LevelData.PlatformType.SpringStart)
+        else if (platformData.type == LevelData.PlatformType.SpringStart)
         {
             platform.tag = "SpringStart";
         }
-        if (platformData.type == LevelData.PlatformType.Elongate)
+        else if (platformData.type == LevelData.PlatformType.EnemySrc)
+        {
+            platform.tag = "EnemySrc";
+        }
+        else if (platformData.type == LevelData.PlatformType.SpringsTrigger)
+        {
+            platform.tag = "SpringsTrigger";
+        }
+        else if (platformData.type == LevelData.PlatformType.Elongate)
         {
             platform.tag = "Elongate";
         }
-        if (platformData.type == LevelData.PlatformType.Normal)
+        else if (platformData.type == LevelData.PlatformType.Normal)
         {
             platform.tag = "Platform";
         }
-        if (platformData.type == LevelData.PlatformType.Moving)
+        else if (platformData.type == LevelData.PlatformType.Moving)
         {
             platform.tag = "Moving";
+        }
+        else if (platformData.type == LevelData.PlatformType.Empty)
+        {
+            platform.tag = "Empty";
+        }
+        else if (platformData.type == LevelData.PlatformType.Hidden)
+        {
+            platform.tag = "Hidden";
+        }
+        else if (platformData.type == LevelData.PlatformType.HiddenTrigger)
+        {
+            platform.tag = "HiddenTrigger";
         }
 
         Rigidbody rb = platform.GetComponent<Rigidbody>();
@@ -331,6 +370,80 @@ public class LevelDisplayManager : MonoBehaviour
 
         // If no match was found, return false and the original gameObject
         return (false, theGameObject);
+    }
+    public (bool success, int val) findPlatformEnemyType(GameObject theGameObject)
+    {
+
+        // Check if the given gameObject is in the platformPositions dictionary
+        if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
+        {
+            // Check if this position has a connection in the platformsConnections dictionary
+            if (levels[currentLevelIndex].platformsEnemyTypes.TryGetValue(position, out int typeVal))
+            {
+
+                return (true, typeVal);
+
+            }
+        }
+
+        // If no match was found, return false and the original gameObject
+        return (false, 0);
+    }
+
+    public (bool success, int val) findPlatformEnemyRewardType(GameObject theGameObject)
+    {
+
+        // Check if the given gameObject is in the platformPositions dictionary
+        if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
+        {
+            // Check if this position has a connection in the platformsConnections dictionary
+            if (levels[currentLevelIndex].platformsEnemyRewardTypes.TryGetValue(position, out int typeVal))
+            {
+
+                return (true, typeVal);
+
+            }
+        }
+
+        // If no match was found, return false and the original gameObject
+        return (false, 0);
+    }
+
+    public (bool success, GameObject[] vals) findTemp(GameObject theGameObject)
+    {
+
+        List<GameObject> objs = new List<GameObject>();
+        // Check if the given gameObject is in the platformPositions dictionary
+        if (levels[currentLevelIndex].platformPositions.TryGetValue(theGameObject, out (int z, int x) position))
+        {
+            // Check if this position has a connection in the platformsConnections dictionary
+            if (levels[currentLevelIndex].Trigger.TryGetValue(position, out var arrayVal))
+            {
+
+                foreach (var pos in arrayVal)
+                {
+                    if (levels[currentLevelIndex].positionPlatforms.TryGetValue(pos, out GameObject targetPlatform))
+                    {
+                        objs.Add(targetPlatform);
+                    }
+                }
+
+            }
+        }
+
+        // If no match was found, return false and the original gameObject
+        return (true, objs.ToArray());
+    }
+
+    public void generateEnemy(int level, int rewardLevel, Vector3 cubePos)
+    {
+
+        Vector3 enemyPosition = cubePos + new Vector3(0, 1f, 0);
+        GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity, currentLevelObject.transform);
+        enemy.SendMessage("setLevel", level);
+        enemy.SendMessage("setRewardLevel", rewardLevel);
+
+
     }
 
     public int GetCurrentLevelIndex()

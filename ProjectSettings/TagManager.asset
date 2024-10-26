@@ -24,6 +24,12 @@ TagManager:
   - coinPlatform
   - Elongate
   - Moving
+  - EnemySrc
+  - SpringsTrigger
+  - SpringTemp
+  - Empty
+  - Hidden
+  - HiddenTrigger
   layers:
   - Default
   - TransparentFX

@@ -12525,7 +12525,7 @@ MonoBehaviour:
   invincibleMaterial: {fileID: 2100000, guid: 0483e0045d421934b82de268e6b56c2d, type: 2}
   originalMaterial: {fileID: 2100000, guid: 3ac757142cc5dce48bb612f436f543a9, type: 2}
   score: 0
-  timeLimit: 180
+  remainingTime: 300
   timerText: {fileID: 784421725}
 --- !u!114 &1011524878
 MonoBehaviour:
@@ -21452,6 +21452,7 @@ MonoBehaviour:
   backGround4: {fileID: 1149353383}
   coin: {fileID: 1950871307682000, guid: 01348926c7cbb3347a006c37204131c3, type: 3}
   invincible: {fileID: 191076, guid: d2bb8296c2fea4f44a9d151466f87b4c, type: 3}
+  enemyPrefab: {fileID: 827022679135782516, guid: 961f8a036f45149e9858ea1c85b5b177, type: 3}
 --- !u!1001 &1597173965
 PrefabInstance:
   m_ObjectHideFlags: 0

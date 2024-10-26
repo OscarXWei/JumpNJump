@@ -305,7 +305,7 @@ public class PlayerController : MonoBehaviour
         // Increment the timer
 
         // Calculate remaining time
-        
+
         timerText.text = $"Time Left: {remainingTime:F1}";
         if (isMoved)
         {
@@ -318,7 +318,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Update the UI Text to display remaining time
-        
+
     }
 
 
@@ -1123,6 +1123,18 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(num);
         // Put any code here that you want to run after the delay
+    }
+
+    public void PlayerDead()
+    {
+        Invoke("ShatterPlayer", shatterDelay);
+        //SoundManager.Instance.PlayShatterSound();
+        StartCoroutine(ShowGameOverAfterDelay());
+    }
+
+    public bool isNowInvicible()
+    {
+        return isInvincible;
     }
 
 }

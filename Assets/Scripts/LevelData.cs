@@ -11,6 +11,9 @@ public class LevelData : ScriptableObject
     public Dictionary<GameObject, (int, int)> platformPositions = new Dictionary<GameObject, (int, int)>();
     public Dictionary<(int, int), GameObject> positionPlatforms = new Dictionary<(int, int), GameObject>();
     public Dictionary<(int, int), (int, int)> platformsConnections = new Dictionary<(int, int), (int, int)>();
+    public Dictionary<(int, int), int> platformsEnemyTypes = new Dictionary<(int, int), int>();
+    public Dictionary<(int, int), int> platformsEnemyRewardTypes = new Dictionary<(int, int), int>();
+    public Dictionary<(int, int), (int, int)[]> Trigger = new Dictionary<(int, int), (int, int)[]>();
     public float timeLimit = 60f;
     public int checkpointIndex = -1;
 
@@ -53,6 +56,11 @@ public class LevelData : ScriptableObject
         Coin, // 7
         Goal, // 3
         Invincible,
+        EnemySrc,
+        SpringsTrigger,
+        SpringTemp,
+        Empty,
+        HiddenTrigger,
         Elongate // 11 
     }
 }
