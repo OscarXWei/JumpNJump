@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     private GameDifficulty currentDifficulty = GameDifficulty.Easy;
     public RawImage screenshotDisplay;
-
+    
     private void Awake()
     {
         // Singleton pattern
@@ -184,6 +184,12 @@ public class GameManager : MonoBehaviour
     {
         if (SaveLoadManager.Instance != null)
         {
+            if (playerController == null)
+                playerController.ResetGameState();
+
+            // Reset score
+            ScoreManager.Instance.ResetScore();
+            
             SaveLoadManager.Instance.LoadGame();
             isStarting = true;
             isGameOver = false;
