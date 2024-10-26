@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 using System.IO.Compression;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -113,6 +114,11 @@ public class PlayerController : MonoBehaviour
     private Renderer playerRenderer;
     public int score;
     private bool isInvincible = false;
+    public float timeLimit = 10f; // Set the time limit for the object to exist
+    private float timer = 0f;
+    public TextMeshProUGUI timerText;
+    private bool isMoved = false;
+
 
     private void Awake()
     {
@@ -300,6 +306,24 @@ public class PlayerController : MonoBehaviour
         //{
         //    ReachGoal();
         //}
+        // Increment the timer
+
+        // Calculate remaining time
+        float remainingTime = 300f;
+        timerText.text = $"Time Left: {remainingTime:F1}";
+        if (isMoved)
+        {
+            timer += Time.deltaTime;
+            remainingTime = remainingTime - timer;
+            timerText.text = $"Time Left: {remainingTime:F1}";
+            if (remainingTime <= 0f)
+            {
+                FailJump();
+            }
+        }
+
+        // Update the UI Text to display remaining time
+        
     }
 
 
@@ -539,9 +563,15 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
+        if (!hitPlatform.CompareTag("Start"))
+        {
+            isMoved = true;
+        }
 
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
+
+
 
         if (!isSimpleRolling && !nowHasTargetCube)
         {

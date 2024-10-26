@@ -6,6 +6,7 @@ public class StartMenuUI : MonoBehaviour
 {
     public GameObject startMenuPanel;
     public TextMeshProUGUI gameTitleText;
+    public GameObject Timer;
     public Button StartBtn;
     //public Button normalModeButton;
     //public Button hardModeButton;
@@ -30,6 +31,7 @@ public class StartMenuUI : MonoBehaviour
     {
         GameManager.Instance.StartGame();
         HideStartMenu();
+        
     }
 
     private void ShowGameInfo()
@@ -46,6 +48,7 @@ public class StartMenuUI : MonoBehaviour
     public void HideStartMenu()
     {
         startMenuPanel.SetActive(false);
+        Timer.SetActive(true);
     }
 }
 
