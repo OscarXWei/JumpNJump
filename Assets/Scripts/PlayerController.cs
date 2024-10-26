@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
     private Renderer playerRenderer;
     public int score;
     private bool isInvincible = false;
-    public float timeLimit = 10f; // Set the time limit for the object to exist
+    public float remainingTime = 300f; // Set the time limit for the object to exist
     private float timer = 0f;
     public TextMeshProUGUI timerText;
     private bool isMoved = false;
@@ -309,12 +309,11 @@ public class PlayerController : MonoBehaviour
         // Increment the timer
 
         // Calculate remaining time
-        float remainingTime = 300f;
+        
         timerText.text = $"Time Left: {remainingTime:F1}";
         if (isMoved)
         {
-            timer += Time.deltaTime;
-            remainingTime = remainingTime - timer;
+            remainingTime = remainingTime - Time.deltaTime;
             timerText.text = $"Time Left: {remainingTime:F1}";
             if (remainingTime <= 0f)
             {
@@ -563,9 +562,18 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
+        if (hitPlatform.CompareTag("Start"))
+        {
+            isMoved = false;
+            remainingTime = 300f;
+        }
         if (!hitPlatform.CompareTag("Start"))
         {
             isMoved = true;
+        }
+        if (!hitPlatform.CompareTag("Goal"))
+        {
+            remainingTime = 300f;
         }
 
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
