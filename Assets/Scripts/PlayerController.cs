@@ -164,6 +164,8 @@ public class PlayerController : MonoBehaviour
     public void SetupLevel()
     {
         currentLevelData = levelDisplayManager.GetCurrentLevelData();
+        isMoved = false;
+        remainingTime = 300f;
         SetStartAndGoalPlatforms();
         SetPlayerToStartPosition();
     }
@@ -558,17 +560,13 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
-        if (hitPlatform.CompareTag("Start"))
-        {
-            isMoved = false;
-            remainingTime = 300f;
-        }
         if (!hitPlatform.CompareTag("Start"))
         {
             isMoved = true;
         }
-        if (!hitPlatform.CompareTag("Goal"))
+        if (hitPlatform.CompareTag("Goal"))
         {
+            isMoved = false;
             remainingTime = 300f;
         }
 
