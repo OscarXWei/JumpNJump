@@ -101,11 +101,12 @@ public class PlayerController : MonoBehaviour
     private GameObject targetCube;
 
     [Header("Elongate Effect")]
-    private float elongateFactor = 5f;
+    private int maxElongateLevel = 5;
+    private int currentElongateLevel = 1;
+    private float baseElongateMultiplier = 1f;
     private float elongateDuration = 20f;
-    public float scrollSensitivity = 0.1f;
+    public float scrollSensitivity = 1f;
     private bool isElongated = false;
-    private float currentElongation;
     private Coroutine elongateCoroutine;
 
 
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
         jumpPowerUI.SetMaxPower(maxJumpForce);
         originalScale = transform.localScale;
-        currentElongation = elongateFactor;
+        //currentElongation = elongateFactor;
 
         SetupLevel();
         SetupArrow();
@@ -264,16 +265,11 @@ public class PlayerController : MonoBehaviour
                 float scrollDelta = Input.mouseScrollDelta.y;
                 if (scrollDelta != 0)
                 {
-                    currentElongation = Mathf.Clamp(
-                        currentElongation - scrollDelta * scrollSensitivity,
-                        1f,
-                        elongateFactor
-                    );
-                    UpdatePlayerLength();
-                    Debug.Log($"Adjusted length: {currentElongation}x"); // 调试信息
+                    // Convert scroll to integer change
+                    int levelChange = scrollDelta > 0 ? 1 : -1;
+                    ChangeElongateLevel(levelChange);
                 }
             }
-
         }
         if (isJumping && isRolling)
         {
@@ -1070,42 +1066,53 @@ public class PlayerController : MonoBehaviour
         }
         return new Vector3();
     }
+    private void ChangeElongateLevel(int change)
+    {
+        int newLevel = Mathf.Clamp(currentElongateLevel + change, 1, maxElongateLevel);
+        if (newLevel != currentElongateLevel)
+        {
+            currentElongateLevel = newLevel;
+            UpdatePlayerLength();
+            Debug.Log($"Elongate Level: {currentElongateLevel}/{maxElongateLevel}"); // Debug information
+        }
+    }
+
     private void StartElongateEffect()
     {
-        //turnOffPhysics();
         if (!isElongated)
         {
             if (elongateCoroutine != null)
             {
                 StopCoroutine(elongateCoroutine);
             }
-            currentElongation = elongateFactor; // 开始时设置为最大长度
+            currentElongateLevel = maxElongateLevel; // Start at maximum level
             elongateCoroutine = StartCoroutine(ElongatePlayer());
         }
     }
 
-    // 更新变长协程
     private IEnumerator ElongatePlayer()
     {
         isElongated = true;
-        UpdatePlayerLength(); // 立即应用长度
-        Debug.Log("Elongate effect started");
+        UpdatePlayerLength(); // Apply initial length
+        Debug.Log($"Elongate effect started at level {currentElongateLevel}");
 
         yield return new WaitForSeconds(elongateDuration);
 
-        // 重置所有状态
+        // Reset all states
+        currentElongateLevel = 1;
         transform.localScale = originalScale;
         isElongated = false;
-        currentElongation = elongateFactor;
         Debug.Log("Elongate effect ended");
     }
 
-    // 更新玩家长度的方法
     private void UpdatePlayerLength()
     {
+        // Calculate the actual elongation factor based on the current level
+        float elongationFactor = 1f + (currentElongateLevel - 1) * baseElongateMultiplier;
+
         Vector3 newScale = new Vector3(
             originalScale.x,
-            originalScale.y * currentElongation,
+            originalScale.y * elongationFactor,
             originalScale.z
         );
         transform.localScale = newScale;
