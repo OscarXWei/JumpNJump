@@ -12,13 +12,17 @@ public class CubeSquashEffect : MonoBehaviour
     private bool hasGeneratedObject = false;
     private int enemyType = 0;
     private int enemyRewardType = 0;
+    private Renderer cubeRenderer;
+    private Material explodingMaterial;
 
     void Start()
     {
         originalScale = transform.localScale;
         player = FindObjectOfType<PlayerController>();
+        explodingMaterial = Resources.Load<Material>("Material/Exploding");
         shatteredPlayerPrefab = Resources.Load<GameObject>("Prefabs/Shatter");
         displayManager = FindObjectOfType<LevelDisplayManager>();
+        cubeRenderer = GetComponent<Renderer>();
     }
 
     void Update()
@@ -180,10 +184,11 @@ public class CubeSquashEffect : MonoBehaviour
 
 
 
-        //if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Platform")) // Assuming your player has the "Player" tag
-        //{
-        //    StartCoroutine(DestroyCubeAfterDelay(5f));
-        //}
+        if (collision.gameObject.CompareTag("Player") && gameObject.CompareTag("Explosive")) // Assuming your player has the "Player" tag
+        {
+            cubeRenderer.material = explodingMaterial;
+            StartCoroutine(DestroyCubeAfterDelay(5f));
+        }
     }
 
     public void setEnemyType(int type)

@@ -115,10 +115,8 @@ public class PlayerController : MonoBehaviour
     private Renderer playerRenderer;
     public int score;
     private bool isInvincible = false;
-    public float remainingTime = 300f; // Set the time limit for the object to exist
-    private float timer = 0f;
+    public float remainingTime = 12f; // Set the time limit for the object to exist
     public TextMeshProUGUI timerText;
-    private bool isMoved = false;
     private bool isLevelCompleting = false;
 
 
@@ -165,8 +163,6 @@ public class PlayerController : MonoBehaviour
     public void SetupLevel()
     {
         currentLevelData = levelDisplayManager.GetCurrentLevelData();
-        isMoved = false;
-        remainingTime = 300f;
         SetStartAndGoalPlatforms();
         SetPlayerToStartPosition();
     }
@@ -309,14 +305,13 @@ public class PlayerController : MonoBehaviour
 
         // Calculate remaining time
 
-        timerText.text = $"Time Left: {remainingTime:F1}";
-        if (isMoved)
+        if (isInvincible)
         {
             remainingTime = remainingTime - Time.deltaTime;
-            timerText.text = $"Time Left: {remainingTime:F1}";
+            timerText.text = $"Invincible Time Left: {remainingTime:F1}";
             if (remainingTime <= 0f)
             {
-                FailJump();
+                timerText.text = "";
             }
         }
 
@@ -561,16 +556,6 @@ public class PlayerController : MonoBehaviour
     {
         // Collision detection bugs
         GameObject hitPlatform = collision.gameObject;
-        if (!hitPlatform.CompareTag("Start"))
-        {
-            isMoved = true;
-        }
-        if (hitPlatform.CompareTag("Goal"))
-        {
-            isMoved = false;
-            remainingTime = 300f;
-        }
-
         if (nowHasTargetCube && targetCube.transform.position == hitPlatform.transform.position)
             nowHasTargetCube = false;
 
@@ -592,6 +577,7 @@ public class PlayerController : MonoBehaviour
         if (hitPlatform.CompareTag("Powerup"))
         {
             Destroy(hitPlatform);
+            remainingTime = 12f;
             StartCoroutine(InvincibilityTimer(12f));
         }
 
