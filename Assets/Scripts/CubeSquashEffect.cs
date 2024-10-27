@@ -15,6 +15,10 @@ public class CubeSquashEffect : MonoBehaviour
     private Renderer cubeRenderer;
     private Material explodingMaterial;
 
+    private bool isPopUpWindows = false;
+
+    private bool hasPopUpWindows = false;
+
     void Start()
     {
         originalScale = transform.localScale;
@@ -269,6 +273,11 @@ public class CubeSquashEffect : MonoBehaviour
         objectRenderer.material.color = Color.clear; // Clear color
     }
 
+    public void showWindows()
+    {
+
+
+    }
 
 
 }

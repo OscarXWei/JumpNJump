@@ -119,6 +119,10 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI timerText;
     private bool isLevelCompleting = false;
 
+    private bool isFailed = false;
+    private int health = 1;
+    private GameObject recoveredPlatform;
+
 
     private void Awake()
     {
@@ -208,7 +212,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (transform.position.y < 1f)
+        if (transform.position.y < 1f && !isFailed)
         {
 
             FailJump();
@@ -563,7 +567,7 @@ public class PlayerController : MonoBehaviour
 
         if (!isSimpleRolling && !nowHasTargetCube)
         {
-            if (hitPlatform.CompareTag("Terrain"))
+            if (hitPlatform.CompareTag("Terrain") && !isFailed)
             {
                 FailJump();
             }
@@ -601,7 +605,7 @@ public class PlayerController : MonoBehaviour
             lastPlatformPosition = currentPlatform.position;
         }
 
-        if (hitPlatform.CompareTag("Terrain"))
+        if (hitPlatform.CompareTag("Terrain") && !isFailed)
         {
             FailJump();
         }
@@ -616,6 +620,11 @@ public class PlayerController : MonoBehaviour
         {
             SaveGame();
         }
+
+        // if (hitPlatform.CompareTag("Platform"))
+        // {
+        //     SaveGame();
+        // }
 
         // reach goal
         // if (hitPlatform.CompareTag("Goal"))
@@ -684,13 +693,26 @@ public class PlayerController : MonoBehaviour
 
     private void FailJump()
     {
-        isJumping = false;
-        isGameOver = true;
-        //Invoke("ShatterPlayer", shatterDelay);
-        GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
-        //Destroy(gameObject);
-        //SoundManager.Instance.PlayShatterSound();
-        StartCoroutine(ShowGameOverAfterDelay());
+        health -= 1;
+        if (health <= 0)
+        {
+            isJumping = false;
+            isFailed = true;
+            isGameOver = true;
+            //Invoke("ShatterPlayer", shatterDelay);
+            GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+            //Destroy(gameObject);
+            //SoundManager.Instance.PlayShatterSound();
+            StartCoroutine(ShowGameOverAfterDelay());
+        }
+        else
+        {
+            isFailed = true;
+            GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+
+
+        }
+
 
     }
 
@@ -701,7 +723,9 @@ public class PlayerController : MonoBehaviour
         if (gameOverUI != null)
         {
             gameOverUI.ShowGameOver();
-            Destroy(gameObject);
+            // 如果使用的是SetActive来隐藏/显示
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
         else
         {
@@ -734,6 +758,10 @@ public class PlayerController : MonoBehaviour
     public void ResetGameState()
     {
         if (debugMode) Debug.Log("Resetting player game state...");
+        // 如果使用的是SetActive来隐藏/显示
+        gameObject.SetActive(true);
+        isGameOver = false;
+        isFailed = false;
 
         // if (platformManager != null && platformManager.GetCurrentPlatform() != null)
         // {
@@ -971,6 +999,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.LoadGame();
+
             Debug.Log("Game loaded.");
         }
         else
