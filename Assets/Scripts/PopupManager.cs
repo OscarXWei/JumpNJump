@@ -29,7 +29,7 @@ public class PopupManager : MonoBehaviour
         {
             ChangePopupText(popupTexts[index]);
             popup.SetActive(true);
-            StartCoroutine(HidePopupAfterDelay(popup, 5f)); // 5 秒后隐藏
+            // StartCoroutine(HidePopupAfterDelay(popup, 5f)); // 5 秒后隐藏
         }
         else
         {
