@@ -3774,7 +3774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -583.99994, y: 49.81295}
+  m_AnchoredPosition: {x: -583.99994, y: 104.812965}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &259171139
@@ -4511,7 +4511,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -584, y: -145}
+  m_AnchoredPosition: {x: -584, y: -90}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &323493239
@@ -6898,8 +6898,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You can freely adjust your height within 20 seconds.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9523,8 +9523,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Start point
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10294,8 +10294,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Guideline
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13548,8 +13548,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Always on the move\u2014catch me if you can!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14949,8 +14949,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Normal cube, doing nothing.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15578,8 +15578,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Terminal
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15769,8 +15769,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Coins ahead! No skipping this path!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -18703,10 +18703,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "4. Stand on the red cube and collect enough yellow stars to win the game.
-    You can always save your game by clicking <b>(Settings) \u2192 (Save)</b>."
+    You can always save your game by clicking (Settings) \u2192 (Save)."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -18730,8 +18730,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44
-  m_fontSizeBase: 44
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -19239,7 +19239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.000076, y: -46.63807}
+  m_AnchoredPosition: {x: 44.000076, y: 8.361946}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337044161
@@ -19315,7 +19315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44, y: 43.999977}
+  m_AnchoredPosition: {x: 44, y: 98.99999}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1343229248
@@ -20546,8 +20546,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Boom!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21114,13 +21114,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "1. Before move, use the arrow keys [\u2191 \u2190 \u2193 \u2192] or [W
-    A S D] to control the moving direction.\n\n2. Two ways to move forward: \r\n-
-    Rolling: [ Enter ]. Hold to keep rolling.\r\n- Jumping:  [ Space ]. Hold to charge
-    a longer jump.\n\n3. When exploring the map, note that cubes of different colors
-    have different functions."
+    A S D] to control the moving direction.\n2. Two ways to move forward: \r\n- Rolling:
+    [ Enter ]. Hold to keep rolling.\r\n- Jumping:  [ Space ]. Hold to charge a longer
+    jump.\n3. When exploring the map, note that cubes of different colors have different
+    functions."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21144,8 +21144,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44
-  m_fontSizeBase: 44
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -22918,7 +22918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.000076, y: -257.9306}
+  m_AnchoredPosition: {x: 44.000076, y: -202.93059}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1556765823
@@ -24434,7 +24434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -583.99994, y: -252.11768}
+  m_AnchoredPosition: {x: -583.99994, y: -197.11766}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1646941839
@@ -24510,7 +24510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.000076, y: -150.81293}
+  m_AnchoredPosition: {x: 44.000076, y: -95.81291}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1652676719
@@ -27471,8 +27471,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hide cube, the default state is transparent.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
-  m_sharedMaterial: {fileID: -9040903286192239463, guid: 2be65f54167590448aeb8dfb90ac8ed8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
+  m_sharedMaterial: {fileID: -7341908865452174109, guid: d32c5c5e08f2d6247b7bbbb6935f2085, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -29932,7 +29932,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -583.99994, y: -40.82511}
+  m_AnchoredPosition: {x: -583.99994, y: 14.174904}
   m_SizeDelta: {x: 66.678, y: 58.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2033544710
