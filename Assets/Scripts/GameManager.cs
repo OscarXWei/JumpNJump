@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
+using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 
 public class GameManager : MonoBehaviour
 {
@@ -213,6 +215,9 @@ public class GameManager : MonoBehaviour
 
             if (screenshotDisplay != null)
             {
+                // TextMeshProUGUI imageText = screenshotDisplay.GetComponentInChildren<TextMeshProUGUI>();
+                // imageText.text = "";
+
                 screenshotDisplay.texture = screenshot;
                 screenshotDisplay.gameObject.SetActive(true);
             }
