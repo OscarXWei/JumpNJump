@@ -625,6 +625,11 @@ public class PlayerController : MonoBehaviour
             StartElongateEffect();
         }
 
+        if (hitPlatform.CompareTag("Checkpoint"))
+        {
+            SaveGame();
+        }
+
         // reach goal
         // if (hitPlatform.CompareTag("Goal"))
         // {
@@ -957,7 +962,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 新增：加载游戏方法
     private void LoadGame()
     {
         if (GameManager.Instance != null)

@@ -50,7 +50,7 @@ public class LevelData : ScriptableObject
         SprintEnd, // 6
         Hidden,
         Explosive, // 4
-        Checkpoint, // 12
+        Checkpoint, // 22
         Moving, // 9
         CoinTrigger,
         Coin, // 7

@@ -220,6 +220,10 @@ public class LevelDisplayManager : MonoBehaviour
         {
             platform.tag = "Start";
         }
+        else if (platformData.type == LevelData.PlatformType.Checkpoint)
+        {
+            platform.tag = "Checkpoint";
+        }
         else if (platformData.type == LevelData.PlatformType.Coin)
         {
             platform.tag = "coinPlatform";

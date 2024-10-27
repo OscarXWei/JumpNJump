@@ -164,6 +164,11 @@ public class MapGenerator : MonoBehaviour
                         platform.type = LevelData.PlatformType.Hidden;
                         platform.color = Color.clear;
                     }
+                    else if (selectedLayout[z, x] == 22)
+                    {
+                        platform.type = LevelData.PlatformType.Checkpoint;
+                        platform.color = Color.grey;
+                    }
                     else
                     {
                         platform.type = LevelData.PlatformType.Normal;
