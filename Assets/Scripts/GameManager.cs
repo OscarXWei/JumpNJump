@@ -179,19 +179,17 @@ public class GameManager : MonoBehaviour
         // capture screenshot and display it
         StartCoroutine(CaptureScreenshot());
     }
-
     public void LoadGame()
     {
         if (SaveLoadManager.Instance != null)
         {
-
             playerController.ResetGameState();
-
-
-            // Reset score
             ScoreManager.Instance.ResetScore();
-
             SaveLoadManager.Instance.LoadGame();
+
+            // 加载并显示截图
+            LoadSavedScreenshot();
+
             isStarting = true;
             isGameOver = false;
             if (gameOverUI != null) gameOverUI.HideGameOver();
@@ -201,6 +199,28 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("SaveLoadManager instance not found!");
+        }
+    }
+
+    private void LoadSavedScreenshot()
+    {
+        string screenshotPath = Path.Combine(Application.persistentDataPath, "screenshot.png");
+        if (File.Exists(screenshotPath))
+        {
+            byte[] fileData = File.ReadAllBytes(screenshotPath);
+            Texture2D screenshot = new Texture2D(2, 2);
+            screenshot.LoadImage(fileData);
+
+            if (screenshotDisplay != null)
+            {
+                screenshotDisplay.texture = screenshot;
+                screenshotDisplay.gameObject.SetActive(true);
+            }
+            Debug.Log("Screenshot loaded successfully");
+        }
+        else
+        {
+            Debug.LogWarning("No screenshot file found!");
         }
     }
 
@@ -229,9 +249,9 @@ public class GameManager : MonoBehaviour
 
             ShowScreenshot(screenshot);
 
-            // 保存截图到文件
-            // byte[] bytes = screenshot.EncodeToPNG();
-            // System.IO.File.WriteAllBytes(Application.persistentDataPath + "/screenshot.png", bytes);
+            //保存截图到文件
+            byte[] bytes = screenshot.EncodeToPNG();
+            System.IO.File.WriteAllBytes(Application.persistentDataPath + "/screenshot.png", bytes);
 
             Debug.Log("Screenshot captured and displayed.");
         }

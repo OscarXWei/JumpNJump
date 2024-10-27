@@ -120,8 +120,10 @@ public class PlayerController : MonoBehaviour
     private bool isLevelCompleting = false;
 
     private bool isFailed = false;
-    private int health = 1;
+    private int health = 5;
     private GameObject recoveredPlatform;
+
+    public PlayerController Instance { get; }
 
 
     private void Awake()
@@ -131,7 +133,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        healthBar.UpdateHp(currentHealth, maxHealth);
+        healthBar.UpdateHp(health, 5);
         gameOverUI = FindObjectOfType<GameOverUI>();
         levelDisplayManager = FindObjectOfType<LevelDisplayManager>();
         playerRenderer = GetComponent<Renderer>();
@@ -407,7 +409,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        healthBar.UpdateHp(currentHealth, maxHealth);
+        healthBar.UpdateHp(health, 5);
     }
 
     // void UpdateCubeReferences()
@@ -621,10 +623,10 @@ public class PlayerController : MonoBehaviour
             SaveGame();
         }
 
-        // if (hitPlatform.CompareTag("Platform"))
-        // {
-        //     SaveGame();
-        // }
+        if (hitPlatform.CompareTag("Platform") || hitPlatform.CompareTag("Start"))
+        {
+            recoveredPlatform = hitPlatform;
+        }
 
         // reach goal
         // if (hitPlatform.CompareTag("Goal"))
@@ -691,9 +693,10 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private void FailJump()
+    public void FailJump()
     {
         health -= 1;
+        healthBar.UpdateHp(health, 5);
         if (health <= 0)
         {
             isJumping = false;
@@ -709,6 +712,9 @@ public class PlayerController : MonoBehaviour
         {
             isFailed = true;
             GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+            gameObject.SetActive(false);
+            Invoke("recoverPlayer", 0.5f);
+            //recoverPlayer();
 
 
         }
@@ -718,7 +724,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ShowGameOverAfterDelay()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
         if (gameOverUI != null)
         {
@@ -733,6 +739,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private void recoverPlayer()
+    {
+        gameObject.SetActive(true);
+        SucceedJump(recoveredPlatform);
+        isFailed = false;
+    }
     void ShatterPlayer()
     {
         isJumping = false;
@@ -754,6 +767,18 @@ public class PlayerController : MonoBehaviour
         GetComponent<Renderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
     }
+
+    public int getCurrentHealth()
+    {
+        return health;
+    }
+
+    public void SetHealth(int newHealth)
+    {
+        health = newHealth;
+    }
+
+
 
     public void ResetGameState()
     {

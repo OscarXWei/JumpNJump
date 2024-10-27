@@ -8,7 +8,9 @@ public class GameState
     public int currentScore;
     public int currentLevelIndex;
     public Vector3 playerPosition;
-    // 添加其他需要保存的游戏状态
+
+    public int playerHealth;
+
 }
 
 public class SaveLoadManager : MonoBehaviour
@@ -36,7 +38,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             currentScore = ScoreManager.Instance.GetCurrentScore(),
             currentLevelIndex = FindObjectOfType<LevelDisplayManager>().GetCurrentLevelIndex(),
-            playerPosition = FindObjectOfType<PlayerController>().transform.position
+            playerPosition = FindObjectOfType<PlayerController>().transform.position,
+            playerHealth = FindObjectOfType<PlayerController>().getCurrentHealth()
             // 添加其他需要保存的游戏状态
         };
 
@@ -57,6 +60,7 @@ public class SaveLoadManager : MonoBehaviour
             ScoreManager.Instance.SetScore(gameState.currentScore);
             FindObjectOfType<LevelDisplayManager>().SetCurrentLevelIndex(gameState.currentLevelIndex);
             FindObjectOfType<PlayerController>().transform.position = gameState.playerPosition;
+            FindObjectOfType<PlayerController>().SetHealth(gameState.playerHealth);
             // 应用其他加载的游戏状态
 
             Debug.Log("Game loaded successfully.");
