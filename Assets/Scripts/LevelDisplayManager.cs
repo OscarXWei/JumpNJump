@@ -11,6 +11,7 @@ public class LevelDisplayManager : MonoBehaviour
 
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
+    private CameraController cameraController;
 
     // Add references for background objects
     public GameObject backGround1;
@@ -25,6 +26,7 @@ public class LevelDisplayManager : MonoBehaviour
     {
         AddGeneratedLevels();
         DisplayCurrentLevel();
+        cameraController = FindObjectOfType<CameraController>();
         // if (PlayerPrefs.HasKey("LevelToLoad"))
         // {
         //     int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
@@ -33,7 +35,6 @@ public class LevelDisplayManager : MonoBehaviour
 
         //     PlayerPrefs.DeleteKey("LevelToLoad");
         // }
-
     }
 
     void Update()
@@ -166,11 +167,16 @@ public class LevelDisplayManager : MonoBehaviour
         }
 
         currentLevelObject = new GameObject($"Level_{currentLevelIndex}");
-        //CreateGround(currentLevelObject.transform);
         DisplayLevel(levels[currentLevelIndex], currentLevelObject.transform);
 
         // 通知 PlayerController 重置玩家位置
         FindObjectOfType<PlayerController>().SetupLevel();
+
+        // 触发相机运镜效果
+        if (cameraController != null)
+        {
+            cameraController.PlayIntroAnimation();
+        }
     }
 
     void DisplayLevel(LevelData levelData, Transform parent)

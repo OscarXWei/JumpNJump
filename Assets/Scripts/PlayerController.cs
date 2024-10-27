@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     public float arrowRotationSpeed = 10f;
     public Color arrowColor = Color.white;
     public float arrowSize = 50f;
-    private bool isShowingArrow = false;
+    private bool isShowingArrow = true;
 
     private Transform currentPlatform;
     private Vector3 lastPlatformPosition;
@@ -392,6 +392,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     void ReachGoal()
     {
         Debug.Log("Goal reached! Moving to next level.");
@@ -606,6 +608,11 @@ public class PlayerController : MonoBehaviour
             currentPlatform = hitPlatform.transform;
             lastPlatformPosition = currentPlatform.position;
         }
+        else
+        {
+            currentPlatform = null;
+            //lastPlatformPosition = null;
+        }
 
         if (hitPlatform.CompareTag("Terrain") && !isFailed)
         {
@@ -627,6 +634,9 @@ public class PlayerController : MonoBehaviour
         {
             recoveredPlatform = hitPlatform;
         }
+
+
+
 
         // reach goal
         // if (hitPlatform.CompareTag("Goal"))
@@ -893,10 +903,10 @@ public class PlayerController : MonoBehaviour
         {
             ShowDirectionArrow();  // 这里调用显示箭头
         }
-        else
-        {
-            HideDirectionArrow();  // 这里调用隐藏箭头
-        }
+        // else
+        // {
+        //     HideDirectionArrow();  // 这里调用隐藏箭头
+        // }
 
         //if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
         //{
@@ -958,6 +968,7 @@ public class PlayerController : MonoBehaviour
             isSimpleRolling = false;
             rb.isKinematic = false;
             //GetComponent<Collider>().enabled = true;
+            ShowDirectionArrow();
 
             // Ensure the player is upright at the end of the roll
             //Vector3 uprightRotation = new Vector3(0, transform.eulerAngles.y, 0);

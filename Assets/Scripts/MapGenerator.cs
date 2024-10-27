@@ -14,11 +14,9 @@ public class MapGenerator : MonoBehaviour
         switch (layoutName)
         {
             case "Easy":
-                // selectedLayout = MapLayouts.EasyMazeLayout;
-                // selectedMoving = MapLayouts.EasyMazeMoving;
-                selectedLayout = MapLayouts.CombinedLayout;
-                selectedConnections = MapLayouts.CombinedLayoutConnections;
-                selectedMoving = MapLayouts.CombinedLayoutMoving;
+                selectedLayout = MapLayouts.EasyMazeLayout;
+                selectedMoving = MapLayouts.EasyMazeMoving;
+
                 //selectedConnections = MapLayouts.EasyMazeConnections;
                 break;
             case "EasyTesting":
