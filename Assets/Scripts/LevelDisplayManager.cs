@@ -21,6 +21,11 @@ public class LevelDisplayManager : MonoBehaviour
     public GameObject invincible;
     public GameObject enemyPrefab;
 
+    public Material grass;
+    public Material sand;
+    public Material snow;
+    public Material alien;
+
     void Start()
     {
         AddGeneratedLevels();
@@ -256,6 +261,17 @@ public class LevelDisplayManager : MonoBehaviour
         }
         else if (platformData.type == LevelData.PlatformType.Normal)
         {
+            if (currentLevelIndex == 0) {
+                renderer.material = grass;
+            } else if (currentLevelIndex == 1) {
+                renderer.material = sand;
+            } else if (currentLevelIndex == 2)
+            {
+                renderer.material = snow;
+            } else if (currentLevelIndex == 3)
+            {
+                renderer.material = alien;
+            }
             platform.tag = "Platform";
         }
         else if (platformData.type == LevelData.PlatformType.Moving)

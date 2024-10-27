@@ -20,6 +20,21 @@ public static class MapLayouts
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0}
     };
 
+    //my map
+    public static readonly int[,] Medium = new int[,]
+    {
+        {0,0,0,0,2,0,0,0,0,0},
+        {0,1,1,1,1,1,1,1,1,0},
+        {0,1,0,0,4,0,0,0,1,0},
+        {8,1,8,0,4,0,0,0,1,0},
+        {0,1,0,12,0,1,0,0,0,0},
+        {8,1,8,0,8,0,0,0,1,0},
+        {0,1,0,0,0,0,0,0,0,0},
+        {8,1,8,0,0,0,0,0,0,0},
+        {0,14,0,0,1,1,0,0,1,0},
+        {0,0,0,0,1,3,0,0,0,0},
+    };
+
     // public static readonly int[,] EasyMazeLayout = new int[,]
     // {
     //     {1,1,5,1,1,1,5,1,1,3},
@@ -53,6 +68,8 @@ public static class MapLayouts
     {
         { (8, 0), (0f, 0f, -7f, 5f) }
     };
+
+
 
     // public static readonly Dictionary<(int, int), (int, int)> EasyMazeConnections = new Dictionary<(int, int), (int, int)>
     // {

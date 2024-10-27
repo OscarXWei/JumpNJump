@@ -164,6 +164,10 @@ public class MapGenerator : MonoBehaviour
                         platform.type = LevelData.PlatformType.Hidden;
                         platform.color = Color.clear;
                     }
+                    else if (selectedLayout[z, x] == 16)
+                    {
+                        platform.type = LevelData.PlatformType.EnemyTrigger;
+                    }
                     else if (selectedLayout[z, x] == 22)
                     {
                         platform.type = LevelData.PlatformType.Checkpoint;
@@ -172,7 +176,6 @@ public class MapGenerator : MonoBehaviour
                     else
                     {
                         platform.type = LevelData.PlatformType.Normal;
-                        platform.color = Color.cyan;
                     }
 
                     platform.zInArray = z;

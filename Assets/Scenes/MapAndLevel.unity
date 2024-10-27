@@ -23620,6 +23620,10 @@ MonoBehaviour:
   coin: {fileID: 1950871307682000, guid: 01348926c7cbb3347a006c37204131c3, type: 3}
   invincible: {fileID: 191076, guid: d2bb8296c2fea4f44a9d151466f87b4c, type: 3}
   enemyPrefab: {fileID: 827022679135782516, guid: 961f8a036f45149e9858ea1c85b5b177, type: 3}
+  grass: {fileID: 2100000, guid: 2e965a20fa4121a4eb3302dcebc3018c, type: 2}
+  sand: {fileID: 2100000, guid: e586094b1ae9c0946b7169798de60c0a, type: 2}
+  snow: {fileID: 2100000, guid: 2236c016e01c87a479837411da023bf6, type: 2}
+  alien: {fileID: 2100000, guid: 70f53d77189e91241a9e4ae748c5eea3, type: 2}
 --- !u!1001 &1597173965
 PrefabInstance:
   m_ObjectHideFlags: 0

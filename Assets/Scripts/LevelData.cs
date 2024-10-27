@@ -61,6 +61,7 @@ public class LevelData : ScriptableObject
         SpringTemp,
         Empty,
         HiddenTrigger,
-        Elongate // 11 
+        Elongate, // 11
+        EnemyTrigger
     }
 }
