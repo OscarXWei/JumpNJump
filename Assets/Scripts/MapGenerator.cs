@@ -29,6 +29,7 @@ public class MapGenerator : MonoBehaviour
                 break;
             case "Medium":
                 selectedLayout = MapLayouts.ObstacleLayout;
+                selectedWindowsShowing = MapLayouts.mediumWindowsShowing;
                 break;
             case "Hard":
                 selectedLayout = MapLayouts.HardRollingLayout;
@@ -36,6 +37,7 @@ public class MapGenerator : MonoBehaviour
             case "Fire":
                 selectedLayout = MapLayouts.FireLayout;
                 selectedConnections = MapLayouts.FireLayoutConnections;
+                selectedWindowsShowing = MapLayouts.FireWindowsShowing;
                 break;
 
             case "FireTesting":
@@ -50,9 +52,11 @@ public class MapGenerator : MonoBehaviour
 
             case "MixedPath":
                 selectedLayout = MapLayouts.MixedPathLayout;
+                selectedWindowsShowing = MapLayouts.MixedWindowsShowing;
                 break;
             case "IslandPath":
                 selectedLayout = MapLayouts.IslandPathLayout;
+                selectedWindowsShowing = MapLayouts.IslandWindowsShowing;
                 break;
             case "SpiralPath":
                 selectedLayout = MapLayouts.SpiralPathLayout;
@@ -63,6 +67,13 @@ public class MapGenerator : MonoBehaviour
             case "AdvancedLayout":
                 selectedLayout = MapLayouts.AdvancedLayout;
                 selectedMoving = MapLayouts.AdvancedLayoutMoving;
+                break;
+            case "EnemyTut":
+                selectedLayout = MapLayouts.EnemyTutLayout;
+                selectedConnections = MapLayouts.EnemyTutConnections;
+                enemyTypes = MapLayouts.EnemyTutEnemyTypes;
+                enemyRewardTypes = MapLayouts.EnemyTutEnemyRewardTypes;
+                selectedWindowsShowing = MapLayouts.EnemyTutWindowsShowing;
                 break;
             default:
                 Debug.LogError("Invalid layout name: " + layoutName);

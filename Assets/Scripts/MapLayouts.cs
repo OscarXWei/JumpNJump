@@ -201,6 +201,12 @@ public static class MapLayouts
         {3,11,0,0,0,0,11,2}
     };
 
+    public static readonly Dictionary<(int, int), int> mediumWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 6), 4 },
+        { (0, 1), 5 },
+    };
+
     // public static readonly int[,] FireLayout = new int[,]
     // {
     //     {0,0,1,1,1,1,1,1,1,0,0,0,0,0},
@@ -228,6 +234,12 @@ public static class MapLayouts
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,6,0,0,0,0,5,0,0,0,0,0,5,0,0}
+    };
+
+    public static readonly Dictionary<(int, int), int> FireWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 14), 7 },
+        { (14, 0), 8}
     };
 
     public static readonly Dictionary<(int, int), (int, int)> FireLayoutConnections = new Dictionary<(int, int), (int, int)>
@@ -279,30 +291,34 @@ public static class MapLayouts
 
     public static readonly int[,] MixedPathLayout = new int[,]
     {
-        {0,0,0,0,1,1,1,0,0,0,0,0},
-        {0,2,1,1,1,0,1,0,0,1,1,0},
-        {0,0,0,0,1,0,1,1,1,1,0,0},
-        {0,1,1,1,1,0,0,0,0,1,0,0},
-        {0,1,0,0,1,1,1,1,0,1,1,0},
-        {0,1,0,0,0,0,0,1,0,0,1,0},
-        {0,1,1,1,1,1,1,1,0,0,1,0},
-        {0,0,0,0,0,0,0,1,1,1,1,0},
-        {0,1,1,1,0,0,0,0,0,0,3,0},
-        {0,0,0,1,1,1,1,1,1,1,1,0}
+        {0,2,1,1,1,1,1,0},
+        {0,0,0,0,0,0,1,0},
+        {0,0,0,0,0,0,1,0},
+        {3,1,1,1,1,1,1,0}
     };
+
+    public static readonly Dictionary<(int, int), int> MixedWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 1), 1 }
+    };
+
+
+
 
     public static readonly int[,] IslandPathLayout = new int[,]
     {
-        {0,0,0,0,0,1,1,1,0,0,0,0},
-        {0,2,1,1,1,1,0,1,0,0,0,0},
-        {0,0,0,0,1,0,0,1,1,1,0,0},
-        {0,0,1,1,1,0,0,0,0,1,0,0},
-        {0,0,1,0,0,0,1,1,1,1,0,0},
-        {0,0,1,0,0,0,1,0,0,0,0,0},
-        {0,0,1,1,1,1,1,0,1,1,1,0},
-        {0,0,0,0,0,1,0,0,1,3,1,0},
-        {0,0,0,0,0,1,1,1,1,1,1,0}
+        {0,2,0,1,0,1,0,1,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,1,0,1,0},
+        {0,0,0,0,0,3,1,1,0}
     };
+    public static readonly Dictionary<(int, int), int> IslandWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 1), 2 },
+        { (0, 5), 3}
+    };
+
+
 
     public static readonly int[,] SpiralPathLayout = new int[,]
     {
@@ -376,4 +392,44 @@ public static class MapLayouts
         { (0, 30), (0f, 0f, 2f, 2f) }
     };
 
+
+    public static readonly int[,] EnemyTutLayout = new int[,]
+   {
+        {2,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {12,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0},
+        {1,7,8,1,1,12,1,13,1,3}
+   };
+
+    public static readonly Dictionary<(int, int), (int, int)> EnemyTutConnections = new Dictionary<(int, int), (int, int)>
+    {
+        { (4, 0), (2, 0) },
+        { (9, 5), (9, 7) }
+    };
+
+    public static readonly Dictionary<(int, int), int> EnemyTutEnemyTypes = new Dictionary<(int, int), int>
+    {
+        { (4, 0), 0},
+        { (9, 5), 0}
+    };
+
+    public static readonly Dictionary<(int, int), int> EnemyTutEnemyRewardTypes = new Dictionary<(int, int), int>
+    {
+        { (4, 0), 0 },
+        { (9, 5), 0}
+    };
+
+    public static readonly Dictionary<(int, int), int> EnemyTutWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (4, 0), 10 },
+        { (9, 1), 11 },
+        { (9, 2), 12 },
+        { (9, 5), 13 },
+    };
 }

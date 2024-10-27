@@ -8,16 +8,20 @@ public class PopupManager : MonoBehaviour
 {
     public GameObject popup;
     private string[] popupTexts = {
-        "  ʕ•́ᴥ•̀ʔ\n welcome to the beginner tutorial!",
-        "Before move, use the arrow keys\n [ ↑ ← ↓ → ] or [ W A S D ]\n to control the direction.",
-        "Then, let's try to roll:\n\nPress [Enter] to roll. ",
-        "Now, let's try another movement approach:\n\nPress [Space] to jump. Hold to charge a longer jump.", // Index 2
-        "Level Up! Great job!",
-        "Well done!  ( ͡• ͜ʖ ͡•)." ,
-        "The green cubes are always in motion.",
-        "The purple cube contains magic that allows you to change your height!\n\n Try using the ↑ or ↓ keys",
-        "This is a very dangerous cube that will explode after 2 seconds.",
-        "You must collect enough starts to win the game"
+        "  ʕ•́ᴥ•̀ʔ\n welcome to the beginner tutorial!",// 0
+        "Use the arrow keys\n [ ↑ ← ↓ → ] or [ W A S D ]\n to control the direction.\nPress [Enter] to roll.", //1
+        "Now, let's try another movement approach:\nPress and hold [Space] to charge a jump. Decide the direction before jumping as well.", //  2
+        "Remeber, use \n [ ↑ ← ↓ → ] or [ W A S D ]\n to change the direction", //3
+        "The purple cube contains magic that allows you to change your height!. \nSometimes rolling is much safer than jump!",//4
+        "The elongated effect lasts 20s.\n Use mouse scroll to change the length." ,//5
+        "The green cubes are always in motion.",//6
+        "Use this spring cube to bounce safely between platforms!",//7
+        "The forward cube is a very dangerous one that will explode after 2 seconds.",//8
+        "You must collect enough starts to win the game",//9
+        "Some cubes could trigger a enemy.\n Don''t panic, avoid them or jump on their head to defeat them!",//10
+        "Red star could make you invicible and avoid damage, simply rolling on enemy could defeat them.",//11
+        "You can collect 5 coins to make you invicible.",//12
+        "Some enemies are floating, defeat them can sometimes gain rewards."//13
     };
     public void ShowPopup(int index)
     {

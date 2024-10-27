@@ -88,9 +88,15 @@ public class LevelDisplayManager : MonoBehaviour
 
         levels = new List<LevelData>();
 
-        levels.Add(MapGenerator.GenerateLevel("Easy"));
-        levels.Add(MapGenerator.GenerateLevel("Medium"));
-        levels.Add(MapGenerator.GenerateLevel("Fire"));
+        //tutorials
+        levels.Add(MapGenerator.GenerateLevel("MixedPath")); //rolling
+        levels.Add(MapGenerator.GenerateLevel("IslandPath")); //jumping
+        levels.Add(MapGenerator.GenerateLevel("Easy")); //moving
+        levels.Add(MapGenerator.GenerateLevel("Medium")); //elongating
+        levels.Add(MapGenerator.GenerateLevel("Fire")); //spring
+        levels.Add(MapGenerator.GenerateLevel("EnemyTut")); //enemy
+
+        //levels
         levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
         levels.Add(MapGenerator.GenerateLevel("EasyTesting"));
         levels.Add(MapGenerator.GenerateLevel("FireTesting"));
@@ -100,8 +106,6 @@ public class LevelDisplayManager : MonoBehaviour
 
         // levels.Add(MapGenerator.GenerateLevel("Fire"));
         // levels.Add(MapGenerator.GenerateLevel("Hard"));
-        // levels.Add(MapGenerator.GenerateLevel("MixedPath"));
-        // levels.Add(MapGenerator.GenerateLevel("IslandPath"));
         // levels.Add(MapGenerator.GenerateLevel("SpiralPath"));
         //levels.Add(MapGenerator.GenerateLevel("ScatteredIslands"));
 
@@ -133,6 +137,8 @@ public class LevelDisplayManager : MonoBehaviour
 
         // 显示新关卡
         DisplayCurrentLevel();
+
+        FindObjectOfType<PlayerController>().RecoverPlayerStatus();
 
         Debug.Log($"Switching from level {previousIndex} to level {currentLevelIndex}");
     }
@@ -245,6 +251,7 @@ public class LevelDisplayManager : MonoBehaviour
             Vector3 coinPosition = platformData.position + new Vector3(0, 1f, 0);
             GameObject Coin = Instantiate(coin, coinPosition, Quaternion.identity, parent);
             Coin.tag = "Coin";
+            Coin.AddComponent<ItemSpin>();
         }
         else if (platformData.type == LevelData.PlatformType.Invincible)
         {
@@ -252,6 +259,7 @@ public class LevelDisplayManager : MonoBehaviour
             Vector3 invinciblePosition = platformData.position + new Vector3(0, 1f, 0);
             GameObject Invincible = Instantiate(invincible, invinciblePosition, Quaternion.identity, parent);
             Invincible.tag = "Powerup";
+            Invincible.AddComponent<ItemSpin>();
         }
         else if (platformData.type == LevelData.PlatformType.SpringStart)
         {

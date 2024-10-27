@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private GameOverUI gameOverUI;
 
     [Header("Jump Settings")]
-    public float maxJumpForce = 10f;
+    public float maxJumpForce = 8f;
     public float chargeRate = 5f;
     public float jumpAngle = 45f;
 
@@ -627,6 +627,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             currentPlatform = null;
+            lastPlatformPosition = Vector3.zero;
+            platformVelocity = Vector3.zero;
             //lastPlatformPosition = null;
         }
 
@@ -641,7 +643,7 @@ public class PlayerController : MonoBehaviour
             StartElongateEffect();
         }
 
-        if (hitPlatform.CompareTag("Checkpoint"))
+        if (hitPlatform.CompareTag("Checkpoint") || hitPlatform.CompareTag("Start"))
         {
             SaveGame();
         }
@@ -727,6 +729,7 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
         {
             isJumping = false;
+            isRolling = false;
             isFailed = true;
             isGameOver = true;
             //Invoke("ShatterPlayer", shatterDelay);
@@ -1213,6 +1216,18 @@ public class PlayerController : MonoBehaviour
     public bool isNowInvicible()
     {
         return isInvincible;
+    }
+
+    public void RecoverPlayerStatus()
+    {
+        health = 5;
+        currentElongateLevel = 1;
+        transform.localScale = originalScale;
+        isElongated = false;
+        isInvincible = false;
+        score = 0;
+
+        healthBar.UpdateHp(health, 5);
     }
 
 }

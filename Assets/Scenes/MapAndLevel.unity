@@ -27789,8 +27789,8 @@ MonoBehaviour:
   smoothSpeed: 0.125
   resetSpeed: 10
   introAnimationDuration: 5
-  startHeight: 100
-  startDistance: 100
+  startHeight: 50
+  startDistance: 50
 --- !u!114 &1821953795
 MonoBehaviour:
   m_ObjectHideFlags: 0

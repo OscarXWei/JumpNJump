@@ -69,7 +69,7 @@ public class CubeSquashEffect : MonoBehaviour
             if (distanceToPlayer < 0.5f)
             {
 
-                if (isPopUpWindows && player.transform.position.y - transform.position.y < 0.2f + player.transform.localScale.y / 2 + transform.localScale.y / 2) // Assuming your player has the "Player" tag
+                if (isPopUpWindows) // Assuming your player has the "Player" tag
                 {
                     if (!hasPopUpWindows)
                         if (GameManager.Instance.isStarting)
