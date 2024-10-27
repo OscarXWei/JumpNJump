@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour
     private float timer = 0f;
     public TextMeshProUGUI timerText;
     private bool isMoved = false;
+    private bool isLevelCompleting = false;
 
 
     private void Awake()
@@ -655,6 +656,7 @@ public class PlayerController : MonoBehaviour
 
         transform.position = hitPlatform.transform.position + Vector3.up * (0.5f + transform.localScale.y);
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        CheckGoalReached();
     }
 
 
@@ -937,16 +939,32 @@ public class PlayerController : MonoBehaviour
     }
     void CheckGoalReached()
     {
+        if (isLevelCompleting) return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
         foreach (Collider collider in colliders)
         {
             if (collider.CompareTag("Goal"))
             {
                 Debug.Log("Congratulations! You've reached the goal!");
-                StartCoroutine(CompleteLevel());
-                return;
+                StartCoroutine(CompleteCurrentLevel());
+                break;
             }
         }
+    }
+
+    private IEnumerator CompleteCurrentLevel()
+    {
+        if (isLevelCompleting) yield break;
+
+        isLevelCompleting = true;
+        Debug.Log("Congratulations! You've reached the goal!");
+
+        // 等待x秒
+        yield return new WaitForSeconds(0.5f);
+
+        levelDisplayManager.SwitchToNextLevel();
+        SetupLevel();
+        isLevelCompleting = false;
     }
 
     private void SaveGame()
@@ -973,16 +991,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("GameManager instance not found!");
         }
-    }
-
-    IEnumerator CompleteLevel()
-    {
-        // 可以在这里添加一些过渡效果
-        yield return new WaitForSeconds(0.01f);
-
-        // 切换到下一关
-        levelDisplayManager.SwitchToNextLevel();
-        //SetupLevel();
     }
 
     public void setTargetCubeJumping(GameObject theGameObject)
