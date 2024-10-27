@@ -22,6 +22,7 @@ public class LevelDisplayManager : MonoBehaviour
     public GameObject invincible;
     public GameObject enemyPrefab;
 
+
     void Start()
     {
         AddGeneratedLevels();
@@ -195,6 +196,10 @@ public class LevelDisplayManager : MonoBehaviour
         GameObject platform = Instantiate(platformPrefab, platformData.position, Quaternion.identity, parent);
         platform.transform.localScale = platformData.scale;
         Renderer renderer = platform.GetComponent<Renderer>();
+        if (platformData.isPopUp)
+        {
+            platform.SendMessage("SetPopIndex", platformData.popUpIndex);
+        }
         if (renderer != null)
         {
             // Set up material for transparency

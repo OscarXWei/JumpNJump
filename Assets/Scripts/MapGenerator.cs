@@ -11,11 +11,13 @@ public class MapGenerator : MonoBehaviour
         Dictionary<(int, int), int> enemyTypes = new Dictionary<(int, int), int>();
         Dictionary<(int, int), int> enemyRewardTypes = new Dictionary<(int, int), int>();
         Dictionary<(int, int), (int, int)[]> selectedTrigger = new Dictionary<(int, int), (int, int)[]>();
+        Dictionary<(int, int), int> selectedWindowsShowing = new Dictionary<(int, int), int>();
         switch (layoutName)
         {
             case "Easy":
                 selectedLayout = MapLayouts.EasyMazeLayout;
                 selectedMoving = MapLayouts.EasyMazeMoving;
+                selectedWindowsShowing = MapLayouts.EasyMazeWindowsShowing;
 
                 //selectedConnections = MapLayouts.EasyMazeConnections;
                 break;
@@ -88,6 +90,12 @@ public class MapGenerator : MonoBehaviour
 
                         directionTag = ""
                     };
+
+                    if (selectedWindowsShowing.ContainsKey((z, x)))
+                    {
+                        platform.isPopUp = true;
+                        platform.popUpIndex = selectedWindowsShowing[(z, x)];
+                    }
 
                     if (selectedLayout[z, x] == 0)
                     {
@@ -204,6 +212,11 @@ public class MapGenerator : MonoBehaviour
         {
             levelData.platformsEnemyTypes[connection.Key] = connection.Value;
         }
+        // levelData.windowsShowing = new Dictionary<(int, int), int>();
+        // foreach (var connection in selectedWindowsShowing)
+        // {
+        //     levelData.windowsShowing[connection.Key] = connection.Value;
+        // }
 
         return levelData;
     }

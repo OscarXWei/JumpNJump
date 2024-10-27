@@ -229,24 +229,28 @@ public class PlayerController : MonoBehaviour
             //Debug.Log($"isJumping {isJumping}, isGameOver {isGameOver}, isStarting {GameManager.Instance.isStarting}");
 
             //Debug.Log("is in first if");
-            if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
+            if (!isElongated)
             {
-                //Debug.Log("space keydown");
-                StartCharging();
+                if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
+                {
+                    //Debug.Log("space keydown");
+                    StartCharging();
+                }
+
+                if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
+                {
+                    ContinueCharging();
+                    ApplySquashEffect();
+                }
+
+                if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
+                {
+                    if (debugMode) Debug.Log("Space key released, attempting to jump");
+                    Jump();
+                    ResetSquashEffect();
+                }
             }
 
-            if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
-            {
-                ContinueCharging();
-                ApplySquashEffect();
-            }
-
-            if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
-            {
-                if (debugMode) Debug.Log("Space key released, attempting to jump");
-                Jump();
-                ResetSquashEffect();
-            }
             if (!isSimpleRolling)
             {
                 HandleRollingInput();
@@ -318,8 +322,18 @@ public class PlayerController : MonoBehaviour
             if (remainingTime <= 0f)
             {
                 timerText.text = "";
+                isInvincible = false;
             }
         }
+        if (isElongated)
+        {
+            remainingTime = remainingTime - Time.deltaTime;
+            timerText.text = $"Elongate Level: {currentElongateLevel}/{maxElongateLevel}";
+
+        }
+        if (!isElongated && !isInvincible)
+            timerText.text = "";
+
 
         // Update the UI Text to display remaining time
 
@@ -478,6 +492,7 @@ public class PlayerController : MonoBehaviour
         //if (isCharging && nextCube != null)
         if (isCharging)
         {
+            HideDirectionArrow();
             turnOnHorizontalPhysics();
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
@@ -593,6 +608,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
+                ShowDirectionArrow();
                 SucceedJump(hitPlatform);
             }
             isRolling = false;
@@ -705,7 +721,8 @@ public class PlayerController : MonoBehaviour
 
     public void FailJump()
     {
-        health -= 1;
+        if (!isInvincible)
+            health -= 1;
         healthBar.UpdateHp(health, 5);
         if (health <= 0)
         {

@@ -10,6 +10,7 @@ public class PopupManager : MonoBehaviour
     private string[] popupTexts = {
         "  ʕ•́ᴥ•̀ʔ\n welcome to the beginner tutorial!",
         "Before move, use the arrow keys\n [ ↑ ← ↓ → ] or [ W A S D ]\n to control the direction.",
+        "Then, let's try to roll:\n\nPress [Enter] to roll. ",
         "Now, let's try another movement approach:\n\nPress [Space] to jump. Hold to charge a longer jump.", // Index 2
         "Level Up! Great job!",
         "Well done!  ( ͡• ͜ʖ ͡•)." ,

@@ -114,6 +114,13 @@ public static class MapLayouts
         { (8, 0), (0f, 0f, -7f, 5f) }
     };
 
+    public static readonly Dictionary<(int, int), int> EasyMazeWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 0), 6 }
+    };
+
+
+
     // public static readonly Dictionary<(int, int), (int, int)> EasyMazeConnections = new Dictionary<(int, int), (int, int)>
     // {
     //     { (0, 2), (4, 5) },
@@ -174,12 +181,7 @@ public static class MapLayouts
 
     public static readonly int[,] ObstacleLayout = new int[,] //medium
     {
-        {3,1,0,0,0,0,0,0,0,0,11,2},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,11,0,11,0,0,11,0,0,0,11,0}
+        {3,11,0,0,0,0,11,2}
     };
 
     // public static readonly int[,] FireLayout = new int[,]
@@ -196,19 +198,19 @@ public static class MapLayouts
     {
         {3,0,0,0,0,0,0,0,0,0,0,0,0,5,2},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,5,6,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,6,0,0,0,0,5,0,0,0,0,0,5,0,0}
+        {1,6,0,0,0,0,5,0,0,0,0,0,5,0,0}
     };
 
     public static readonly Dictionary<(int, int), (int, int)> FireLayoutConnections = new Dictionary<(int, int), (int, int)>

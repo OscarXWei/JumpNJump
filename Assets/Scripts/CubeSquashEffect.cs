@@ -19,6 +19,10 @@ public class CubeSquashEffect : MonoBehaviour
 
     private bool hasPopUpWindows = false;
 
+    private int popIndex = -1;
+
+    public PopupManager ppm;
+
     void Start()
     {
         originalScale = transform.localScale;
@@ -26,6 +30,7 @@ public class CubeSquashEffect : MonoBehaviour
         explodingMaterial = Resources.Load<Material>("Material/Exploding");
         shatteredPlayerPrefab = Resources.Load<GameObject>("Prefabs/Shatter");
         displayManager = FindObjectOfType<LevelDisplayManager>();
+        ppm = FindObjectOfType<PopupManager>();
         cubeRenderer = GetComponent<Renderer>();
     }
 
@@ -63,8 +68,15 @@ public class CubeSquashEffect : MonoBehaviour
 
             if (distanceToPlayer < 0.5f)
             {
+
+                if (isPopUpWindows && player.transform.position.y - transform.position.y < 0.2f + player.transform.localScale.y / 2 + transform.localScale.y / 2) // Assuming your player has the "Player" tag
+                {
+                    if (!hasPopUpWindows)
+                        if (GameManager.Instance.isStarting)
+                            showWindows();
+                }
                 //Debug.Log(gameObject.tag);
-                if (gameObject.CompareTag("Explosive")) // Assuming your player has the "Player" tag
+                if (gameObject.CompareTag("Explosive") && player.transform.position.y - transform.position.y < 0.2f + player.transform.localScale.y / 2 + transform.localScale.y / 2) // Assuming your player has the "Player" tag
                 {
                     Debug.Log("Explodeing!");
                     StartCoroutine(DestroyCubeAfterDelay(3f));
@@ -77,7 +89,7 @@ public class CubeSquashEffect : MonoBehaviour
                 //         player.setTargetCubeJumping(result.val);
                 //     //sss
                 // }
-                else if (gameObject.CompareTag("EnemySrc")) // Assuming your player has the "Player" tag
+                else if (gameObject.CompareTag("EnemySrc") && player.transform.position.y - transform.position.y < 0.2f + player.transform.localScale.y / 2 + transform.localScale.y / 2) // Assuming your player has the "Player" tag
                 {
                     var result = displayManager.findMatchedPlatform(gameObject);
                     var resultLevel = displayManager.findPlatformEnemyType(gameObject);
@@ -276,7 +288,20 @@ public class CubeSquashEffect : MonoBehaviour
     public void showWindows()
     {
 
+        if (!isPopUpWindows)
+            return;
 
+        ppm.ShowPopup(popIndex);
+
+        hasPopUpWindows = true;
+
+
+    }
+
+    public void SetPopIndex(int num)
+    {
+        isPopUpWindows = true;
+        popIndex = num;
     }
 
 
