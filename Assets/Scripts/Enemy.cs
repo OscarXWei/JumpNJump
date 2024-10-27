@@ -49,7 +49,8 @@ public class Enemy : MonoBehaviour
                     }
                     else if (!playerObj.isNowInvicible())
                     {
-                        playerObj.SendMessage("PlayerDead");
+                        playerObj.FailJump();
+                        Destroy(gameObject);
                     }
                 }
                 else if (level >= 2 && !isDead)
@@ -60,7 +61,8 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        playerObj.SendMessage("PlayerDead");
+                        playerObj.FailJump();
+                        Destroy(gameObject);
                     }
                 }
             }

@@ -148,3 +148,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSquashAmount: 1
   squashSpeed: 3
+  shatteredPlayerPrefab: {fileID: 7714232352248266988, guid: c4bfa6a5ac0244453982be610e5ffde4, type: 3}
+  ppm: {fileID: 0}

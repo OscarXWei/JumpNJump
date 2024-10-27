@@ -49,6 +49,66 @@ public static class MapLayouts
     //     {2,7,8,1,1,1,1,1,1,1}
     // };
 
+
+    public static readonly int[,] CombinedLayout = new int[,]
+    {
+    // Easy section (top)
+    {2,0,0,0,0,0,0,0,0,0,0,0,0,0,0},  // 起点
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0},  // 移动平台
+    {6,0,0,0,0,0,0,0,0,0,0,0,0,0,0},  // Easy结束点/传送点
+
+    // Medium section (middle)
+    {6,1,0,0,0,0,0,0,0,0,11,5,0,0,0},  // Medium起点
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,11,0,11,0,0,11,0,0,0,11,6,0,0,0},  // Medium结束点/传送点
+
+    // Fire section (bottom)
+    {6,0,0,0,0,0,0,0,0,0,0,0,0,5,0},  // Fire起点
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {4,0,0,13,0,0,0,0,0,0,0,0,0,0,0},  // 添加触发器
+    {0,0,0,15,15,15,0,0,0,0,0,0,0,0,0},  // 添加可触发平台
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,3}  // 终点
+    };
+
+    // 添加连接字典
+    public static readonly Dictionary<(int, int), (int, int)> CombinedLayoutConnections = new Dictionary<(int, int), (int, int)>
+{
+    // Easy to Medium transition
+    { (9, 0), (10, 0) },  // Easy终点连到Medium起点
+    
+    // Medium to Fire transition
+    { (15, 11), (16, 0) },  // Medium终点连到Fire起点
+    
+    // Fire section's internal teleports
+    { (16, 13), (22, 13) },
+    { (22, 12), (22, 6) },
+    { (22, 6), (22, 1) }
+};
+
+    // 保留Easy部分的移动平台设置
+    public static readonly Dictionary<(int, int), (float, float, float, float)> CombinedLayoutMoving = new Dictionary<(int, int), (float, float, float, float)>
+{
+    { (8, 0), (0f, 0f, -7f, 5f) }  // Easy部分的移动平台设置
+};
+
+    // 添加触发器字典
+    public static readonly Dictionary<(int, int), (int, int)[]> CombinedLayoutTrigger = new Dictionary<(int, int), (int, int)[]>
+{
+    { (18, 3), new (int, int)[] { (19, 3), (19, 4), (19, 5) } }  // 触发器位置及其控制的平台位置
+};
+
     public static readonly int[,] EasyMazeLayout = new int[,]
     {
             {2},
@@ -68,6 +128,13 @@ public static class MapLayouts
     {
         { (8, 0), (0f, 0f, -7f, 5f) }
     };
+
+    public static readonly Dictionary<(int, int), int> EasyMazeWindowsShowing = new Dictionary<(int, int), int>
+    {
+        { (0, 0), 6 }
+    };
+
+
 
 
 
@@ -131,12 +198,7 @@ public static class MapLayouts
 
     public static readonly int[,] ObstacleLayout = new int[,] //medium
     {
-        {3,1,0,0,0,0,0,0,0,0,11,2},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0,0,0},
-        {0,11,0,11,0,0,11,0,0,0,11,0}
+        {3,11,0,0,0,0,11,2}
     };
 
     // public static readonly int[,] FireLayout = new int[,]
@@ -153,19 +215,19 @@ public static class MapLayouts
     {
         {3,0,0,0,0,0,0,0,0,0,0,0,0,5,2},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,5,6,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-        {4,6,0,0,0,0,5,0,0,0,0,0,5,0,0}
+        {1,6,0,0,0,0,5,0,0,0,0,0,5,0,0}
     };
 
     public static readonly Dictionary<(int, int), (int, int)> FireLayoutConnections = new Dictionary<(int, int), (int, int)>

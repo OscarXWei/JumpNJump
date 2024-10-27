@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     public float arrowRotationSpeed = 10f;
     public Color arrowColor = Color.white;
     public float arrowSize = 50f;
-    private bool isShowingArrow = false;
+    private bool isShowingArrow = true;
 
     private Transform currentPlatform;
     private Vector3 lastPlatformPosition;
@@ -119,6 +119,12 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI timerText;
     private bool isLevelCompleting = false;
 
+    private bool isFailed = false;
+    private int health = 5;
+    private GameObject recoveredPlatform;
+
+    public PlayerController Instance { get; }
+
 
     private void Awake()
     {
@@ -127,7 +133,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        healthBar.UpdateHp(currentHealth, maxHealth);
+        healthBar.UpdateHp(health, 5);
         gameOverUI = FindObjectOfType<GameOverUI>();
         levelDisplayManager = FindObjectOfType<LevelDisplayManager>();
         playerRenderer = GetComponent<Renderer>();
@@ -208,7 +214,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (transform.position.y < 1f)
+        if (transform.position.y < 1f && !isFailed)
         {
 
             FailJump();
@@ -223,24 +229,28 @@ public class PlayerController : MonoBehaviour
             //Debug.Log($"isJumping {isJumping}, isGameOver {isGameOver}, isStarting {GameManager.Instance.isStarting}");
 
             //Debug.Log("is in first if");
-            if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
+            if (!isElongated)
             {
-                //Debug.Log("space keydown");
-                StartCharging();
+                if (!isSimpleRolling && Input.GetKeyDown(KeyCode.Space))
+                {
+                    //Debug.Log("space keydown");
+                    StartCharging();
+                }
+
+                if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
+                {
+                    ContinueCharging();
+                    ApplySquashEffect();
+                }
+
+                if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
+                {
+                    if (debugMode) Debug.Log("Space key released, attempting to jump");
+                    Jump();
+                    ResetSquashEffect();
+                }
             }
 
-            if (!isSimpleRolling && Input.GetKey(KeyCode.Space) && isCharging)
-            {
-                ContinueCharging();
-                ApplySquashEffect();
-            }
-
-            if (!isSimpleRolling && Input.GetKeyUp(KeyCode.Space))
-            {
-                if (debugMode) Debug.Log("Space key released, attempting to jump");
-                Jump();
-                ResetSquashEffect();
-            }
             if (!isSimpleRolling)
             {
                 HandleRollingInput();
@@ -312,8 +322,18 @@ public class PlayerController : MonoBehaviour
             if (remainingTime <= 0f)
             {
                 timerText.text = "";
+                isInvincible = false;
             }
         }
+        if (isElongated)
+        {
+            remainingTime = remainingTime - Time.deltaTime;
+            timerText.text = $"Elongate Level: {currentElongateLevel}/{maxElongateLevel}";
+
+        }
+        if (!isElongated && !isInvincible)
+            timerText.text = "";
+
 
         // Update the UI Text to display remaining time
 
@@ -386,6 +406,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     void ReachGoal()
     {
         Debug.Log("Goal reached! Moving to next level.");
@@ -403,7 +425,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        healthBar.UpdateHp(currentHealth, maxHealth);
+        healthBar.UpdateHp(health, 5);
     }
 
     // void UpdateCubeReferences()
@@ -470,6 +492,7 @@ public class PlayerController : MonoBehaviour
         //if (isCharging && nextCube != null)
         if (isCharging)
         {
+            HideDirectionArrow();
             turnOnHorizontalPhysics();
             Vector3 jumpDirection = CalculateJumpDirection();
             //Vector3 jumpDirection = new Vector3(simpleRollHorizontal, 0, simpleRollVertical).normalized;
@@ -563,7 +586,7 @@ public class PlayerController : MonoBehaviour
 
         if (!isSimpleRolling && !nowHasTargetCube)
         {
-            if (hitPlatform.CompareTag("Terrain"))
+            if (hitPlatform.CompareTag("Terrain") && !isFailed)
             {
                 FailJump();
             }
@@ -585,6 +608,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hitPlatform == transform.position.y > hitPlatform.transform.position.y + 0.6)
             {
+                ShowDirectionArrow();
                 SucceedJump(hitPlatform);
             }
             isRolling = false;
@@ -600,8 +624,13 @@ public class PlayerController : MonoBehaviour
             currentPlatform = hitPlatform.transform;
             lastPlatformPosition = currentPlatform.position;
         }
+        else
+        {
+            currentPlatform = null;
+            //lastPlatformPosition = null;
+        }
 
-        if (hitPlatform.CompareTag("Terrain"))
+        if (hitPlatform.CompareTag("Terrain") && !isFailed)
         {
             FailJump();
         }
@@ -616,6 +645,14 @@ public class PlayerController : MonoBehaviour
         {
             SaveGame();
         }
+
+        if (hitPlatform.CompareTag("Platform") || hitPlatform.CompareTag("Start"))
+        {
+            recoveredPlatform = hitPlatform;
+        }
+
+
+
 
         // reach goal
         // if (hitPlatform.CompareTag("Goal"))
@@ -682,26 +719,46 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private void FailJump()
+    public void FailJump()
     {
-        isJumping = false;
-        isGameOver = true;
-        //Invoke("ShatterPlayer", shatterDelay);
-        GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
-        //Destroy(gameObject);
-        //SoundManager.Instance.PlayShatterSound();
-        StartCoroutine(ShowGameOverAfterDelay());
+        if (!isInvincible)
+            health -= 1;
+        healthBar.UpdateHp(health, 5);
+        if (health <= 0)
+        {
+            isJumping = false;
+            isFailed = true;
+            isGameOver = true;
+            //Invoke("ShatterPlayer", shatterDelay);
+            GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+            //Destroy(gameObject);
+            //SoundManager.Instance.PlayShatterSound();
+            StartCoroutine(ShowGameOverAfterDelay());
+        }
+        else
+        {
+            isFailed = true;
+            GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
+            gameObject.SetActive(false);
+            Invoke("recoverPlayer", 0.5f);
+            //recoverPlayer();
+
+
+        }
+
 
     }
 
     private IEnumerator ShowGameOverAfterDelay()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
         if (gameOverUI != null)
         {
             gameOverUI.ShowGameOver();
-            Destroy(gameObject);
+            // 如果使用的是SetActive来隐藏/显示
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
         else
         {
@@ -709,6 +766,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private void recoverPlayer()
+    {
+        gameObject.SetActive(true);
+        SucceedJump(recoveredPlatform);
+        isFailed = false;
+    }
     void ShatterPlayer()
     {
         isJumping = false;
@@ -731,9 +795,25 @@ public class PlayerController : MonoBehaviour
         GetComponent<Collider>().enabled = false;
     }
 
+    public int getCurrentHealth()
+    {
+        return health;
+    }
+
+    public void SetHealth(int newHealth)
+    {
+        health = newHealth;
+    }
+
+
+
     public void ResetGameState()
     {
         if (debugMode) Debug.Log("Resetting player game state...");
+        // 如果使用的是SetActive来隐藏/显示
+        gameObject.SetActive(true);
+        isGameOver = false;
+        isFailed = false;
 
         // if (platformManager != null && platformManager.GetCurrentPlatform() != null)
         // {
@@ -840,10 +920,10 @@ public class PlayerController : MonoBehaviour
         {
             ShowDirectionArrow();  // 这里调用显示箭头
         }
-        else
-        {
-            HideDirectionArrow();  // 这里调用隐藏箭头
-        }
+        // else
+        // {
+        //     HideDirectionArrow();  // 这里调用隐藏箭头
+        // }
 
         //if (Input.GetKeyDown(KeyCode.Return) && simpleRollDirection.magnitude > 0.1f)
         //{
@@ -905,6 +985,7 @@ public class PlayerController : MonoBehaviour
             isSimpleRolling = false;
             rb.isKinematic = false;
             //GetComponent<Collider>().enabled = true;
+            ShowDirectionArrow();
 
             // Ensure the player is upright at the end of the roll
             //Vector3 uprightRotation = new Vector3(0, transform.eulerAngles.y, 0);
@@ -971,6 +1052,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.LoadGame();
+
             Debug.Log("Game loaded.");
         }
         else

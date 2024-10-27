@@ -11,6 +11,7 @@ public class LevelDisplayManager : MonoBehaviour
 
     private int currentLevelIndex = 0;
     private GameObject currentLevelObject;
+    private CameraController cameraController;
 
     // Add references for background objects
     public GameObject backGround1;
@@ -30,6 +31,7 @@ public class LevelDisplayManager : MonoBehaviour
     {
         AddGeneratedLevels();
         DisplayCurrentLevel();
+        cameraController = FindObjectOfType<CameraController>();
         // if (PlayerPrefs.HasKey("LevelToLoad"))
         // {
         //     int levelIndex = PlayerPrefs.GetInt("LevelToLoad");
@@ -38,7 +40,6 @@ public class LevelDisplayManager : MonoBehaviour
 
         //     PlayerPrefs.DeleteKey("LevelToLoad");
         // }
-
     }
 
     void Update()
@@ -171,11 +172,16 @@ public class LevelDisplayManager : MonoBehaviour
         }
 
         currentLevelObject = new GameObject($"Level_{currentLevelIndex}");
-        //CreateGround(currentLevelObject.transform);
         DisplayLevel(levels[currentLevelIndex], currentLevelObject.transform);
 
         // 通知 PlayerController 重置玩家位置
         FindObjectOfType<PlayerController>().SetupLevel();
+
+        // 触发相机运镜效果
+        if (cameraController != null)
+        {
+            cameraController.PlayIntroAnimation();
+        }
     }
 
     void DisplayLevel(LevelData levelData, Transform parent)
@@ -194,6 +200,10 @@ public class LevelDisplayManager : MonoBehaviour
         GameObject platform = Instantiate(platformPrefab, platformData.position, Quaternion.identity, parent);
         platform.transform.localScale = platformData.scale;
         Renderer renderer = platform.GetComponent<Renderer>();
+        if (platformData.isPopUp)
+        {
+            platform.SendMessage("SetPopIndex", platformData.popUpIndex);
+        }
         if (renderer != null)
         {
             // Set up material for transparency
@@ -261,14 +271,19 @@ public class LevelDisplayManager : MonoBehaviour
         }
         else if (platformData.type == LevelData.PlatformType.Normal)
         {
-            if (currentLevelIndex == 0) {
+            if (currentLevelIndex == 0)
+            {
                 renderer.material = grass;
-            } else if (currentLevelIndex == 1) {
+            }
+            else if (currentLevelIndex == 1)
+            {
                 renderer.material = sand;
-            } else if (currentLevelIndex == 2)
+            }
+            else if (currentLevelIndex == 2)
             {
                 renderer.material = snow;
-            } else if (currentLevelIndex == 3)
+            }
+            else if (currentLevelIndex == 3)
             {
                 renderer.material = alien;
             }

@@ -21,8 +21,8 @@ public class HealthBarController : MonoBehaviour
         healthBar.rotation = Quaternion.LookRotation(lookDirection);
     }
 
-    public void UpdateHp(float currentHealth, float maxHealth)
+    public void UpdateHp(int currentHealth, int maxHealth)
     {
-        slider.value = currentHealth / maxHealth;
+        slider.value = (float)currentHealth / (float)maxHealth;
     }
 }

@@ -14,6 +14,7 @@ public class LevelData : ScriptableObject
     public Dictionary<(int, int), int> platformsEnemyTypes = new Dictionary<(int, int), int>();
     public Dictionary<(int, int), int> platformsEnemyRewardTypes = new Dictionary<(int, int), int>();
     public Dictionary<(int, int), (int, int)[]> Trigger = new Dictionary<(int, int), (int, int)[]>();
+    public Dictionary<(int, int), int> windowsShowing = new Dictionary<(int, int), int>();
     public float timeLimit = 60f;
     public int checkpointIndex = -1;
 
@@ -39,6 +40,9 @@ public class LevelData : ScriptableObject
         public float moveDuration = 2f;
         public int zInArray = -1;
         public int xInArray = -1;
+
+        public bool isPopUp = false;
+        public int popUpIndex = -1;
     }
 
     public enum PlatformType

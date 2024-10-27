@@ -30,6 +30,7 @@ TagManager:
   - Empty
   - Hidden
   - HiddenTrigger
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
