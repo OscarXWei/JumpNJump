@@ -21,6 +21,7 @@ public class LevelDisplayManager : MonoBehaviour
     public GameObject coin;
     public GameObject invincible;
     public GameObject enemyPrefab;
+    public GameObject hidden;
 
     public Material grass;
     public Material sand;
@@ -299,6 +300,10 @@ public class LevelDisplayManager : MonoBehaviour
             {
                 renderer.material = alien;
             }
+            else
+            {
+                renderer.material = alien;
+            }
             platform.tag = "Platform";
         }
         else if (platformData.type == LevelData.PlatformType.Moving)
@@ -307,7 +312,9 @@ public class LevelDisplayManager : MonoBehaviour
         }
         else if (platformData.type == LevelData.PlatformType.Hidden)
         {
-            platform.tag = "Hidden";
+            Destroy(platform);
+            GameObject hiddencube = Instantiate(hidden, platformData.position, Quaternion.identity, parent);
+            hiddencube.tag = "Hidden";
         }
         else if (platformData.type == LevelData.PlatformType.HiddenTrigger)
         {

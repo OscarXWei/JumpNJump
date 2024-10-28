@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     private GameDifficulty currentDifficulty = GameDifficulty.Easy;
     public RawImage screenshotDisplay;
+    public AudioClip backgroundMusic;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -48,6 +50,12 @@ public class GameManager : MonoBehaviour
             jumpPowerUI = FindObjectOfType<JumpPowerUI>();
         if (startMenuUI == null)
             startMenuUI = FindObjectOfType<StartMenuUI>();
+
+        // 设置音乐
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = backgroundMusic;
+        audioSource.loop = true; // 设置为循环播放
+        audioSource.Play();
 
         // Show start menu
         ShowStartMenu();

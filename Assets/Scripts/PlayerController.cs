@@ -518,7 +518,7 @@ public class PlayerController : MonoBehaviour
 
             jumpPowerUI.SetPower(0);
 
-            //SoundManager.Instance.PlayJumpSound();  
+            SoundManager.Instance.PlayJumpSound();  
         }
         else
         {
@@ -723,6 +723,7 @@ public class PlayerController : MonoBehaviour
 
     public void FailJump()
     {
+        SoundManager.Instance.PlayShatterSound();
         if (!isInvincible)
             health -= 1;
         healthBar.UpdateHp(health, 5);
@@ -735,7 +736,7 @@ public class PlayerController : MonoBehaviour
             //Invoke("ShatterPlayer", shatterDelay);
             GameObject shatteredPlayer1 = Instantiate(shatteredPlayerPrefab, transform.position, Quaternion.identity);
             //Destroy(gameObject);
-            //SoundManager.Instance.PlayShatterSound();
+            SoundManager.Instance.PlayShatterSound();
             StartCoroutine(ShowGameOverAfterDelay());
         }
         else
