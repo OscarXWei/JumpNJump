@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
-using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 
 public class GameManager : MonoBehaviour
 {

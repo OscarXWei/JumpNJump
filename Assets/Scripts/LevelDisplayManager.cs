@@ -232,6 +232,7 @@ public class LevelDisplayManager : MonoBehaviour
         else if (platformData.type == LevelData.PlatformType.Empty)
         {
             platform.tag = "Empty";
+            Destroy(platform);
         }
         else if (platformData.type == LevelData.PlatformType.Explosive)
         {
@@ -300,10 +301,6 @@ public class LevelDisplayManager : MonoBehaviour
         else if (platformData.type == LevelData.PlatformType.Moving)
         {
             platform.tag = "Moving";
-        }
-        else if (platformData.type == LevelData.PlatformType.Empty)
-        {
-            platform.tag = "Empty";
         }
         else if (platformData.type == LevelData.PlatformType.Hidden)
         {
