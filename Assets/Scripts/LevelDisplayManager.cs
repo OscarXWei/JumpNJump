@@ -54,28 +54,28 @@ public class LevelDisplayManager : MonoBehaviour
             SwitchToNextLevel();
         }
 
-        if (currentLevelIndex == 0)
+        if (currentLevelIndex < 3)
         {
             backGround1.SetActive(true);
             backGround2.SetActive(false);
             backGround3.SetActive(false);
             backGround4.SetActive(false);
         }
-        else if (currentLevelIndex == 1)
+        else if (currentLevelIndex >= 3 && currentLevelIndex < 6)
         {
             backGround1.SetActive(false);
             backGround2.SetActive(true);
             backGround3.SetActive(false);
             backGround4.SetActive(false);
         }
-        else if (currentLevelIndex == 2)
+        else if (currentLevelIndex >= 6 && currentLevelIndex < 9)
         {
             backGround1.SetActive(false);
             backGround2.SetActive(false);
             backGround3.SetActive(true);
             backGround4.SetActive(false);
         }
-        else if (currentLevelIndex == 3)
+        else if (currentLevelIndex >= 9)
         {
             backGround1.SetActive(false);
             backGround2.SetActive(false);
@@ -284,25 +284,25 @@ public class LevelDisplayManager : MonoBehaviour
         }
         else if (platformData.type == LevelData.PlatformType.Normal)
         {
-            if (currentLevelIndex == 0)
+            if (currentLevelIndex < 3)
             {
                 renderer.material = grass;
             }
-            else if (currentLevelIndex == 1)
-            {
-                renderer.material = sand;
-            }
-            else if (currentLevelIndex == 2)
+            else if (currentLevelIndex >= 3 && currentLevelIndex < 6)
             {
                 renderer.material = snow;
             }
-            else if (currentLevelIndex == 3)
+            else if (currentLevelIndex >= 6 && currentLevelIndex < 9)
+            {
+                renderer.material = sand;
+            }
+            else if (currentLevelIndex >= 9 && currentLevelIndex < 12)
             {
                 renderer.material = alien;
             }
             else
             {
-                renderer.material = alien;
+                renderer.material = grass;
             }
             platform.tag = "Platform";
         }
