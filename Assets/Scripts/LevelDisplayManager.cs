@@ -95,12 +95,15 @@ public class LevelDisplayManager : MonoBehaviour
         levels.Add(MapGenerator.GenerateLevel("Medium")); //elongating
         levels.Add(MapGenerator.GenerateLevel("Fire")); //spring
         levels.Add(MapGenerator.GenerateLevel("EnemyTut")); //enemy
+        levels.Add(MapGenerator.GenerateLevel("FireTesting")); //spring trigger 
+        levels.Add(MapGenerator.GenerateLevel("FireTesting2")); //hidden trigger
 
         //levels
         levels.Add(MapGenerator.GenerateLevel("AdvancedLayout"));
-        levels.Add(MapGenerator.GenerateLevel("EasyTesting"));
-        levels.Add(MapGenerator.GenerateLevel("FireTesting"));
-        levels.Add(MapGenerator.GenerateLevel("FireTesting2"));
+        levels.Add(MapGenerator.GenerateLevel("Fire"));
+
+        //levels.Add(MapGenerator.GenerateLevel("EasyTesting"));
+
 
 
 

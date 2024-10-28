@@ -44,10 +44,12 @@ public class MapGenerator : MonoBehaviour
                 selectedLayout = MapLayouts.FireTestingLayout;
                 selectedConnections = MapLayouts.FireTestingLayoutConnections;
                 selectedTrigger = MapLayouts.FireTestingLayoutTrigger;
+                selectedWindowsShowing = MapLayouts.fireWindowsShowing;
                 break;
             case "FireTesting2":
                 selectedLayout = MapLayouts.FireTesting2Layout;
                 selectedTrigger = MapLayouts.FireTesting2LayoutTrigger;
+                selectedWindowsShowing = MapLayouts.fire2WindowsShowing;
                 break;
 
             case "MixedPath":

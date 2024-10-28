@@ -21,7 +21,9 @@ public class PopupManager : MonoBehaviour
         "Some cubes could trigger a enemy.\n Don''t panic, avoid them or jump on their head to defeat them!",//10
         "Red star could make you invicible and avoid damage, simply rolling on enemy could defeat them.",//11
         "You can collect 5 coins to make you invicible.",//12
-        "Some enemies are floating, defeat them can sometimes gain rewards."//13
+        "Some enemies are floating, defeat them can sometimes gain rewards.",//13
+        "Sometimes you can trigger the spring cubes by standing on this cube." ,//14
+        "Stand on this cube to reveal hidden blocks. They are there, just invisible!"//15
     };
     public void ShowPopup(int index)
     {
